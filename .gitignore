@@ -1,0 +1,86 @@
+########################################
+# ASP.NET Core / .NET Core
+########################################
+bin/
+obj/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Publish / temp
+**/publish/
+**/*.dbmdl
+**/*.log
+**/App_Data/
+
+# User secrets (if used)
+secrets.json
+
+# Entity Framework
+Migrations/
+
+# Logs
+*.log
+logs/
+
+########################################
+# Angular
+########################################
+node_modules/
+dist/
+tmp/
+temp/
+npm-debug.log
+yarn-error.log
+.angular/
+.angular-cache/
+.cache/
+.env
+.env.*.local
+.vscode/
+
+# Angular build output
+**/out-tsc/
+**/.angular/
+
+# IDEs and Editors
+########################################
+
+# Visual Studio Code
+.vscode/
+.history/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# VS for Mac
+.vscode/
+.vscode-test/
+
+# OS Files
+########################################
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# Others
+*.swp
+*.bak
+*.tmp
+
+# Test output
+TestResults/
+coverage/
