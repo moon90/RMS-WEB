@@ -17,6 +17,8 @@ namespace RMS.Domain.Entities
         public string FullName { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
+
+        public string? ProfilePictureUrl { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiry { get; set; }
         public string? PasswordResetToken { get; set; }

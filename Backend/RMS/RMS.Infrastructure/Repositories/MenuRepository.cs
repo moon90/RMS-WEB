@@ -77,5 +77,10 @@ namespace RMS.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> MenuExistsAsync(int menuId)
+        {
+            return await _context.Menus.AnyAsync(m => m.Id == menuId);
+        }
     }
 }

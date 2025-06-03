@@ -130,12 +130,12 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+//        .RequireAuthenticatedUser()
+//        .Build();
+//});
 
 
 builder.Services.AddScoped<ITokenService, TokenService>(provider =>
@@ -149,8 +149,8 @@ builder.Services.AddScoped<ITokenService, TokenService>(provider =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp",
-        builder => builder.WithOrigins("http://localhost:4200")
+    options.AddPolicy("AllowFrontend",
+        builder => builder.WithOrigins("http://localhost:4200", "http://localhost:5173")
                           .AllowAnyHeader()
                           .AllowAnyMethod());
 });
@@ -201,6 +201,24 @@ using (var scope = app.Services.CreateScope())
     await DbInitializer.InitializeAsync(dbContext); // <-- Call your seeding logic here
 }
 
+app.UseStaticFiles();
+
+// Redirect root URL to Swagger UI
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger");
+        return;
+    }
+
+    await next();
+});
+
+app.UseCors("AllowFrontend");
+
+app.UseHttpsRedirection();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -211,13 +229,19 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors("AllowAngularApp");
-
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "RMS.API v1");
+    c.RoutePrefix = "swagger"; // default, but explicitly safe
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Optional: public ping route
+//app.MapGet("/", () => Results.Ok("RMS API is running.")).AllowAnonymous();
 
 app.Run();

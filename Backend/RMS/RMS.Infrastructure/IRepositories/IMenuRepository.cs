@@ -16,5 +16,6 @@ namespace RMS.Infrastructure.Interfaces
         Task AddMenuAsync(Menu menu);
         Task UpdateMenuAsync(Menu menu);
         Task DeleteMenuAsync(int menuId);
+        Task<bool> MenuExistsAsync(int menuId);
     }
 }

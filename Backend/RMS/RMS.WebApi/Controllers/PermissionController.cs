@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.Interfaces;
+using RMS.Domain.Dtos;
 using RMS.Domain.Dtos.PermissionDTOs.InputDTOs;
 
 namespace RMS.WebApi.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class PermissionController : ControllerBase
     {
         private readonly IPermissionService _permissionService;
@@ -22,8 +23,21 @@ namespace RMS.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var permissions = await _permissionService.GetAllPermissionsAsync();
-            return Ok(permissions);
+            try
+            {
+                var response = await _permissionService.GetAllPermissionsAsync();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving permissions.",
+                    Code = "500",
+                    Details = ex.Message
+                });
+            }
         }
 
         // GET: api/permission/{id}
@@ -31,16 +45,30 @@ namespace RMS.WebApi.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             if (id <= 0)
-                return BadRequest("Permission ID must be greater than 0.");
+                return BadRequest(new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "Permission ID must be greater than 0.",
+                    Code = "400"
+                });
 
             try
             {
-                var permission = await _permissionService.GetPermissionByIdAsync(id);
-                return Ok(permission);
+                var response = await _permissionService.GetPermissionByIdAsync(id);
+                if (!response.IsSuccess)
+                    return NotFound(response);
+
+                return Ok(response);
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An unexpected error occurred.",
+                    Code = "500",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -49,10 +77,31 @@ namespace RMS.WebApi.Controllers
         public async Task<IActionResult> Create([FromBody] PermissionCreateDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                return BadRequest(new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "Validation failed.",
+                    Code = "400",
+                    Details = ModelState
+                });
+            }
 
-            var id = await _permissionService.CreatePermissionAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id }, new { id });
+            try
+            {
+                var response = await _permissionService.CreatePermissionAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = response.Data }, response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while creating the permission.",
+                    Code = "500",
+                    Details = ex.Message
+                });
+            }
         }
 
         // PUT: api/permission/{id}
@@ -60,19 +109,43 @@ namespace RMS.WebApi.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] PermissionUpdateDto dto)
         {
             if (id != dto.Id)
-                return BadRequest("Mismatch between route ID and payload ID.");
+            {
+                return BadRequest(new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "Mismatch between route ID and payload ID.",
+                    Code = "400"
+                });
+            }
 
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                return BadRequest(new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "Validation failed.",
+                    Code = "400",
+                    Details = ModelState
+                });
+            }
 
             try
             {
-                await _permissionService.UpdatePermissionAsync(dto);
-                return NoContent();
+                var response = await _permissionService.UpdatePermissionAsync(dto);
+                if (!response.IsSuccess)
+                    return NotFound(response);
+
+                return Ok(response);
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while updating the permission.",
+                    Code = "500",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -81,17 +154,34 @@ namespace RMS.WebApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0)
-                return BadRequest("Permission ID must be greater than 0.");
+            {
+                return BadRequest(new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "Permission ID must be greater than 0.",
+                    Code = "400"
+                });
+            }
 
             try
             {
-                await _permissionService.DeletePermissionAsync(id);
-                return NoContent();
+                var response = await _permissionService.DeletePermissionAsync(id);
+                if (!response.IsSuccess)
+                    return NotFound(response);
+
+                return Ok(response);
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while deleting the permission.",
+                    Code = "500",
+                    Details = ex.Message
+                });
             }
         }
     }
+
 }

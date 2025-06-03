@@ -70,5 +70,11 @@ namespace RMS.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> RoleExistsAsync(int roleId)
+        {
+            return await _context.Roles.AnyAsync(r => r.Id == roleId);
+        }
+
     }
 }

@@ -2,6 +2,7 @@
 using FluentValidation;
 using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Dtos;
 using RMS.Domain.DTOs.RoleDTOs.InputDTOs;
 using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
 using RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs;
@@ -34,21 +35,56 @@ namespace RMS.Application.Implementations
         }
 
         // Get role by ID
-        public async Task<RoleDto> GetRoleByIdAsync(int roleId)
+        public async Task<ResponseDto<RoleDto>> GetRoleByIdAsync(int roleId)
         {
             var role = await _roleRepository.GetRoleByIdAsync(roleId);
             if (role == null)
-                throw new ArgumentException("Role not found.");
+            {
+                return new ResponseDto<RoleDto>
+                {
+                    IsSuccess = false,
+                    Message = "Role not found.",
+                    Code = "404"
+                };
+            }
 
-            return _mapper.Map<RoleDto>(role);
+            var roleDto = _mapper.Map<RoleDto>(role);
+
+            return new ResponseDto<RoleDto>
+            {
+                IsSuccess = true,
+                Message = "Role retrieved successfully.",
+                Code = "200",
+                Data = roleDto
+            };
         }
 
         // Get all roles
-        public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
+        public async Task<ResponseDto<IEnumerable<RoleDto>>> GetAllRolesAsync()
         {
             var roles = await _roleRepository.GetAllRolesAsync();
-            return _mapper.Map<IEnumerable<RoleDto>>(roles);
+            var roleDtos = _mapper.Map<IEnumerable<RoleDto>>(roles);
+
+            if (!roleDtos.Any())
+            {
+                return new ResponseDto<IEnumerable<RoleDto>>
+                {
+                    IsSuccess = false,
+                    Message = "No roles found.",
+                    Code = "404",
+                    Data = roleDtos
+                };
+            }
+
+            return new ResponseDto<IEnumerable<RoleDto>>
+            {
+                IsSuccess = true,
+                Message = "Roles retrieved successfully.",
+                Code = "200",
+                Data = roleDtos
+            };
         }
+
 
         public async Task<PagedResult<RoleDto>> GetAllRolesAsync(int pageNumber, int pageSize)
         {
@@ -60,99 +96,232 @@ namespace RMS.Application.Implementations
             return pagedResult;
         }
 
-        // Create a new role
-        public async Task<int> CreateRoleAsync(RoleCreateDto roleCreateDto)
+        public async Task<ResponseDto<RoleDto>> CreateRoleAsync(RoleCreateDto roleCreateDto)
         {
-            // Validate input
             var validationResult = await _roleCreateValidator.ValidateAsync(roleCreateDto);
             if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.Errors);
+            {
+                return new ResponseDto<RoleDto>
+                {
+                    IsSuccess = false,
+                    Message = "Validation failed.",
+                    Code = "400",
+                    Details = validationResult.Errors.Select(e => new
+                    {
+                        e.PropertyName,
+                        e.ErrorMessage
+                    })
+                };
+            }
 
             var role = _mapper.Map<Role>(roleCreateDto);
             await _roleRepository.AddRoleAsync(role);
-            return role.Id;
+
+            var roleDto = _mapper.Map<RoleDto>(role);
+
+            return new ResponseDto<RoleDto>
+            {
+                IsSuccess = true,
+                Message = "Role created successfully.",
+                Code = "201",
+                Data = roleDto
+            };
         }
 
+
         // Update an existing role
-        public async Task UpdateRoleAsync(RoleUpdateDto roleUpdateDto)
+        public async Task<ResponseDto<string>> UpdateRoleAsync(RoleUpdateDto roleUpdateDto)
         {
-            // Validate input
             var validationResult = await _roleUpdateValidator.ValidateAsync(roleUpdateDto);
             if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.Errors);
+            {
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "Validation failed.",
+                    Code = "400",
+                    Details = validationResult.Errors.Select(e => new
+                    {
+                        e.PropertyName,
+                        e.ErrorMessage
+                    })
+                };
+            }
 
             var role = await _roleRepository.GetRoleByIdAsync(roleUpdateDto.RoleID);
             if (role == null)
-                throw new ArgumentException("Role not found.");
+            {
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "Role not found.",
+                    Code = "404"
+                };
+            }
 
             _mapper.Map(roleUpdateDto, role);
             await _roleRepository.UpdateRoleAsync(role);
+
+            return new ResponseDto<string>
+            {
+                IsSuccess = true,
+                Message = "Role updated successfully.",
+                Code = "200",
+                Data = $"RoleId:{roleUpdateDto.RoleID}"
+            };
         }
+
 
         // Delete a role
-        public async Task DeleteRoleAsync(int roleId)
+        public async Task<ResponseDto<string>> DeleteRoleAsync(int roleId)
         {
             var role = await _roleRepository.GetRoleByIdAsync(roleId);
             if (role == null)
-                throw new ArgumentException("Role not found.");
+            {
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "Role not found.",
+                    Code = "404"
+                };
+            }
 
             await _roleRepository.DeleteRoleAsync(roleId);
+
+            return new ResponseDto<string>
+            {
+                IsSuccess = true,
+                Message = "Role deleted successfully.",
+                Code = "200",
+                Data = $"RoleId:{roleId}"
+            };
         }
+
 
         // Assign a permission to a role
-        public async Task AssignPermissionToRoleAsync(RolePermissionDto rolePermissionDto)
+        public async Task<ResponseDto<string>> AssignPermissionToRoleAsync(RolePermissionDto rolePermissionDto)
         {
-            // Check if the permission is already assigned to the role
-            var isAssigned = await _rolePermissionRepository.IsPermissionAssignedToRoleAsync(rolePermissionDto.RoleID, rolePermissionDto.PermissionID);
-            if (isAssigned)
-                throw new ArgumentException("Permission is already assigned to the role.");
+            var isAssigned = await _rolePermissionRepository.IsPermissionAssignedToRoleAsync(
+                rolePermissionDto.RoleID, rolePermissionDto.PermissionID);
 
-            // Assign the permission to the role
-            await _rolePermissionRepository.AssignPermissionToRoleAsync(rolePermissionDto.RoleID, rolePermissionDto.PermissionID, rolePermissionDto.SortingOrder);
+            if (isAssigned)
+            {
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "Permission is already assigned to the role.",
+                    Code = "409"
+                };
+            }
+
+            await _rolePermissionRepository.AssignPermissionToRoleAsync(
+                rolePermissionDto.RoleID,
+                rolePermissionDto.PermissionID,
+                rolePermissionDto.SortingOrder);
+
+            return new ResponseDto<string>
+            {
+                IsSuccess = true,
+                Message = "Permission assigned successfully.",
+                Code = "200",
+                Data = $"RoleId:{rolePermissionDto.RoleID}-PermissionId:{rolePermissionDto.PermissionID}"
+            };
         }
+
 
         // Unassign a permission from a role
-        public async Task UnassignPermissionFromRoleAsync(int roleId, int permissionId)
+        public async Task<ResponseDto<string>> UnassignPermissionFromRoleAsync(int roleId, int permissionId)
         {
-            // Check if the permission is assigned to the role
             var isAssigned = await _rolePermissionRepository.IsPermissionAssignedToRoleAsync(roleId, permissionId);
             if (!isAssigned)
-                throw new ArgumentException("Permission is not assigned to the role.");
+            {
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "Permission is not assigned to the role.",
+                    Code = "403"
+                };
+            }
 
-            // Unassign the permission from the role
             await _rolePermissionRepository.UnassignPermissionFromRoleAsync(roleId, permissionId);
+
+            return new ResponseDto<string>
+            {
+                IsSuccess = true,
+                Message = "Permission unassigned successfully.",
+                Code = "200",
+                Data = $"RoleId:{roleId}-PermissionId:{permissionId}"
+            };
         }
 
-        public async Task AssignPermissionsToRoleAsync(int roleId, List<int> permissionIds)
+
+        public async Task<ResponseDto<List<int>>> AssignPermissionsToRoleAsync(int roleId, List<int> permissionIds)
         {
             var role = await _roleRepository.GetRoleByIdAsync(roleId);
             if (role == null)
-                throw new ArgumentException("Role not found.");
+            {
+                return new ResponseDto<List<int>>
+                {
+                    IsSuccess = false,
+                    Message = "Role not found.",
+                    Code = "404"
+                };
+            }
+
+            var assignedPermissions = new List<int>();
 
             foreach (var permissionId in permissionIds)
             {
-                bool isAssigned = await _rolePermissionRepository.IsPermissionAssignedToRoleAsync(roleId, permissionId);
+                var isAssigned = await _rolePermissionRepository.IsPermissionAssignedToRoleAsync(roleId, permissionId);
                 if (!isAssigned)
                 {
                     await _rolePermissionRepository.AssignPermissionToRoleAsync(roleId, permissionId);
+                    assignedPermissions.Add(permissionId);
                 }
             }
+
+            return new ResponseDto<List<int>>
+            {
+                IsSuccess = true,
+                Message = "Permissions assigned successfully.",
+                Code = "200",
+                Data = assignedPermissions
+            };
         }
 
-        public async Task UnassignPermissionsFromRoleAsync(int roleId, List<int> permissionIds)
+
+        public async Task<ResponseDto<List<int>>> UnassignPermissionsFromRoleAsync(int roleId, List<int> permissionIds)
         {
             var role = await _roleRepository.GetRoleByIdAsync(roleId);
             if (role == null)
-                throw new ArgumentException("Role not found.");
+            {
+                return new ResponseDto<List<int>>
+                {
+                    IsSuccess = false,
+                    Message = "Role not found.",
+                    Code = "404"
+                };
+            }
+
+            var unassignedPermissions = new List<int>();
 
             foreach (var permissionId in permissionIds)
             {
-                bool isAssigned = await _rolePermissionRepository.IsPermissionAssignedToRoleAsync(roleId, permissionId);
+                var isAssigned = await _rolePermissionRepository.IsPermissionAssignedToRoleAsync(roleId, permissionId);
                 if (isAssigned)
                 {
                     await _rolePermissionRepository.UnassignPermissionFromRoleAsync(roleId, permissionId);
+                    unassignedPermissions.Add(permissionId);
                 }
             }
+
+            return new ResponseDto<List<int>>
+            {
+                IsSuccess = true,
+                Message = "Permissions unassigned successfully.",
+                Code = "200",
+                Data = unassignedPermissions
+            };
         }
 
     }

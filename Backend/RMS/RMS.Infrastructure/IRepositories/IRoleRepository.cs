@@ -15,5 +15,6 @@ namespace RMS.Infrastructure.Interfaces
         Task AddRoleAsync(Role role);
         Task UpdateRoleAsync(Role role);
         Task DeleteRoleAsync(int roleId);
+        Task<bool> RoleExistsAsync(int roleId);
     }
 }

@@ -23,18 +23,24 @@ namespace RMS.Application.AutoMappers
                 .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Roles, opt => opt.MapFrom(src =>
                     src.UserRoles.Select(ur => ur.Role != null ? ur.Role.RoleName : string.Empty).ToList()))
+                .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.ProfilePictureUrl)) // New line
                 .ReverseMap()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserID))
-                .ForMember(dest => dest.UserRoles, opt => opt.Ignore());
+                .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.ProfilePictureUrl)) // New line
+                .ForMember(dest => dest.UserRoles, opt => opt.Ignore()); // Keeps role assignment clean
 
             CreateMap<User, UserCreateDto>()
-            .ForMember(dest => dest.Password, opt => opt.Ignore()) // If `UserCreateDto` has a plain Password
-            .ReverseMap();
+                .ForMember(dest => dest.Password, opt => opt.Ignore()) // Never map password hash back to DTO
+                .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.ProfilePictureUrl)) // New line
+                .ReverseMap()
+                .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.ProfilePictureUrl)); // New line
 
             CreateMap<UserUpdateDto, User>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserID))
-            .ReverseMap()
-            .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.Id));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserID))
+                .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.ProfilePictureUrl)) // New line
+                .ReverseMap()
+                .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.ProfilePictureUrl)); // New line
 
 
             // Role mappings

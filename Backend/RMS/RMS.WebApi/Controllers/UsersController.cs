@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RMS.Application.Implementations;
+using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Dtos;
+using RMS.Domain.DTOs;
 using RMS.Domain.DTOs.UserDTOs.InputDTOs;
-using RMS.Domain.Entities;
 
 namespace RMS.WebApi.Controllers
 {
@@ -20,183 +21,192 @@ namespace RMS.WebApi.Controllers
             _userService = userService;
         }
 
-        // Get all users
         [HttpGet]
         public async Task<IActionResult> GetAllUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                // Validate pagination parameters
                 if (pageNumber < 1 || pageSize < 1)
-                    return BadRequest("Page number and page size must be greater than 0.");
+                {
+                    return BadRequest(new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "Page number and page size must be greater than 0.",
+                        Code = "INVALID_PAGINATION"
+                    });
+                }
 
-                // Get paginated users
-                var pagedResult = await _userService.GetAllUsersAsync(pageNumber, pageSize);
-
-                // Return paginated response
-                //var response = new
-                //{
-                //    TotalCount = totalCount,
-                //    PageNumber = pageNumber,
-                //    PageSize = pageSize,
-                //    Users = users
-                //};
-
-                return Ok(pagedResult);
+                var result = await _userService.GetAllUsersAsync(pageNumber, pageSize);
+                return Ok(new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = "Users retrieved successfully",
+                    Code = "200",
+                    Data = result
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while retrieving users: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving users.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
-        // Get user by ID
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUserById(int id)
         {
             try
             {
-                var user = await _userService.GetUserByIdAsync(id);
-                if (user == null)
-                    return NotFound();
-
-                return Ok(user);
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _userService.GetUserByIdAsync(id);
+                return result.IsSuccess ? Ok(result) : NotFound(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while retrieving the user: {ex.Message}");
+                return StatusCode(500, new ResponseDto<UserDto>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving the user.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
-        // Get user by UserName
-        [HttpGet("{username}")]
+        [HttpGet("username/{username}")]
         public async Task<IActionResult> GetUserByUsername(string username)
         {
             try
             {
-                var user = await _userService.GetUserByUsernameAsync(username);
-                if (user == null)
-                    return NotFound();
-
-                return Ok(user);
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _userService.GetUserByUsernameAsync(username);
+                return result.IsSuccess ? Ok(result) : NotFound(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while retrieving the user: {ex.Message}");
+                return StatusCode(500, new ResponseDto<UserDto>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving the user.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
-        // Create a new user
         [HttpPost]
-        public async Task<IActionResult> CreateUser(UserCreateDto userCreateDto)
+        public async Task<IActionResult> CreateUser([FromBody] UserCreateDto dto)
         {
             try
             {
-                var userId = await _userService.CreateUserAsync(userCreateDto);
-                return CreatedAtAction(nameof(GetUserById), new { id = userId }, new { UserId = userId });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
+                var result = await _userService.CreateUserAsync(dto);
+                if (!result.IsSuccess)
+                    return BadRequest(result);
+
+                return CreatedAtAction(nameof(GetUserById), new { id = result.Data.UserID }, result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while creating the user: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while creating the user.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
-        // Update an existing user
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, UserUpdateDto userUpdateDto)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto dto)
         {
             try
             {
-                if (id != userUpdateDto.UserID)
-                    return BadRequest("User ID mismatch.");
+                if (id != dto.UserID)
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "User ID mismatch.",
+                        Code = "ID_MISMATCH"
+                    });
+                }
 
-                await _userService.UpdateUserAsync(userUpdateDto);
-                return NoContent();
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _userService.UpdateUserAsync(dto);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while updating the user: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while updating the user.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
-        // Delete a user
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
-                await _userService.DeleteUserAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _userService.DeleteUserAsync(id);
+                return result.IsSuccess ? Ok(result) : NotFound(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while deleting the user: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while deleting the user.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
-        // Assign a role to a user
         [HttpPost("{userId}/roles/{roleId}")]
         public async Task<IActionResult> AssignRoleToUser(int userId, int roleId)
         {
             try
             {
-                await _userService.AssignRoleToUserAsync(userId, roleId);
-                return Ok("Role assigned successfully.");
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _userService.AssignRoleToUserAsync(userId, roleId);
+                return result.IsSuccess ? Ok(result) : NotFound(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while assigning the role: {ex.Message}");
+                return StatusCode(500, new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while assigning the role.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
-        // Unassign a role from a user
         [HttpDelete("{userId}/roles/{roleId}")]
         public async Task<IActionResult> UnassignRoleFromUser(int userId, int roleId)
         {
             try
             {
-                await _userService.UnassignRoleFromUserAsync(userId, roleId);
-                return Ok("Role unassigned successfully.");
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _userService.UnassignRoleFromUserAsync(userId, roleId);
+                return result.IsSuccess ? Ok(result) : NotFound(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while unassigning the role: {ex.Message}");
+                return StatusCode(500, new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while unassigning the role.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -205,24 +215,29 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                string performedBy = User.Identity?.Name ?? "System";
+                if (userId <= 0 || roleIds == null || !roleIds.Any())
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "User ID and role list must be valid.",
+                        Code = "INVALID_INPUT"
+                    });
+                }
 
-                if (userId <= 0)
-                    return BadRequest("User ID must be greater than 0.");
-
-                if (roleIds == null || !roleIds.Any())
-                    return BadRequest("At least one role ID must be provided.");
-
-                await _userService.AssignRolesToUserAsync(userId, roleIds, performedBy);
-                return Ok("Roles assigned to role successfully.");
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var performedBy = User.Identity?.Name ?? "System";
+                var result = await _userService.AssignRolesToUserAsync(userId, roleIds, performedBy);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while assigning permissions: {ex.Message}");
+                return StatusCode(500, new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while assigning roles.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -231,25 +246,51 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                string performedBy = User.Identity?.Name ?? "System";
+                if (userId <= 0 || roleIds == null || !roleIds.Any())
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "User ID and role list must be valid.",
+                        Code = "INVALID_INPUT"
+                    });
+                }
 
-                if (userId <= 0)
-                    return BadRequest("User ID must be greater than 0.");
-
-                if (roleIds == null || !roleIds.Any())
-                    return BadRequest("At least one role ID must be provided.");
-
-                await _userService.UnassignRolesFromUserAsync(userId, roleIds, performedBy);
-                return Ok("Roles unassigned.");
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var performedBy = User.Identity?.Name ?? "System";
+                var result = await _userService.UnassignRolesFromUserAsync(userId, roleIds, performedBy);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while assigning permissions: {ex.Message}");
-            }                        
+                return StatusCode(500, new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while unassigning roles.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("{userId}/upload-profile-picture")]
+        public async Task<IActionResult> UploadProfilePicture(int userId, IFormFile file)
+        {
+            try
+            {
+                var result = await _userService.UploadProfilePictureAsync(userId, file);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred during upload.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
+            }
         }
     }
 }
+
