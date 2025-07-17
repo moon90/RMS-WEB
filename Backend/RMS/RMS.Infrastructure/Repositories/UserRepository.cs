@@ -19,23 +19,74 @@ namespace RMS.Infrastructure.Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<(IEnumerable<User> Users, int TotalCount)> GetAllUsersAsync(int pageNumber, int pageSize)
+        public async Task<(IEnumerable<User> Users, int TotalCount)> GetAllUsersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, string? role)
         {
-            var query = _context.Users.AsQueryable();
+            var query = _context.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).AsQueryable();
 
-            // Calculate the number of items to skip
-            var skip = (pageNumber - 1) * pageSize;
+            // Filtering
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                query = query.Where(u =>
+                    u.UserName.Contains(searchQuery) ||
+                    u.FullName.Contains(searchQuery) ||
+                    (u.Email != null && u.Email.Contains(searchQuery)) ||
+                    (u.Phone != null && u.Phone.Contains(searchQuery))
+                );
+            }
 
-            // Get the total count of users
+            if (status.HasValue)
+            {
+                query = query.Where(u => u.Status == status.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(role))
+            {
+                query = query.Where(u => u.UserRoles.Any(ur => ur.Role != null && ur.Role.RoleName == role));
+            }
+
+            // Sorting
+            if (!string.IsNullOrWhiteSpace(sortColumn))
+            {
+                switch (sortColumn.ToLower())
+                {
+                    case "userid":
+                        query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.Id) : query.OrderBy(u => u.Id);
+                        break;
+                    case "username":
+                        query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.UserName) : query.OrderBy(u => u.UserName);
+                        break;
+                    case "fullname":
+                        query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.FullName) : query.OrderBy(u => u.FullName);
+                        break;
+                    case "email":
+                        query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.Email) : query.OrderBy(u => u.Email);
+                        break;
+                    case "phone":
+                        query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.Phone) : query.OrderBy(u => u.Phone);
+                        break;
+                    case "status":
+                        query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.Status) : query.OrderBy(u => u.Status);
+                        break;
+                    default:
+                        query = query.OrderBy(u => u.Id); // Default sort
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(u => u.Id); // Default sort if no column specified
+            }
+
+            // Get the total count of users after filtering
             var totalCount = await query.CountAsync();
 
             // Apply pagination
             var users = await query
-                .Skip(skip)
+                .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            return (users, totalCount);
+            return (Users: users, TotalCount: totalCount);
         }
 
         public async Task<User> GetUserByIdAsync(int userId)

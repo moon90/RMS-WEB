@@ -67,14 +67,16 @@ namespace RMS.Infrastructure.Repositories
                 .AnyAsync(ur => ur.UserID == userId && ur.RoleID == roleId);
         }
 
-        public async Task AssignRoleToUserAsync(int userId, int roleId)
+        public async Task AssignRoleToUserAsync(int userId, int roleId, string performedBy)
         {
             if (!await IsRoleAssignedToUserAsync(userId, roleId))
             {
                 var userRole = new UserRole
                 {
                     UserID = userId,
-                    RoleID = roleId
+                    RoleID = roleId,
+                    AssignedAt = DateTime.UtcNow,
+                    AssignedBy = performedBy
                 };
                 await _context.UserRoles.AddAsync(userRole);
                 await _context.SaveChangesAsync();

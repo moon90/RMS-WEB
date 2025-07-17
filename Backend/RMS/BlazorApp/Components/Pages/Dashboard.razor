@@ -1,0 +1,204 @@
+@page "/dashboard"
+@using MudBlazor.Utilities
+
+<MudText Typo="Typo.h3" GutterBottom="true" Class="mb-4">Welcome Back!</MudText>
+
+<MudGrid Spacing="4">
+    <!-- Metric Cards -->
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="0" Class="d-flex flex-column pa-4 mud-theme-tertiary-gradient" Style="height: 100%;">
+            <div class="d-flex justify-space-between align-center">
+                <MudText Typo="Typo.subtitle1">Total Orders</MudText>
+                <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" />
+            </div>
+            <MudText Typo="Typo.h4" GutterBottom="true">1,234</MudText>
+            <MudText Typo="Typo.body2" Class="d-flex align-center">
+                <MudIcon Icon="@Icons.Material.Filled.ArrowUpward" Color="Color.Success" Class="mr-1" />
+                <span style="color: var(--mud-palette-success-text);">5.2%</span>
+                <span class="ml-1">vs last month</span>
+            </MudText>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="0" Class="d-flex flex-column pa-4 mud-theme-primary-gradient" Style="height: 100%;">
+            <div class="d-flex justify-space-between align-center">
+                <MudText Typo="Typo.subtitle1">Total Revenue</MudText>
+                <MudIcon Icon="@Icons.Material.Filled.AttachMoney" />
+            </div>
+            <MudText Typo="Typo.h4" GutterBottom="true">$56,789</MudText>
+            <MudText Typo="Typo.body2" Class="d-flex align-center">
+                <MudIcon Icon="@Icons.Material.Filled.ArrowUpward" Color="Color.Success" Class="mr-1" />
+                <span style="color: var(--mud-palette-success-text);">8.1%</span>
+                <span class="ml-1">vs last month</span>
+            </MudText>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="0" Class="d-flex flex-column pa-4 mud-theme-secondary-gradient" Style="height: 100%;">
+            <div class="d-flex justify-space-between align-center">
+                <MudText Typo="Typo.subtitle1">New Customers</MudText>
+                <MudIcon Icon="@Icons.Material.Filled.PersonAdd" />
+            </div>
+            <MudText Typo="Typo.h4" GutterBottom="true">56</MudText>
+            <MudText Typo="Typo.body2" Class="d-flex align-center">
+                <MudIcon Icon="@Icons.Material.Filled.ArrowDownward" Color="Color.Error" Class="mr-1" />
+                <span style="color: var(--mud-palette-error-text);">2.3%</span>
+                <span class="ml-1">vs last month</span>
+            </MudText>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="0" Class="d-flex flex-column pa-4 mud-theme-warning-gradient" Style="height: 100%;">
+            <div class="d-flex justify-space-between align-center">
+                <MudText Typo="Typo.subtitle1">Pending Orders</MudText>
+                <MudIcon Icon="@Icons.Material.Filled.HourglassEmpty" />
+            </div>
+            <MudText Typo="Typo.h4" GutterBottom="true">12</MudText>
+            <MudText Typo="Typo.body2" Class="d-flex align-center">
+                <MudIcon Icon="@Icons.Material.Filled.ArrowUpward" Color="Color.Success" Class="mr-1" />
+                <span style="color: var(--mud-palette-success-text);">1.5%</span>
+                <span class="ml-1">vs yesterday</span>
+            </MudText>
+        </MudCard>
+    </MudItem>
+
+    <!-- Revenue Chart -->
+    <MudItem xs="12" md="8">
+        <MudCard Elevation="2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Monthly Revenue</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudChart ChartType="ChartType.Line" ChartSeries="@_series" ChartOptions="@_chartOptions" XAxisLabels="@_xAxisLabels" Height="350px" />
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- Recent Activity -->
+    <MudItem xs="12" md="4">
+        <MudCard Elevation="2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Recent Activity</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudList T="Activity">
+                    @foreach (var activity in _activities)
+                    {
+                        <MudListItem T="Activity" Value="@activity" Icon="@activity.Icon" IconColor="@activity.IconColor">
+                            <div class="d-flex justify-space-between w-100">
+                                <span>@activity.Message</span>
+                                <MudText Typo="Typo.caption" Class="mud-text-secondary">@activity.Timestamp</MudText>
+                            </div>
+                        </MudListItem>
+                    }
+                </MudList>
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <!-- Recent Orders Table -->
+    <MudItem xs="12" onscroll="@ScrollBehavior.Auto">
+        <MudCard Elevation="2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Recent Orders</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudTable Items="@_orders" Hover="true" Dense="true" Class="mt-4">
+                    <HeaderContent>
+                        <MudTh>Order ID</MudTh>
+                        <MudTh>Customer</MudTh>
+                        <MudTh>Date</MudTh>
+                        <MudTh>Total</MudTh>
+                        <MudTh>Status</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Order ID">#@context.Id</MudTd>
+                        <MudTd DataLabel="Customer">@context.CustomerName</MudTd>
+                        <MudTd DataLabel="Date">@context.OrderDate.ToString("MMM dd, yyyy")</MudTd>
+                        <MudTd DataLabel="Total">$@context.Total.ToString("N2")</MudTd>
+                        <MudTd DataLabel="Status">
+                            <MudChip T="object" Color="@GetStatusColor(context.Status)" Size="Size.Small">
+                                @context.Status
+                            </MudChip>
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private List<ChartSeries> _series = new List<ChartSeries>();
+    private ChartOptions _chartOptions = new ChartOptions();
+    private string[] _xAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+    private List<Order> _orders = new List<Order>();
+    private List<Activity> _activities = new List<Activity>();
+
+    protected override void OnInitialized()
+    {
+        _series.Add(new ChartSeries() { Name = "Revenue", Data = new double[] { 45000, 48000, 52000, 58000, 62000, 68000, 72000, 75000, 78000, 82000, 85000, 90000 } });
+
+        _chartOptions.ChartPalette = new string[] { new MudColor("#594AE2").ToString(MudColorOutputFormats.Hex) };
+        _chartOptions.LineStrokeWidth = 2;
+        _chartOptions.YAxisFormat = "c0";
+        _chartOptions.InterpolationOption = InterpolationOption.NaturalSpline;
+
+        _orders = new List<Order>
+        {
+            new Order { Id = 1001, CustomerName = "John Smith", OrderDate = DateTime.Now.AddDays(-1), Total = 55.00, Status = "Delivered" },
+            new Order { Id = 1002, CustomerName = "Jane Doe", OrderDate = DateTime.Now.AddDays(-1), Total = 72.50, Status = "Delivered" },
+            new Order { Id = 1003, CustomerName = "Peter Jones", OrderDate = DateTime.Now, Total = 33.75, Status = "Pending" },
+            new Order { Id = 1004, CustomerName = "Mary Williams", OrderDate = DateTime.Now, Total = 98.20, Status = "In Progress" },
+            new Order { Id = 1005, CustomerName = "David Brown", OrderDate = DateTime.Now.AddDays(-2), Total = 112.80, Status = "Cancelled" },
+        };
+
+        _activities = new List<Activity>
+        {
+            new Activity { Icon = Icons.Material.Filled.AddShoppingCart, Message = "New order #1005 placed", Timestamp = "1h ago", IconColor = Color.Success },
+            new Activity { Icon = Icons.Material.Filled.PersonAdd, Message = "New customer registered", Timestamp = "3h ago", IconColor = Color.Primary },
+            new Activity { Icon = Icons.Material.Filled.Cancel, Message = "Order #1001 cancelled", Timestamp = "yesterday", IconColor = Color.Error },
+            new Activity { Icon = Icons.Material.Filled.CheckCircle, Message = "Payment received for #1002", Timestamp = "yesterday", IconColor = Color.Info },
+        };
+    }
+
+    private Color GetStatusColor(string status)
+    {
+        return status switch
+        {
+            "Delivered" => Color.Success,
+            "In Progress" => Color.Info,
+            "Pending" => Color.Warning,
+            "Cancelled" => Color.Error,
+            _ => Color.Default
+        };
+    }
+
+    public class Order
+    {
+        public int Id { get; set; }
+        public string CustomerName { get; set; }
+        public DateTime OrderDate { get; set; }
+        public double Total { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class Activity
+    {
+        public string Icon { get; set; }
+        public Color IconColor { get; set; }
+        public string Message { get; set; }
+        public string Timestamp { get; set; }
+    }
+
+}

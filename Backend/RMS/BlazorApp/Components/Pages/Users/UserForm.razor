@@ -1,0 +1,254 @@
+@using BlazorApp.Services
+@using RMS.Domain.DTOs.UserDTOs.InputDTOs
+@using RMS.Domain.DTOs;
+@using RMS.Domain.Dtos;
+@using MudBlazor
+@using System.Text.Json
+@inject UserApiClientService UserApiClientService
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">@(_isEditMode ? "Edit User" : "Add User")</MudText>
+    </TitleContent>
+
+    <DialogContent>
+        <MudForm @ref="_form" @bind-IsValid="_isValid">
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="_user.UserName" Label="Username" Required="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="_user.FullName" Label="Full Name" Required="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="_user.Email" Label="Email" Required="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="_user.Phone" Label="Phone" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="_user.Password" Label="Password" Required="!_isEditMode" InputType="InputType.Password" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    @if (_isEditMode)
+                    {
+                        <MudSwitch T="bool" @bind-Checked="_userUpdate.Status" Color="Color.Primary">Active</MudSwitch>
+                    }
+                    else
+                    {
+                        <MudSwitch T="bool" @bind-Checked="_user.Status" Color="Color.Primary">Active</MudSwitch>
+                    }
+                </MudItem>
+            </MudGrid>
+
+            
+
+            <MudItem xs="12">
+                    @if (!string.IsNullOrEmpty(_userUpdate.ProfilePictureUrl) && _isEditMode && ProfilePicture == null)
+                    {
+                        <MudAvatar Image="@_userUpdate.ProfilePictureUrl" Size="Size.Large" />
+                    }
+                    else if (ProfilePicture != null)
+                    {
+                        <MudAvatar Image="@_previewImageUrl" Size="Size.Large" />
+                    }
+                    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
+                                   MaxFiles="1"
+                                   FilesChanged="@OnFilesChanged">
+                        <UploadButtonContent>
+                            <MudButton Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.CloudUpload">
+                                Upload Profile Picture
+                            </MudButton>
+                        </UploadButtonContent>
+                    </MudFileUpload>
+                </MudItem>
+
+        </MudForm>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton OnClick="Submit" Color="Color.Primary" Disabled="!_isValid">@(_isEditMode ? "Update" : "Create")</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public IDialogReference DialogReference { get; set; }
+
+    [Parameter] public int UserId { get; set; }
+
+    private bool _isEditMode => UserId != 0;
+
+    private MudForm _form;
+    private bool _isValid;
+
+    private UserCreateDto _user = new();
+    private UserUpdateDto _userUpdate = new();
+    private List<IBrowserFile> _uploadedFiles = new();
+
+    private IBrowserFile? ProfilePicture => _uploadedFiles.FirstOrDefault();
+    private string? _previewImageUrl;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (_isEditMode)
+            {
+                var response = await UserApiClientService.GetUserByIdAsync(UserId);
+                if (!response.IsSuccess || response.Data == null)
+                {
+                    Snackbar.Add("Could not load user.", Severity.Error);
+                    DialogReference?.Close();
+                    return;
+                }
+                else
+                {
+                    var userDto = response.Data;
+                    _userUpdate = new UserUpdateDto
+                        {
+                            UserID = userDto.UserID,
+                            UserName = userDto.UserName,
+                            FullName = userDto.FullName,
+                            Email = userDto.Email,
+                            Phone = userDto.Phone,
+                            Status = userDto.Status,
+                            ProfilePictureUrl = userDto.ProfilePictureUrl
+                        };
+
+                    _user.UserName = _userUpdate.UserName;
+                    _user.FullName = _userUpdate.FullName;
+                    _user.Email = _userUpdate.Email;
+                    _user.Phone = _userUpdate.Phone;
+                }
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Initialization failed: {ex.Message}", Severity.Error);
+            DialogReference?.Close();
+        }
+
+    }
+
+    private void OnFilesChanged(IReadOnlyList<IBrowserFile> files)
+    {
+        _uploadedFiles = files.ToList();
+        if (ProfilePicture != null)
+        {
+            var reader = new System.IO.StreamReader(ProfilePicture.OpenReadStream());
+            var bytes = new byte[ProfilePicture.Size];
+            reader.BaseStream.Read(bytes, 0, (int)ProfilePicture.Size);
+            _previewImageUrl = $"data:{ProfilePicture.ContentType};base64,{Convert.ToBase64String(bytes)}";
+        }
+    }
+
+    private void Cancel()
+    {
+        DialogReference?.Close(DialogResult.Cancel());
+    }
+
+    private async Task Submit()
+    {
+        await _form.Validate();
+        if (!_isValid) return;
+
+        if (_isEditMode)
+        {
+            _userUpdate.UserName = _user.UserName;
+            _userUpdate.FullName = _user.FullName;
+            _userUpdate.Email = _user.Email;
+            _userUpdate.Phone = _user.Phone;
+
+            var response = await UserApiClientService.UpdateUserAsync(UserId, _userUpdate);
+            if (response.IsSuccess)
+            {
+                if (ProfilePicture != null)
+                {
+                    var stream = ProfilePicture.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // 10 MB max
+                    var uploadResult = await UserApiClientService.UploadProfilePictureAsync(
+                        UserId,
+                        stream,
+                        ProfilePicture.Name,
+                        ProfilePicture.ContentType);
+
+                    if (!uploadResult.IsSuccess)
+                    {
+                        Snackbar.Add("Profile picture upload failed: " + uploadResult.Message, Severity.Warning);
+                    }
+                }
+                Snackbar.Add("User updated successfully.", Severity.Success);
+                DialogReference.Close(DialogResult.Ok(true));
+            }
+            else
+            {
+                Snackbar.Add(response.Message, Severity.Error);
+            }
+        }
+        else
+        {
+            var createResponse = await UserApiClientService.CreateUserAsync(_user);
+            if (createResponse.IsSuccess)
+            {
+                int newUserId = createResponse.Data.UserID;
+
+                if (ProfilePicture != null)
+                {
+                    var stream = ProfilePicture.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // 10 MB max
+                    var uploadResult = await UserApiClientService.UploadProfilePictureAsync(
+                        newUserId,
+                        stream,
+                        ProfilePicture.Name,
+                        ProfilePicture.ContentType);
+
+                    if (!uploadResult.IsSuccess)
+                    {
+                        Snackbar.Add("Profile picture upload failed: " + uploadResult.Message, Severity.Warning);
+                    }
+                }
+
+                Snackbar.Add("User created successfully.", Severity.Success);
+                DialogReference.Close(DialogResult.Ok(true));
+            }
+            else
+            {
+                // Show main error message
+                Snackbar.Add(createResponse.Message ?? "Failed to create user.", Severity.Error);
+
+                // Handle validation errors from JsonElement
+                if (createResponse.Details is JsonElement jsonElement && jsonElement.ValueKind == JsonValueKind.Array)
+                {
+                    try
+                    {
+                        var options = new JsonSerializerOptions
+                            {
+                                PropertyNameCaseInsensitive = true
+                            };
+
+                        var validationErrors = JsonSerializer.Deserialize<List<ValidationDetailDto>>(jsonElement.GetRawText(), options);
+
+                        if (validationErrors != null)
+                        {
+                            foreach (var error in validationErrors)
+                            {
+                                if (!string.IsNullOrWhiteSpace(error.PropertyName) && !string.IsNullOrWhiteSpace(error.ErrorMessage))
+                                {
+                                    Snackbar.Add($"{error.PropertyName}: {error.ErrorMessage}", Severity.Error);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Snackbar.Add($"Failed to parse validation errors: {ex.Message}", Severity.Warning);
+                    }
+                }
+            }
+        }
+    }
+}

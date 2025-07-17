@@ -45,8 +45,8 @@ namespace RMS.Infrastructure.Configurations
                 {
                     Id = 2,
                     UserName = "manager",
-                    PasswordHash = "d4QTV4pwUJ-pwL2B2Y4V_w", // Replace with actual hashed password
-                    PasswordSalt = "cZ7UtVxlTYIEb97pOqfoBQ", // Replace with actual password salt
+                    PasswordHash = "d4QTV4pwUJ-pwL2B2Y4V_w", // Replace with actual hashed password - manager
+                    PasswordSalt = "cZ7UtVxlTYIEb97pOqfoBQ", // Replace with actual password salt - manager
                     FullName = "Manager User",
                     Email = "manager@example.com",
                     Phone = "0987654321",
@@ -61,8 +61,8 @@ namespace RMS.Infrastructure.Configurations
                 {
                     Id = 3,
                     UserName = "user",
-                    PasswordHash = "6Fn94S0iWXBrFbYv5v4Yxg", // Replace with actual hashed password
-                    PasswordSalt = "6Fn94S0iWXBrFbYv5v4Yxg", // Replace with actual password salt
+                    PasswordHash = "6Fn94S0iWXBrFbYv5v4Yxg", // Replace with actual hashed password - user
+                    PasswordSalt = "6Fn94S0iWXBrFbYv5v4Yxg", // Replace with actual password salt - user
                     FullName = "User",
                     Email = "user@example.com",
                     Phone = "0987654321",

@@ -20,29 +20,51 @@ namespace RMS.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<Role> GetRoleByNameAsync(string roleName)
+        {
+            return await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == roleName);
+        }
+
         public async Task<Role> GetRoleByIdAsync(int roleId)
         {
             return await _context.Roles.FindAsync(roleId);
         }
 
-        public async Task<IEnumerable<Role>> GetAllRolesAsync()
-        {
-            return await _context.Roles.ToListAsync();
-        }
-
-        public async Task<(IEnumerable<Role> Roles, int TotalCount)> GetAllRolesAsync(int pageNumber, int pageSize)
+        public async Task<(IEnumerable<Role> Roles, int TotalCount)> GetAllRolesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection)
         {
             var query = _context.Roles.AsQueryable();
 
-            // Calculate the number of items to skip
-            var skip = (pageNumber - 1) * pageSize;
+            // Apply search filter
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                query = query.Where(r => r.RoleName.Contains(searchQuery));
+            }
 
-            // Get the total count of roles
+            // Apply sorting
+            if (!string.IsNullOrEmpty(sortColumn))
+            {
+                switch (sortColumn.ToLower())
+                {
+                    case "rolename":
+                        query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(r => r.RoleName) : query.OrderBy(r => r.RoleName);
+                        break;
+                    case "id":
+                        query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(r => r.Id) : query.OrderBy(r => r.Id);
+                        break;
+                    default:
+                        query = query.OrderBy(r => r.Id); // Default sort
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(r => r.Id); // Default sort if no column is specified
+            }
+
             var totalCount = await query.CountAsync();
 
-            // Apply pagination
             var roles = await query
-                .Skip(skip)
+                .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 

@@ -26,8 +26,7 @@ namespace RMS.Application.Validators
             RuleFor(u => u.Phone)
                 .MaximumLength(20).WithMessage("Phone number cannot exceed 20 characters.");
 
-            RuleFor(u => u.RoleID)
-                .GreaterThan(0).WithMessage("Role ID must be greater than 0.");
+            
         }
     }
 }

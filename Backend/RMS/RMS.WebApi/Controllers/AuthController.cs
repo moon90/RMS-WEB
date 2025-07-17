@@ -233,10 +233,11 @@ namespace RMS.WebApi.Controllers
 
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout(int userId)
+        public async Task<IActionResult> Logout([FromBody] LogoutRequestDto logoutDto)
         {
             try
             {
+                int userId = logoutDto.UserId;
                 var result = await _userService.UpdateRefreshTokenAsync(userId, null, null);
 
                 if (!result.IsSuccess)

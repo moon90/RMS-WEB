@@ -59,39 +59,11 @@ namespace RMS.Application.Implementations
             };
         }
 
-        // Get all roles
-        public async Task<ResponseDto<IEnumerable<RoleDto>>> GetAllRolesAsync()
+        public async Task<PagedResult<RoleDto>> GetAllRolesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection)
         {
-            var roles = await _roleRepository.GetAllRolesAsync();
-            var roleDtos = _mapper.Map<IEnumerable<RoleDto>>(roles);
-
-            if (!roleDtos.Any())
-            {
-                return new ResponseDto<IEnumerable<RoleDto>>
-                {
-                    IsSuccess = false,
-                    Message = "No roles found.",
-                    Code = "404",
-                    Data = roleDtos
-                };
-            }
-
-            return new ResponseDto<IEnumerable<RoleDto>>
-            {
-                IsSuccess = true,
-                Message = "Roles retrieved successfully.",
-                Code = "200",
-                Data = roleDtos
-            };
-        }
-
-
-        public async Task<PagedResult<RoleDto>> GetAllRolesAsync(int pageNumber, int pageSize)
-        {
-            var (roles, totalCount) = await _roleRepository.GetAllRolesAsync(pageNumber, pageSize);
+            var (roles, totalCount) = await _roleRepository.GetAllRolesAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection);
             var roleDtos = _mapper.Map<List<RoleDto>>(roles);
 
-            // Wrap in PagedResult
             var pagedResult = new PagedResult<RoleDto>(roleDtos, pageNumber, pageSize, totalCount);
             return pagedResult;
         }
@@ -111,6 +83,17 @@ namespace RMS.Application.Implementations
                         e.PropertyName,
                         e.ErrorMessage
                     })
+                };
+            }
+
+            // Check if role name already exists
+            if (await _roleRepository.GetRoleByNameAsync(roleCreateDto.RoleName) != null)
+            {
+                return new ResponseDto<RoleDto>
+                {
+                    IsSuccess = false,
+                    Message = "Role name already exists.",
+                    Code = "409"
                 };
             }
 
@@ -156,6 +139,18 @@ namespace RMS.Application.Implementations
                     IsSuccess = false,
                     Message = "Role not found.",
                     Code = "404"
+                };
+            }
+
+            // Check if role name already exists for another role
+            var existingRole = await _roleRepository.GetRoleByNameAsync(roleUpdateDto.RoleName);
+            if (existingRole != null && existingRole.Id != roleUpdateDto.RoleID)
+            {
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "Role name already exists.",
+                    Code = "409"
                 };
             }
 

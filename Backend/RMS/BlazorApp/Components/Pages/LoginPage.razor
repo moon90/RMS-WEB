@@ -1,0 +1,84 @@
+@page "/login"
+@layout AuthLayout
+@using BlazorApp.Components.Layout
+@using RMS.Domain.DTOs
+@using RMS.Domain.Dtos
+@using RMS.Domain.Dtos.UserDTOs.InputDTOs
+@using Microsoft.AspNetCore.Components.Authorization
+@using BlazorApp.Services
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject IJSRuntime JSRuntime
+@inject AuthService AuthService
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center justify-center" Style="height: 100vh;">
+    <MudPaper Elevation="3" Class="pa-8" Width="100%">
+        <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-4">Login</MudText>
+        <MudForm @ref="form" @bind-IsValid="success" @bind-Errors="errors">
+            <MudTextField T="string" Label="Username" @bind-Value="loginModel.UserName" Required="true" RequiredError="Username is required!" />
+            <MudTextField T="string" Label="Password" InputType="InputType.Password" @bind-Value="loginModel.Password" Required="true" RequiredError="Password is required!" Class="mt-4" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Class="mt-4" OnClick="Login" Disabled="!success || _isLoading">Login</MudButton>
+        </MudForm>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <MudText Color="Color.Error" Class="mt-4">@errorMessage</MudText>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private LoginDto loginModel = new LoginDto();
+    private bool success;
+    private string[] errors = { };
+    private MudForm form;
+    private string errorMessage = string.Empty;
+    private bool _isLoading = false;
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    //     var user = authState.User;
+
+    //     if (user.Identity.IsAuthenticated)
+    //     {
+    //         NavigationManager.NavigateTo("/", forceLoad: true);
+    //     }
+    // }
+
+    private async Task Login()
+    {
+        _isLoading = true;
+        errorMessage = string.Empty;
+
+        try
+        {
+            await form.Validate();
+
+            if (success)
+            {
+                var result = await AuthService.LoginAsync(loginModel);
+
+                if (result.IsSuccess)
+                {
+                    Snackbar.Add("Login successful!", Severity.Success);
+                    NavigationManager.NavigateTo("/", forceLoad: true);
+                }
+                else
+                {
+                    errorMessage = result.Message ?? "Login failed. Please check your credentials.";
+                    Snackbar.Add(errorMessage, Severity.Error);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An unexpected error occurred: {ex.Message}";
+            Snackbar.Add(errorMessage, Severity.Error);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+}

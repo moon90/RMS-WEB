@@ -14,7 +14,7 @@ namespace RMS.Domain.DTOs.UserDTOs.InputDTOs
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public bool Status { get; set; }
-        public int RoleID { get; set; }
+        
 
         public string? ProfilePictureUrl { get; set; } // Update profile image
     }

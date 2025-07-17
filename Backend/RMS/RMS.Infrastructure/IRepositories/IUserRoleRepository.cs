@@ -18,7 +18,7 @@ namespace RMS.Infrastructure.Interfaces
 
         // New methods for role assignment
         Task<bool> IsRoleAssignedToUserAsync(int userId, int roleId);
-        Task AssignRoleToUserAsync(int userId, int roleId);
+        Task AssignRoleToUserAsync(int userId, int roleId, string performedBy);
         Task UnassignRoleFromUserAsync(int userId, int roleId);
     }
 }

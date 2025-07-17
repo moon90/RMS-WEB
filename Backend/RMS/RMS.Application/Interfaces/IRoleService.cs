@@ -15,8 +15,7 @@ namespace RMS.Application.Interfaces
     public interface IRoleService
     {
         Task<ResponseDto<RoleDto>> GetRoleByIdAsync(int roleId);
-        Task<ResponseDto<IEnumerable<RoleDto>>> GetAllRolesAsync();
-        Task<PagedResult<RoleDto>> GetAllRolesAsync(int pageNumber, int pageSize);
+        Task<PagedResult<RoleDto>> GetAllRolesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection);
 
         Task<ResponseDto<RoleDto>> CreateRoleAsync(RoleCreateDto roleCreateDto);
         Task<ResponseDto<string>> UpdateRoleAsync(RoleUpdateDto roleUpdateDto);

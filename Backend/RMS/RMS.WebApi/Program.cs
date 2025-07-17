@@ -150,7 +150,7 @@ builder.Services.AddScoped<ITokenService, TokenService>(provider =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
-        builder => builder.WithOrigins("http://localhost:4200", "http://localhost:5173")
+        builder => builder.WithOrigins("http://localhost:4200", "http://localhost:5173", "http://localhost:5229/", "https://localhost:7237/", "http://localhost:3000")
                           .AllowAnyHeader()
                           .AllowAnyMethod());
 });
@@ -161,6 +161,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter>();
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

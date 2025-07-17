@@ -1,0 +1,54 @@
+@using MudBlazor.Utilities
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="_theme" IsDarkMode="_isDarkMode" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <!-- Main Content -->
+    <MudMainContent>
+        <!-- Page content -->
+        <MudContainer MaxWidth="MaxWidth.False" Class="pa-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+    private string searchText = string.Empty;
+    private bool _isDarkMode = true;
+    private MudThemeProvider _mudThemeProvider;
+
+    private readonly MudTheme _theme = new MudTheme()
+    {
+        PaletteLight = new PaletteLight()
+        {
+                Primary = new MudColor("#2980b9"),              // Indigo
+                Secondary = new MudColor("#2c3e50"),            // Pink A200
+                AppbarBackground = new MudColor("#303F9F"),     // Darker Indigo
+            DrawerBackground = new MudColor("#303F9F"),     // Darker Indigo
+            Background = new MudColor("#F5F5F5"),           // Light Grey
+            AppbarText = new MudColor("#FFFFFF"),
+            DrawerText = new MudColor("#FFFFFF"),
+            DrawerIcon = new MudColor("#FFFFFF"),
+            TextPrimary = new MudColor("#212121"),          // Dark Grey for text
+            TextSecondary = new MudColor("#757575"),        // Medium Grey for secondary text
+        },
+        PaletteDark = new PaletteDark()
+        {
+                Primary = new MudColor("#2980b9"),              // Light Indigo
+                Secondary = new MudColor("#34495e"),            // Light Pink
+                AppbarBackground = new MudColor("#212121"),     // Dark Grey
+            DrawerBackground = new MudColor("#212121"),     // Dark Grey
+            Background = new MudColor("#303030"),           // Darker Grey
+            AppbarText = new MudColor("#FFFFFF"),
+            DrawerText = new MudColor("#FFFFFF"),
+            DrawerIcon = new MudColor("#FFFFFF"),
+            TextPrimary = new MudColor("#FFFFFF"),          // White for text
+            TextSecondary = new MudColor("#BDBDBD"),        // Light Grey for secondary text
+        }
+    };
+}

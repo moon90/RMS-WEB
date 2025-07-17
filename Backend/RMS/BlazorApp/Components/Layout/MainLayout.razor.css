@@ -1,0 +1,20 @@
+.mud-appbar-content {
+    width: 100%;
+}
+
+.mud-toolbar {
+    padding: 0 16px;
+}
+
+.mud-input-control {
+    margin: 0 16px;
+}
+
+.mud-avatar-size-medium {
+    height: 40px;
+    width: 40px;
+}
+
+.mud-menu {
+    margin-left: 16px;
+}

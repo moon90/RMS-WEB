@@ -13,6 +13,7 @@ namespace RMS.Domain.DTOs.UserDTOs.InputDTOs
         public string FullName { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
+        public bool Status { get; set; } = true; // Default to active
 
         public string? ProfilePictureUrl { get; set; } // Optional profile picture
         //public int RoleID { get; set; }

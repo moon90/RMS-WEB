@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.Interfaces;
+using RMS.Domain.Dtos;
 using RMS.Domain.DTOs.RoleDTOs.InputDTOs;
 using RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs;
+using RMS.Domain.Models.BaseModels;
 
 namespace RMS.WebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
@@ -19,33 +21,32 @@ namespace RMS.WebApi.Controllers
             _roleService = roleService;
         }
 
-        // Get all roles with pagination
         [HttpGet]
-        public async Task<IActionResult> GetAllRoles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAllRoles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null)
         {
             try
             {
-                // Validate pagination parameters
-                if (pageNumber < 1 || pageSize < 1)
-                    return BadRequest("Page number and page size must be greater than 0.");
+                var result = await _roleService.GetAllRolesAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection);
 
-                // Get paginated roles
-                var pagedResult = await _roleService.GetAllRolesAsync(pageNumber, pageSize);
+                var response = new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = "Roles retrieved successfully",
+                    Code = "200",
+                    Data = result
+                };
 
-                // Return paginated response
-                //var response = new
-                //{
-                //    TotalCount = totalCount,
-                //    PageNumber = pageNumber,
-                //    PageSize = pageSize,
-                //    Roles = roles
-                //};
-
-                return Ok(pagedResult);
+                return Ok(response);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while retrieving roles: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving roles.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -56,18 +57,17 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var role = await _roleService.GetRoleByIdAsync(id);
-                if (role == null)
-                    return NotFound();
-
-                return Ok(role);
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                return role.IsSuccess ? Ok(role) : NotFound(role);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while retrieving the role: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving the role.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -77,20 +77,21 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                var roleId = await _roleService.CreateRoleAsync(roleCreateDto);
-                return CreatedAtAction(nameof(GetRoleById), new { id = roleId }, new { RoleId = roleId });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
+                var result = await _roleService.CreateRoleAsync(roleCreateDto);
+                if (!result.IsSuccess)
+                    return BadRequest(result);
+
+                return CreatedAtAction(nameof(GetRoleById), new { id = result.Data.RoleID }, result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while creating the role: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while creating the role.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -102,22 +103,27 @@ namespace RMS.WebApi.Controllers
             {
                 // Ensure the ID in the URL matches the ID in the DTO
                 if (id != roleUpdateDto.RoleID)
-                    return BadRequest("Role ID mismatch.");
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "Role ID mismatch.",
+                        Code = "ID_MISMATCH"
+                    });
+                }
 
-                await _roleService.UpdateRoleAsync(roleUpdateDto);
-                return NoContent();
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _roleService.UpdateRoleAsync(roleUpdateDto);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while updating the role: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while updating the role.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -127,16 +133,18 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                await _roleService.DeleteRoleAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _roleService.DeleteRoleAsync(id);
+                return result.IsSuccess ? Ok(result) : NotFound(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while deleting the role: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while deleting the role.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -148,7 +156,14 @@ namespace RMS.WebApi.Controllers
             {
                 // Validate roleId and permissionId
                 if (roleId <= 0 || permissionId <= 0)
-                    return BadRequest("Role ID and Permission ID must be greater than 0.");
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "Role ID and Permission ID must be greater than 0.",
+                        Code = "INVALID_INPUT"
+                    });
+                }
 
                 // Assign the permission to the role
                 var dto = new RolePermissionDto
@@ -159,17 +174,18 @@ namespace RMS.WebApi.Controllers
                     AssignedAt = DateTime.UtcNow,
                     AssignedBy = User.Identity?.Name ?? "System"
                 };
-                await _roleService.AssignPermissionToRoleAsync(dto);
-
-                return Ok("Permission assigned to role successfully.");
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _roleService.AssignPermissionToRoleAsync(dto);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while assigning the permission: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while assigning the permission.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -181,20 +197,28 @@ namespace RMS.WebApi.Controllers
             {
                 // Validate roleId and permissionId
                 if (roleId <= 0 || permissionId <= 0)
-                    return BadRequest("Role ID and Permission ID must be greater than 0.");
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "Role ID and Permission ID must be greater than 0.",
+                        Code = "INVALID_INPUT"
+                    });
+                }
 
                 // Unassign the permission from the role
-                await _roleService.UnassignPermissionFromRoleAsync(roleId, permissionId);
-
-                return Ok("Permission unassigned from role successfully.");
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _roleService.UnassignPermissionFromRoleAsync(roleId, permissionId);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while unassigning the permission: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while unassigning the permission.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -204,22 +228,37 @@ namespace RMS.WebApi.Controllers
             try
             {
                 if (roleId <= 0)
-                    return BadRequest("Role ID must be greater than 0.");
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "Role ID must be greater than 0.",
+                        Code = "INVALID_INPUT"
+                    });
+                }
 
                 if (permissionIds == null || !permissionIds.Any())
-                    return BadRequest("At least one permission ID must be provided.");
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "At least one permission ID must be provided.",
+                        Code = "INVALID_INPUT"
+                    });
+                }
 
-                await _roleService.AssignPermissionsToRoleAsync(roleId, permissionIds);
-
-                return Ok("Permissions assigned to role successfully.");
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _roleService.AssignPermissionsToRoleAsync(roleId, permissionIds);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while assigning permissions: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while assigning permissions.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -229,25 +268,39 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                if(roleId <= 0)
-                    return BadRequest("Role ID must be greater than 0.");
+                if (roleId <= 0)
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "Role ID must be greater than 0.",
+                        Code = "INVALID_INPUT"
+                    });
+                }
 
                 if (permissionIds == null || !permissionIds.Any())
-                    return BadRequest("At least one permission ID must be provided.");
+                {
+                    return BadRequest(new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "At least one permission ID must be provided.",
+                        Code = "INVALID_INPUT"
+                    });
+                }
 
-                await _roleService.UnassignPermissionsFromRoleAsync(roleId, permissionIds);
-                return Ok("Permissions unassigned.");
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
+                var result = await _roleService.UnassignPermissionsFromRoleAsync(roleId, permissionIds);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while assigning permissions: {ex.Message}");
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while assigning permissions: {ex.Message}",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
             }
-
-            
         }
     }
 }

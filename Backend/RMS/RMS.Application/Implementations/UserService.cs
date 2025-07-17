@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
@@ -7,6 +7,7 @@ using RMS.Application.Helpers;
 using RMS.Application.Interfaces;
 using RMS.Domain.Dtos;
 using RMS.Domain.DTOs;
+using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
 using RMS.Domain.DTOs.UserDTOs.InputDTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
@@ -23,6 +24,7 @@ namespace RMS.Application.Implementations
         private readonly IRolePermissionRepository _rolePermissionRepository;
         private readonly IRoleMenuRepository _roleMenuRepository;
         private readonly IAuditLogService _auditLogService;
+        private readonly IRoleRepository _roleRepository; // Added
 
         private readonly IMapper _mapper;
         private readonly IValidator<UserCreateDto> _userCreateValidator;
@@ -36,7 +38,8 @@ namespace RMS.Application.Implementations
             IValidator<UserUpdateDto> userUpdateValidator,
             IRolePermissionRepository rolePermissionRepository,
             IRoleMenuRepository roleMenuRepository,
-            IAuditLogService auditLogService)
+            IAuditLogService auditLogService,
+            IRoleRepository roleRepository) // Added
         {
             _userRepository = userRepository;
             _userRoleRepository = userRoleRepository;
@@ -46,6 +49,7 @@ namespace RMS.Application.Implementations
             _rolePermissionRepository = rolePermissionRepository;
             _roleMenuRepository = roleMenuRepository;
             _auditLogService = auditLogService;
+            _roleRepository = roleRepository; // Assign the injected roleRepository
         }
 
         public async Task<ResponseDto<UserDto>> AuthenticateAsync(string username, string password)
@@ -60,27 +64,6 @@ namespace RMS.Application.Implementations
                     Code = "401"
                 };
             }
-
-            //var userDto = new UserDto()
-            //{
-            //    UserID = user.Id,
-            //    UserName = user.UserName,
-            //    FullName = user.FullName,
-            //    Email = user.Email,
-            //    Roles = user.UserRoles.Select(ur => ur.Role != null ? ur.Role.RoleName : string.Empty).ToList(),
-            //    Phone = user.Phone,
-            //    Status = user.Status,
-            //    CreatedDate = user.CreatedDate,
-            //    CreatedBy = user.CreatedBy,
-            //    ModifiedDate = user.ModifiedDate,
-            //    ModifiedBy = user.ModifiedBy,
-
-            //};
-
-            //var configCheck = _mapper.ConfigurationProvider;
-            //configCheck.AssertConfigurationIsValid();
-
-            //Console.WriteLine($"Mapping type: {user.GetType().FullName} → {typeof(UserDto).FullName}");
 
             var userDto = _mapper.Map<UserDto>(user);
 
@@ -217,17 +200,16 @@ namespace RMS.Application.Implementations
             };
         }
 
-        public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, string? role)
         {
-            var (users, totalCount) = await _userRepository.GetAllUsersAsync(pageNumber, pageSize);
+            var (users, totalCount) = await _userRepository.GetAllUsersAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, role);
+
             var userDtos = _mapper.Map<List<UserDto>>(users);
 
-            // Wrap in PagedResult
             var pagedResult = new PagedResult<UserDto>(userDtos, pageNumber, pageSize, totalCount);
             return pagedResult;
         }
 
-        // Get user by ID
         public async Task<ResponseDto<UserDto>> GetUserByIdAsync(int userId)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
@@ -250,7 +232,6 @@ namespace RMS.Application.Implementations
             };
         }
 
-        // Get user by username
         public async Task<ResponseDto<UserDto>> GetUserByUsernameAsync(string username)
         {
             var user = await _userRepository.GetUserByUsernameAsync(username);
@@ -276,10 +257,8 @@ namespace RMS.Application.Implementations
             };
         }
 
-        // Create a new user
         public async Task<ResponseDto<UserDto>> CreateUserAsync(UserCreateDto userCreateDto)
         {
-            // Validate input
             var validationResult = await _userCreateValidator.ValidateAsync(userCreateDto);
             if (!validationResult.IsValid)
             {
@@ -292,13 +271,30 @@ namespace RMS.Application.Implementations
                 };
             }
 
-            // Generate password hash and salt
+            if (await _userRepository.GetUserByUsernameAsync(userCreateDto.UserName) != null)
+            {
+                return new ResponseDto<UserDto>
+                {
+                    IsSuccess = false,
+                    Message = "Username already exists.",
+                    Code = "409"
+                };
+            }
+
+            if (await _userRepository.GetUserByEmailAsync(userCreateDto.Email) != null)
+            {
+                return new ResponseDto<UserDto>
+                {
+                    IsSuccess = false,
+                    Message = "Email already exists.",
+                    Code = "409"
+                };
+            }
+
             var (passwordHash, passwordSalt) = PasswordHelper.CreatePasswordHash(userCreateDto.Password);
 
-            // Map DTO to entity
             var user = _mapper.Map<User>(userCreateDto);
 
-            // Apply default profile picture if missing
             if (string.IsNullOrEmpty(user.ProfilePictureUrl))
             {
                 user.ProfilePictureUrl = "/images/profiles/default.png";
@@ -307,10 +303,23 @@ namespace RMS.Application.Implementations
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            // Save user
             await _userRepository.AddUserAsync(user);
 
-            // Map to UserDto
+            var defaultRole = await _roleRepository.GetRoleByNameAsync("User");
+            if (defaultRole != null)
+            {
+                await _userRoleRepository.AssignRoleToUserAsync(user.Id, defaultRole.Id, userCreateDto.UserName);
+            }
+            else
+            {
+                return new ResponseDto<UserDto>
+                {
+                    IsSuccess = false,
+                    Message = "User created, but default 'User' role not found or assigned.",
+                    Code = "404"
+                };
+            }
+
             var userDto = _mapper.Map<UserDto>(user);
 
             return new ResponseDto<UserDto>
@@ -322,10 +331,8 @@ namespace RMS.Application.Implementations
             };
         }
 
-        // Update an existing user
         public async Task<ResponseDto<UserDto>> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
-            // Validate input
             var validationResult = await _userUpdateValidator.ValidateAsync(userUpdateDto);
             if (!validationResult.IsValid)
             {
@@ -349,9 +356,30 @@ namespace RMS.Application.Implementations
                 };
             }
 
+            var existingUserByUsername = await _userRepository.GetUserByUsernameAsync(userUpdateDto.UserName);
+            if (existingUserByUsername != null && existingUserByUsername.Id != userUpdateDto.UserID)
+            {
+                return new ResponseDto<UserDto>
+                {
+                    IsSuccess = false,
+                    Message = "Username already exists.",
+                    Code = "409"
+                };
+            }
+
+            var existingUserByEmail = await _userRepository.GetUserByEmailAsync(userUpdateDto.Email);
+            if (existingUserByEmail != null && existingUserByEmail.Id != userUpdateDto.UserID)
+            {
+                return new ResponseDto<UserDto>
+                {
+                    IsSuccess = false,
+                    Message = "Email already exists.",
+                    Code = "409"
+                };
+            }
+
             _mapper.Map(userUpdateDto, user);
 
-            // Handle profile picture update and delete old one
             if (!string.IsNullOrEmpty(userUpdateDto.ProfilePictureUrl) && user.ProfilePictureUrl != userUpdateDto.ProfilePictureUrl)
             {
                 if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
@@ -379,7 +407,6 @@ namespace RMS.Application.Implementations
             };
         }
 
-        // Delete a user
         public async Task<ResponseDto<string>> DeleteUserAsync(int userId)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
@@ -399,7 +426,8 @@ namespace RMS.Application.Implementations
                 action: "DeleteUser",
                 entityType: "User",
                 entityId: $"UserId:{userId}",
-                performedBy: user.ModifiedBy
+                performedBy: user.UserName, 
+                details: $"User with ID {userId} was deleted."
             );
 
             return new ResponseDto<string>
@@ -412,8 +440,7 @@ namespace RMS.Application.Implementations
         }
 
 
-        // Assign a role to a user
-        public async Task<ResponseDto<string>> AssignRoleToUserAsync(int userId, int roleId)
+        public async Task<ResponseDto<string>> AssignRoleToUserAsync(int userId, int roleId, string performedBy)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
             if (user == null)
@@ -426,7 +453,18 @@ namespace RMS.Application.Implementations
                 };
             }
 
-            await _userRoleRepository.AssignRoleToUserAsync(userId, roleId);
+            var role = await _roleRepository.GetRoleByIdAsync(roleId);
+            if (role == null)
+            {
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "Role not found.",
+                    Code = "404"
+                };
+            }
+
+            await _userRoleRepository.AssignRoleToUserAsync(userId, roleId, performedBy);
 
             return new ResponseDto<string>
             {
@@ -437,7 +475,6 @@ namespace RMS.Application.Implementations
             };
         }
 
-        // Unassign a role from a user
         public async Task<ResponseDto<string>> UnassignRoleFromUserAsync(int userId, int roleId)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
@@ -618,13 +655,21 @@ namespace RMS.Application.Implementations
             }
 
             var assignedRoles = new List<int>();
+            var notFoundRoles = new List<int>();
 
             foreach (var roleId in roleIds)
             {
+                var role = await _roleRepository.GetRoleByIdAsync(roleId);
+                if (role == null)
+                {
+                    notFoundRoles.Add(roleId);
+                    continue;
+                }
+
                 bool isAssigned = await _userRoleRepository.IsRoleAssignedToUserAsync(userId, roleId);
                 if (!isAssigned)
                 {
-                    await _userRoleRepository.AssignRoleToUserAsync(userId, roleId);
+                    await _userRoleRepository.AssignRoleToUserAsync(userId, roleId, performedBy);
                     assignedRoles.Add(roleId);
 
                     await _auditLogService.LogAsync(
@@ -637,6 +682,16 @@ namespace RMS.Application.Implementations
                 }
             }
 
+            if (notFoundRoles.Any())
+            {
+                return new ResponseDto<List<int>>
+                {
+                    IsSuccess = false,
+                    Message = $"Some roles were not found: {string.Join(", ", notFoundRoles)}",
+                    Code = "404"
+                };
+            }
+
             if (assignedRoles.Count == 0)
             {
                 return new ResponseDto<List<int>>
@@ -644,7 +699,7 @@ namespace RMS.Application.Implementations
                     IsSuccess = false,
                     Message = "No new roles were assigned. All roles already assigned.",
                     Code = "409",
-                    Data = new List<int>() // Optional: still return empty list
+                    Data = new List<int>()
                 };
             }
 

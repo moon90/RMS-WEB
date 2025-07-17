@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using RMS.Application.DTOs;
 using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Domain.Dtos;
 using RMS.Domain.DTOs;
+using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
 using RMS.Domain.DTOs.UserDTOs.InputDTOs;
 using RMS.Domain.Models.BaseModels;
 using System;
@@ -32,14 +33,14 @@ namespace RMS.Application.Interfaces
 
         // User listing
         Task<ResponseDto<IEnumerable<UserDto>>> GetAllUsersAsync();
-        Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize); // can keep raw since it's a custom wrapper
+        Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, string? role);
 
         // Role & Permission
         Task<ResponseDto<List<string>>> GetRolePermissionsAsync(int userId);
         Task<ResponseDto<List<MenuPermissionDto>>> GetMenuPermissionsAsync(int userId);
 
         // Role assignment
-        Task<ResponseDto<string>> AssignRoleToUserAsync(int userId, int roleId);
+        Task<ResponseDto<string>> AssignRoleToUserAsync(int userId, int roleId, string performedBy);
         Task<ResponseDto<string>> UnassignRoleFromUserAsync(int userId, int roleId);
         Task<ResponseDto<List<int>>> AssignRolesToUserAsync(int userId, List<int> roleIds, string performedBy);
         Task<ResponseDto<List<int>>> UnassignRolesFromUserAsync(int userId, List<int> roleIds, string performedBy);

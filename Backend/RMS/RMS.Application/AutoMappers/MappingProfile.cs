@@ -44,9 +44,9 @@ namespace RMS.Application.AutoMappers
 
 
             // Role mappings
-            CreateMap<Role, RoleDto>().ReverseMap();
+            CreateMap<Role, RoleDto>().ForMember(dest => dest.RoleID, opt => opt.MapFrom(src => src.Id)).ReverseMap();
             CreateMap<RoleCreateDto, Role>().ReverseMap();
-            CreateMap<RoleUpdateDto, Role>().ReverseMap();
+            CreateMap<RoleUpdateDto, Role>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RoleID)).ReverseMap();
 
             // Menu mappings
             CreateMap<Menu, MenuDto>().ReverseMap();

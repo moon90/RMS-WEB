@@ -1,0 +1,175 @@
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="_theme" IsDarkMode="_isDarkMode" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager NavigationManager
+@inject AuthService AuthService
+@inject AuthenticationStateProvider AuthProvider
+@inject IJSRuntime JSRuntime
+@inject ISnackbar Snackbar
+
+<MudLayout>
+    <!-- Header / AppBar -->
+    <MudAppBar Color="Color.Primary" Fixed="true" Elevation="4">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => _drawerOpen = !_drawerOpen)" />
+        <MudText Typo="Typo.h6" Class="ml-4">RMS</MudText>
+        <MudSpacer />
+
+        <MudTextField @bind-Value="searchText" Placeholder="Search..." Variant="Variant.Outlined" Margin="Margin.Dense" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+
+        <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" />
+
+        <MudMenu Label="Open Menu" Color="Color.Secondary" Size="Size.Medium" Variant="Variant.Text">
+            <ActivatorContent>
+                <MudAvatar>
+                    <MudIcon Icon="@Icons.Material.Filled.Person" />
+                </MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem Label="Profile" OnClick="@(() => Console.WriteLine("Profile clicked"))" />
+                <MudMenuItem Label="My account" OnClick="@(() => Console.WriteLine("My Account clicked"))" />
+                <MudMenuItem Label="Logout" OnClick="@(() => Logout())" />
+            </ChildContent>
+        </MudMenu>
+
+    </MudAppBar>
+    <!-- Sidebar -->
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="1" Anchor="Anchor.Left" Variant="DrawerVariant.Persistent">
+        <MudNavMenu>
+            <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+            <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
+            <MudNavLink Href="/reports" Icon="@Icons.Material.Filled.Assessment">Reports</MudNavLink>
+            <MudNavLink Href="/users" Icon="@Icons.Material.Filled.People">User Management</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <!-- Main Content -->
+    <MudMainContent>
+
+        <!-- Page content -->
+        <MudContainer MaxWidth="MaxWidth.False" Class="pa-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+
+    <!-- Footer -->
+    <MudAppBar Bottom="true" Elevation="1">
+        <MudSpacer />
+        <MudText Typo="Typo.caption">© 2025 My Company</MudText>
+        <MudSpacer />
+    </MudAppBar>
+</MudLayout>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@using BlazorApp.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@using MudBlazor.Utilities
+
+@code {
+    private bool _drawerOpen = true;
+    private string searchText = string.Empty;
+    private bool _isDarkMode = true;
+    private MudThemeProvider _mudThemeProvider;
+
+    private readonly MudTheme _theme = new MudTheme()
+    {
+        PaletteLight = new PaletteLight()
+        {
+                Primary = new MudColor("#2980b9"),              // Indigo
+                Secondary = new MudColor("#2c3e50"),            // Pink A200
+                AppbarBackground = new MudColor("#303F9F"),     // Darker Indigo
+            DrawerBackground = new MudColor("#303F9F"),     // Darker Indigo
+            Background = new MudColor("#F5F5F5"),           // Light Grey
+            AppbarText = new MudColor("#FFFFFF"),
+            DrawerText = new MudColor("#FFFFFF"),
+            DrawerIcon = new MudColor("#FFFFFF"),
+            TextPrimary = new MudColor("#212121"),          // Dark Grey for text
+            TextSecondary = new MudColor("#757575"),        // Medium Grey for secondary text
+        },
+        PaletteDark = new PaletteDark()
+        {
+                Primary = new MudColor("#2980b9"),              // Light Indigo
+                Secondary = new MudColor("#34495e"),            // Light Pink
+                AppbarBackground = new MudColor("#212121"),     // Dark Grey
+            DrawerBackground = new MudColor("#212121"),     // Dark Grey
+            Background = new MudColor("#303030"),           // Darker Grey
+            AppbarText = new MudColor("#FFFFFF"),
+            DrawerText = new MudColor("#FFFFFF"),
+            DrawerIcon = new MudColor("#FFFFFF"),
+            TextPrimary = new MudColor("#FFFFFF"),          // White for text
+            TextSecondary = new MudColor("#BDBDBD"),        // Light Grey for secondary text
+        }
+    };
+
+
+    private bool _hasCheckedAuth = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_hasCheckedAuth)
+        {
+            _hasCheckedAuth = true;
+
+            try
+            {
+                var token = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "accessToken");
+
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    NavigationManager.NavigateTo("/login", forceLoad: true);
+                }
+            }
+            catch
+            {
+                // If JSInterop fails (e.g., still prerendering), do nothing.
+            }
+        }
+    }
+    private async Task Logout()
+    {
+        try
+        {
+            // You must get the userId from token/session. Assuming stored in localStorage:
+            var userIdStr = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "userId");
+            if (int.TryParse(userIdStr, out int userId))
+            {
+                //var httpClient = HttpClientFactory.CreateClient("RMSApi");
+                var response = await AuthService.LogoutAsync(userId);
+
+                if (response.IsSuccess)
+                {
+                    // Clear tokens from localStorage
+                    // await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "accessToken");
+                    // await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "refreshToken");
+                    // await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "userId");
+
+                    Snackbar.Add("Logged out successfully", Severity.Success);
+                    NavigationManager.NavigateTo("/login", forceLoad: true);
+                }
+                else
+                {
+                    Snackbar.Add("Logout failed on server.", Severity.Error);
+                }
+            }
+            else
+            {
+                Snackbar.Add("Invalid user session", Severity.Warning);
+                NavigationManager.NavigateTo("/login", forceLoad: true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Logout error: {ex.Message}", Severity.Error);
+        }
+    }
+
+}

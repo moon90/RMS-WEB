@@ -9,7 +9,7 @@ using RMS.Domain.DTOs.UserDTOs.InputDTOs;
 
 namespace RMS.WebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -22,37 +22,31 @@ namespace RMS.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAllUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null, [FromQuery] string? role = null)
         {
             try
             {
-                if (pageNumber < 1 || pageSize < 1)
-                {
-                    return BadRequest(new ResponseDto<object>
-                    {
-                        IsSuccess = false,
-                        Message = "Page number and page size must be greater than 0.",
-                        Code = "INVALID_PAGINATION"
-                    });
-                }
+                var result = await _userService.GetAllUsersAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, role);
 
-                var result = await _userService.GetAllUsersAsync(pageNumber, pageSize);
-                return Ok(new ResponseDto<object>
+                var response = new ResponseDto<object>
                 {
                     IsSuccess = true,
                     Message = "Users retrieved successfully",
                     Code = "200",
                     Data = result
-                });
+                };
+
+                return Ok(response);
             }
             catch (Exception ex)
             {
+                // Log the exception details here
                 return StatusCode(500, new ResponseDto<object>
                 {
                     IsSuccess = false,
                     Message = "An error occurred while retrieving users.",
                     Code = "INTERNAL_SERVER_ERROR",
-                    Details = ex.Message
+                    Details = ex.Message // Consider logging the full exception for debugging
                 });
             }
         }
@@ -175,7 +169,8 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                var result = await _userService.AssignRoleToUserAsync(userId, roleId);
+                var performedBy = User.Identity?.Name ?? "System";
+                var result = await _userService.AssignRoleToUserAsync(userId, roleId, performedBy);
                 return result.IsSuccess ? Ok(result) : NotFound(result);
             }
             catch (Exception ex)
