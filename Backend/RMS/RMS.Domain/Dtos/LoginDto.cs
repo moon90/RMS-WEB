@@ -12,10 +12,10 @@ namespace RMS.Domain.DTOs
     {
         [Required(ErrorMessage = "Username is required.")]
         [JsonPropertyName("userName")]
-        public string UserName { get; set; }
+        public required string UserName { get; set; }
 
         [Required(ErrorMessage = "Username is required.")]
         [JsonPropertyName("password")]
-        public string Password { get; set; }
+        public required string Password { get; set; }
     }
 }

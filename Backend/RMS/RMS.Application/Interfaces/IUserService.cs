@@ -37,7 +37,7 @@ namespace RMS.Application.Interfaces
 
         // Role & Permission
         Task<ResponseDto<List<string>>> GetRolePermissionsAsync(int userId);
-        Task<ResponseDto<List<MenuPermissionDto>>> GetMenuPermissionsAsync(int userId);
+        Task<ResponseDto<IEnumerable<UserMenuPermissionDto>>> GetMenuPermissionsAsync(int userId);
 
         // Role assignment
         Task<ResponseDto<string>> AssignRoleToUserAsync(int userId, int roleId, string performedBy);
@@ -51,6 +51,6 @@ namespace RMS.Application.Interfaces
         Task<ResponseDto<string>> UpdateRefreshTokenAsync(int userId, string refreshToken, DateTime? refreshTokenExpiry);
 
         // Profile picture
-        Task<ResponseDto<string>> UploadProfilePictureAsync(int userId, IFormFile file);
+        Task<ResponseDto<string>> UploadProfilePictureAsync(int userId, string imageUrl); // Modified
     }
 }

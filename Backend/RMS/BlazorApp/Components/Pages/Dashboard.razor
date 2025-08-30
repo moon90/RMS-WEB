@@ -187,18 +187,18 @@
     public class Order
     {
         public int Id { get; set; }
-        public string CustomerName { get; set; }
+        public required string CustomerName { get; set; }
         public DateTime OrderDate { get; set; }
         public double Total { get; set; }
-        public string Status { get; set; }
+        public required string Status { get; set; }
     }
 
     public class Activity
     {
-        public string Icon { get; set; }
+        public required string Icon { get; set; }
         public Color IconColor { get; set; }
-        public string Message { get; set; }
-        public string Timestamp { get; set; }
+        public required string Message { get; set; }
+        public required string Timestamp { get; set; }
     }
 
 }

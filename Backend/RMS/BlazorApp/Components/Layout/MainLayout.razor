@@ -11,6 +11,7 @@
 @inject AuthenticationStateProvider AuthProvider
 @inject IJSRuntime JSRuntime
 @inject ISnackbar Snackbar
+@inject RoleApiClientService RoleApiClientService // Inject RoleApiClientService
 
 <MudLayout>
     <!-- Header / AppBar -->
@@ -40,10 +41,22 @@
     <!-- Sidebar -->
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="1" Anchor="Anchor.Left" Variant="DrawerVariant.Persistent">
         <MudNavMenu>
-            <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-            <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
-            <MudNavLink Href="/reports" Icon="@Icons.Material.Filled.Assessment">Reports</MudNavLink>
-            <MudNavLink Href="/users" Icon="@Icons.Material.Filled.People">User Management</MudNavLink>
+            @if (_authorizedMenus != null)
+            {
+                @foreach (var menu in _authorizedMenus.OrderBy(m => m.DisplayOrder))
+                {
+                    @if (menu.ParentID == null) // Top-level menu items
+                    {
+                        <MudNavLink Href="@menu.MenuPath" Icon="@menu.MenuIcon" Match="NavLinkMatch.Prefix">@menu.MenuName</MudNavLink>
+
+                        @* Render child menus *@
+                        @foreach (var childMenu in _authorizedMenus.Where(m => m.ParentID == menu.MenuID).OrderBy(m => m.DisplayOrder))
+                        {
+                            <MudNavLink Href="@childMenu.MenuPath" Icon="@childMenu.MenuIcon" Match="NavLinkMatch.Prefix" Class="ml-4">@childMenu.MenuName</MudNavLink>
+                        }
+                    }
+                }
+            }
         </MudNavMenu>
     </MudDrawer>
 
@@ -73,12 +86,14 @@
 @using BlazorApp.Services
 @using Microsoft.AspNetCore.Components.Authorization
 @using MudBlazor.Utilities
+@using RMS.Domain.DTOs.RoleMenuDTOs.OutputDTOs // Added for RoleMenuDto
 
 @code {
     private bool _drawerOpen = true;
     private string searchText = string.Empty;
     private bool _isDarkMode = true;
-    private MudThemeProvider _mudThemeProvider;
+    private MudThemeProvider _mudThemeProvider = new();
+    private List<RoleMenuDto>? _authorizedMenus; // To store authorized menus
 
     private readonly MudTheme _theme = new MudTheme()
     {
@@ -113,6 +128,11 @@
 
     private bool _hasCheckedAuth = false;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAuthorizedMenus();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && !_hasCheckedAuth)
@@ -134,6 +154,51 @@
             }
         }
     }
+
+    private async Task LoadAuthorizedMenus()
+    {
+        try
+        {
+            var authState = await AuthProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity != null && user.Identity.IsAuthenticated)
+            {
+                // Assuming RoleID is available as a claim or can be retrieved from a service
+                // For simplicity, let's assume the user has a "roleid" claim
+                var roleIdClaim = user.FindFirst("roleid"); // Adjust claim type if different
+
+                if (roleIdClaim != null && int.TryParse(roleIdClaim.Value, out int roleId))
+                {
+                    var response = await RoleApiClientService.GetRoleMenusByRoleIdAsync(roleId);
+                    if (response.IsSuccess && response.Data != null)
+                    {
+                        _authorizedMenus = response.Data.Where(m => m.CanView).ToList();
+                        StateHasChanged(); // Notify Blazor that the state has changed
+                    }
+                    else
+                    {
+                        Snackbar.Add($"Failed to load menus: {response.Message}", Severity.Error);
+                    }
+                }
+                else
+                {
+                    Snackbar.Add("User role ID not found or invalid.", Severity.Warning);
+                }
+            }
+            else
+            {
+                // User is not authenticated, clear menus or redirect to login
+                _authorizedMenus = new List<RoleMenuDto>();
+                NavigationManager.NavigateTo("/login", forceLoad: true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading menus: {ex.Message}", Severity.Error);
+        }
+    }
+
     private async Task Logout()
     {
         try

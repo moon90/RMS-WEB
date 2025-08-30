@@ -11,10 +11,10 @@ namespace RMS.Domain.Entities
     public class User : BaseEntity
     {
         public int Id { get; set; }
-        public string UserName { get; set; }
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
-        public string FullName { get; set; }
+        public required string UserName { get; set; }
+        public required string PasswordHash { get; set; }
+        public required string PasswordSalt { get; set; }
+        public required string FullName { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
 

@@ -19,10 +19,10 @@ namespace RMS.Infrastructure.Configurations
 
             // Seed
             builder.HasData(
-                new Role { Id = 1, RoleName = "Admin", Description = "Administrator role", CreatedBy = "system", CreatedDate = DateTime.UtcNow },
-                new Role { Id = 2, RoleName = "Manager", Description = "Standard manager role", CreatedBy = "system", CreatedDate = DateTime.UtcNow },
-                new Role { Id = 3, RoleName = "User", Description = "Standard user role", CreatedBy = "system", CreatedDate = DateTime.UtcNow }
-            );
+                    new Role { Id = 1, RoleName = "Admin", Description = "Administrator", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Role { Id = 2, RoleName = "Manager", Description = "Manager", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Role { Id = 3, RoleName = "User", Description = "Standard User", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow }
+                );
         }
     }
 }

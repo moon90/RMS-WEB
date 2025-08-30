@@ -15,5 +15,7 @@ namespace RMS.Domain.DTOs.RoleMenuDTOs.OutputDTOs
         public bool CanAdd { get; set; }
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
+        public string? menuName { get; set; }
+        public int DisplayOrder { get; set; } // Added
     }
 }

@@ -9,7 +9,7 @@ namespace RMS.Infrastructure.Interfaces
 {
     public interface IUserRoleRepository
     {
-        Task<UserRole> GetUserRoleByIdAsync(int userRoleId);
+        Task<UserRole?> GetUserRoleByIdAsync(int userRoleId);
         Task<IEnumerable<UserRole>> GetUserRolesByUserIdAsync(int userId);
         Task<IEnumerable<UserRole>> GetUserRolesByRoleIdAsync(int roleId);
         Task AddUserRoleAsync(UserRole userRole);

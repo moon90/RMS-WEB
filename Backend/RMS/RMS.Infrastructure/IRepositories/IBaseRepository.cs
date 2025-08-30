@@ -21,7 +21,7 @@ namespace RMS.Infrastructure.IRepositories
         /// A task that represents the asynchronous operation. The task result contains the entity of type <typeparamref name="T"/> with the given identifier,
         /// or <c>null</c> if no entity is found with the provided id.
         /// </returns>
-        Task<T> GetByIdAsync(object id);
+        Task<Result<T>> GetByIdAsync(object id);
 
         /// <summary>
         /// Asynchronously retrieves a paged result of entities based on the provided query parameters and an optional queryable input.
@@ -39,7 +39,7 @@ namespace RMS.Infrastructure.IRepositories
         /// <exception cref="NotFoundException">Thrown when the requested page number is invalid (e.g., 
         /// the page does not exist based on the total number of pages). 
         /// Example message: "Page {param.PageNumber} does not exist. Maximum page number is {totalPages}."</exception>
-        Task<PagedResult<T>> GetPagedResultAsync(PagedQuery param, IQueryable<T>? queryableInput);
+        Task<PagedResult<T>> GetPagedResultAsync(PagedQuery param, Expression<Func<T, object>>? orderByExpression = null, bool isDescending = false, IQueryable<T>? queryableInput = null);
 
         /// <summary>
         /// Asynchronously retrieves a collection of entities ordered according to the specified order criteria.
@@ -120,7 +120,7 @@ namespace RMS.Infrastructure.IRepositories
         //TODO: implement when using
         Task<Result> AddRangeAsync(IEnumerable<T> entities);
         Task<IEnumerable<T>> GetAllAsync();
-        Task<Result<T>> GetFirstOrDefaultBySpecAsync(BaseSpecification<T> specs);
+        Task<Result<T?>> GetFirstOrDefaultBySpecAsync(BaseSpecification<T> specs);
         Task<Result<T>> GetFirstBySpecAsync(BaseSpecification<T> specs);
         Task<Result> UpdateAsync(T entity);
         Task<Result> UpdateRangeAsync(IEnumerable<T> entities);

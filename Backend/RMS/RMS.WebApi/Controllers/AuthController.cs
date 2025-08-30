@@ -123,14 +123,7 @@ namespace RMS.WebApi.Controllers
                 if (!result.IsSuccess)
                     return BadRequest(result); // includes validation errors via `Details`
 
-                // Return 201 Created with the full response and location header
-                return CreatedAtAction(nameof(GetUserById), new { id = result.Data.UserID }, new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = result.Message,
-                    Code = result.Code,
-                    Data = new { UserId = result.Data.UserID }
-                });
+                return CreatedAtAction(nameof(GetUserById), new { id = result.Data.UserID }, result);
             }
             catch (Exception ex)
             {
@@ -155,7 +148,7 @@ namespace RMS.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseDto<object>
+                return StatusCode(500, new ResponseDto<UserDto>
                 {
                     IsSuccess = false,
                     Message = "An error occurred while retrieving the user.",
@@ -253,7 +246,7 @@ namespace RMS.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseDto<object>
+                return StatusCode(500, new ResponseDto<string>
                 {
                     IsSuccess = false,
                     Message = "An unexpected error occurred while logging out.",

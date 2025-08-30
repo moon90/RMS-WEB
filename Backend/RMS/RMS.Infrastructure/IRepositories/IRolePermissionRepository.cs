@@ -9,7 +9,7 @@ namespace RMS.Infrastructure.Interfaces
 {
     public interface IRolePermissionRepository
     {
-        Task<RolePermission> GetRolePermissionByIdAsync(int rolePermissionId);
+        Task<RolePermission?> GetRolePermissionByIdAsync(int rolePermissionId);
         Task<IEnumerable<RolePermission>> GetRolePermissionsByRoleIdAsync(int roleId);
         Task<List<Permission>> GetPermissionsForRoleAsync(int roleId);
         Task AddRolePermissionAsync(RolePermission rolePermission);
@@ -19,6 +19,7 @@ namespace RMS.Infrastructure.Interfaces
         // New methods for permission assignment
         Task<bool> IsPermissionAssignedToRoleAsync(int roleId, int permissionId);
         Task AssignPermissionToRoleAsync(int roleId, int permissionId, int? sortingOrder = null);
+        Task AssignPermissionsToRoleAsync(int roleId, List<int> permissionIds);
         Task UnassignPermissionFromRoleAsync(int roleId, int permissionId);
     }
 }

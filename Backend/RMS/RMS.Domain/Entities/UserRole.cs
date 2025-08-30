@@ -17,6 +17,6 @@ namespace RMS.Domain.Entities
         public Role? Role { get; set; }
 
         public DateTime AssignedAt { get; set; }
-        public string AssignedBy { get; set; }
+        public string? AssignedBy { get; set; }
     }
 }

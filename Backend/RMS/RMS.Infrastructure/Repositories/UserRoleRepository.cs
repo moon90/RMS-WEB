@@ -20,78 +20,150 @@ namespace RMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<UserRole> GetUserRoleByIdAsync(int userRoleId)
+        public async Task<UserRole?> GetUserRoleByIdAsync(int userRoleId)
         {
-            return await _context.UserRoles.FindAsync(userRoleId);
+            try
+            {
+                return await _context.UserRoles.FindAsync(userRoleId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving user role by ID: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task<IEnumerable<UserRole>> GetUserRolesByUserIdAsync(int userId)
         {
-            return await _context.UserRoles
-                .Where(ur => ur.UserID == userId)
-                .ToListAsync();
+            try
+            {
+                return await _context.UserRoles
+                    .Where(ur => ur.UserID == userId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving user roles by user ID: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task<IEnumerable<UserRole>> GetUserRolesByRoleIdAsync(int roleId)
         {
-            return await _context.UserRoles
-                .Where(ur => ur.RoleID == roleId)
-                .ToListAsync();
+            try
+            {
+                return await _context.UserRoles
+                    .Where(ur => ur.RoleID == roleId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving user roles by role ID: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task AddUserRoleAsync(UserRole userRole)
         {
-            await _context.UserRoles.AddAsync(userRole);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.UserRoles.AddAsync(userRole);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding user role: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task UpdateUserRoleAsync(UserRole userRole)
         {
-            _context.UserRoles.Update(userRole);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.UserRoles.Update(userRole);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating user role: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task DeleteUserRoleAsync(int userRoleId)
         {
-            var userRole = await _context.UserRoles.FindAsync(userRoleId);
-            if (userRole != null)
+            try
             {
-                _context.UserRoles.Remove(userRole);
-                await _context.SaveChangesAsync();
+                var userRole = await _context.UserRoles.FindAsync(userRoleId);
+                if (userRole != null)
+                {
+                    _context.UserRoles.Remove(userRole);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting user role: {ex.Message}");
+                throw; 
             }
         }
 
         public async Task<bool> IsRoleAssignedToUserAsync(int userId, int roleId)
         {
-            return await _context.UserRoles
-                .AnyAsync(ur => ur.UserID == userId && ur.RoleID == roleId);
+            try
+            {
+                return await _context.UserRoles
+                    .AnyAsync(ur => ur.UserID == userId && ur.RoleID == roleId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking if role is assigned to user: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task AssignRoleToUserAsync(int userId, int roleId, string performedBy)
         {
-            if (!await IsRoleAssignedToUserAsync(userId, roleId))
+            try
             {
-                var userRole = new UserRole
+                if (!await IsRoleAssignedToUserAsync(userId, roleId))
                 {
-                    UserID = userId,
-                    RoleID = roleId,
-                    AssignedAt = DateTime.UtcNow,
-                    AssignedBy = performedBy
-                };
-                await _context.UserRoles.AddAsync(userRole);
-                await _context.SaveChangesAsync();
+                    var userRole = new UserRole
+                    {
+                        UserID = userId,
+                        RoleID = roleId,
+                        AssignedAt = DateTime.UtcNow,
+                        AssignedBy = performedBy
+                    };
+                    await _context.UserRoles.AddAsync(userRole);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error assigning role to user: {ex.Message}");
+                throw; 
             }
         }
 
         public async Task UnassignRoleFromUserAsync(int userId, int roleId)
         {
-            var userRole = await _context.UserRoles
-                .FirstOrDefaultAsync(ur => ur.UserID == userId && ur.RoleID == roleId);
-
-            if (userRole != null)
+            try
             {
-                _context.UserRoles.Remove(userRole);
-                await _context.SaveChangesAsync();
+                var userRole = await _context.UserRoles
+                    .FirstOrDefaultAsync(ur => ur.UserID == userId && ur.RoleID == roleId);
+
+                if (userRole != null)
+                {
+                    _context.UserRoles.Remove(userRole);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error unassigning role from user: {ex.Message}");
+                throw; 
             }
         }
     }

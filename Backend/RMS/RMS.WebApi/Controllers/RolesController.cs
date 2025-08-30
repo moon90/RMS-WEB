@@ -9,7 +9,7 @@ using RMS.Domain.Models.BaseModels;
 
 namespace RMS.WebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
@@ -22,6 +22,7 @@ namespace RMS.WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "ROLE_VIEW")]
         public async Task<IActionResult> GetAllRoles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null)
         {
             try
@@ -52,6 +53,7 @@ namespace RMS.WebApi.Controllers
 
         // Get role by ID
         [HttpGet("{id}")]
+        [Authorize(Policy = "ROLE_VIEW")]
         public async Task<IActionResult> GetRoleById(int id)
         {
             try
@@ -73,6 +75,7 @@ namespace RMS.WebApi.Controllers
 
         // Create a new role
         [HttpPost]
+        [Authorize(Policy = "ROLE_CREATE")]
         public async Task<IActionResult> CreateRole(RoleCreateDto roleCreateDto)
         {
             try
@@ -97,6 +100,7 @@ namespace RMS.WebApi.Controllers
 
         // Update an existing role
         [HttpPut("{id}")]
+        [Authorize(Policy = "ROLE_UPDATE")]
         public async Task<IActionResult> UpdateRole(int id, RoleUpdateDto roleUpdateDto)
         {
             try
@@ -129,6 +133,7 @@ namespace RMS.WebApi.Controllers
 
         // Delete a role
         [HttpDelete("{id}")]
+        [Authorize(Policy = "ROLE_DELETE")]
         public async Task<IActionResult> DeleteRole(int id)
         {
             try
@@ -150,6 +155,7 @@ namespace RMS.WebApi.Controllers
 
         // Assign a permission to a role
         [HttpPost("{roleId}/permissions/{permissionId}")]
+        [Authorize(Policy = "ROLE_ASSIGN_PERMISSION")]
         public async Task<IActionResult> AssignPermissionToRole(int roleId, int permissionId, [FromQuery] int? sortingOrder = null)
         {
             try
@@ -191,6 +197,7 @@ namespace RMS.WebApi.Controllers
 
         // Unassign a permission from a role
         [HttpDelete("{roleId}/permissions/{permissionId}")]
+        [Authorize(Policy = "ROLE_UNASSIGN_PERMISSION")]
         public async Task<IActionResult> UnassignPermissionFromRole(int roleId, int permissionId)
         {
             try
@@ -212,7 +219,7 @@ namespace RMS.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseDto<object>
+                return StatusCode(500, new ResponseDto<string>
                 {
                     IsSuccess = false,
                     Message = "An error occurred while unassigning the permission.",
@@ -223,6 +230,7 @@ namespace RMS.WebApi.Controllers
         }
 
         [HttpPost("{roleId}/assign-permissions")]
+        [Authorize(Policy = "ROLE_ASSIGN_PERMISSION")]
         public async Task<IActionResult> AssignPermissionsToRole(int roleId, [FromBody] List<int> permissionIds)
         {
             try
@@ -252,7 +260,7 @@ namespace RMS.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseDto<object>
+                return StatusCode(500, new ResponseDto<string>
                 {
                     IsSuccess = false,
                     Message = "An error occurred while assigning permissions.",
@@ -264,6 +272,7 @@ namespace RMS.WebApi.Controllers
 
 
         [HttpPost("{roleId}/unassign-permissions")]
+        [Authorize(Policy = "ROLE_UNASSIGN_PERMISSION")]
         public async Task<IActionResult> UnassignPermissionsFromRole(int roleId, [FromBody] List<int> permissionIds)
         {
             try
@@ -297,6 +306,48 @@ namespace RMS.WebApi.Controllers
                 {
                     IsSuccess = false,
                     Message = "An error occurred while assigning permissions: {ex.Message}",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("{roleId}/permissions")]
+        [Authorize(Policy = "ROLE_VIEW")] // Assuming you have a policy for viewing role permissions
+        public async Task<IActionResult> GetRolePermissionsByRoleId(int roleId)
+        {
+            try
+            {
+                var result = await _roleService.GetRolePermissionsByRoleIdAsync(roleId);
+                return result.IsSuccess ? Ok(result) : NotFound(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving role permissions.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("{roleId}/menus")]
+        [Authorize(Policy = "ROLE_VIEW_MENUS")]
+        public async Task<IActionResult> GetRoleMenusByRoleId(int roleId)
+        {
+            try
+            {
+                var result = await _roleService.GetRoleMenusByRoleIdAsync(roleId);
+                return result.IsSuccess ? Ok(result) : NotFound(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving role menus.",
                     Code = "INTERNAL_SERVER_ERROR",
                     Details = ex.Message
                 });

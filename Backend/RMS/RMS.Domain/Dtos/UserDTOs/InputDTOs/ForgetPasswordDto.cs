@@ -8,6 +8,6 @@ namespace RMS.Domain.Dtos.UserDTOs.InputDTOs
 {
     public class ForgetPasswordDto
     {
-        public string Email { get; set; }
+        public required string Email { get; set; }
     }
 }

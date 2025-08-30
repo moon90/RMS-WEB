@@ -20,6 +20,18 @@ namespace RMS.Application.Validators
 
             RuleFor(m => m.DisplayOrder)
                 .GreaterThanOrEqualTo(0).WithMessage("Display order must be a non-negative number.");
+
+            RuleFor(m => m.ControllerName)
+                .NotEmpty().WithMessage("Controller name is required.")
+                .MaximumLength(100).WithMessage("Controller name cannot exceed 100 characters.");
+
+            RuleFor(m => m.ActionName)
+                .NotEmpty().WithMessage("Action name is required.")
+                .MaximumLength(100).WithMessage("Action name cannot exceed 100 characters.");
+
+            RuleFor(m => m.ModuleName)
+                .NotEmpty().WithMessage("Module name is required.")
+                .MaximumLength(100).WithMessage("Module name cannot exceed 100 characters.");
         }
     }
 }

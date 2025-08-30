@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public string PermissionName { get; set; }
+        public required string PermissionName { get; set; }
 
-        public string PermissionKey { get; set; }
+        public required string PermissionKey { get; set; }
 
         public string? ControllerName { get; set; }
         public string? ActionName { get; set; }

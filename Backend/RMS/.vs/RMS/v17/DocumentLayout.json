@@ -3,155 +3,44 @@
   "WorkspaceRootPath": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\menuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\menuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\rolerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\rolerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\roleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\roleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\auditlogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\auditlogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\axega\\AppData\\Local\\SourceServer\\915eb5f3dc4a1adfe71913e7f25074eb2fecbdb3c3e25ce61bac87b96ab48ee6\\Backend\\RMS\\RMS.Application\\Implementations\\UserService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\validators\\userupdatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\validators\\userupdatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\validators\\usercreatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\validators\\usercreatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\automappers\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\automappers\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\dtos\\responsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\dtos\\responsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\services\\roleapiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\services\\roleapiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\dtos\\userdtos\\outputdtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\dtos\\userdtos\\outputdtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\pages\\users\\userform.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\pages\\users\\userform.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\pages\\users\\userlist.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\pages\\users\\userlist.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\dtos\\userdtos\\inputdtos\\usercreatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\dtos\\userdtos\\inputdtos\\usercreatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\dtos\\validationdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\dtos\\validationdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\permissionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\permissionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\menuservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\menuservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\services\\userapiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\services\\userapiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\services\\authapiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\services\\authapiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\pages\\dashboard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\pages\\dashboard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\wwwroot\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\wwwroot\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\pages\\loginpage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\pages\\loginpage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\pages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\pages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\layout\\authlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\layout\\authlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\redirecttologin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\redirecttologin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\dtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\dtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\configurations\\userconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\configurations\\userconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\blazorapp\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B007EE8D-E975-43A1-9ECE-09DE592D208A}|BlazorApp\\BlazorApp.csproj|solutionrelative:blazorapp\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -161,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 13,
           "Children": [
             {
               "$type": "Bookmark",
@@ -197,15 +86,94 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "ResponseDto.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\ResponseDto.cs",
-              "RelativeDocumentMoniker": "RMS.Domain\\Dtos\\ResponseDto.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\ResponseDto.cs",
-              "RelativeToolTip": "RMS.Domain\\Dtos\\ResponseDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAoAAAAgAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "20250830181509_AddUploadImageFunctionality.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs",
+              "ViewState": "AgIAAM0AAAAAAAAAAAAQwNIAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T05:40:17.467Z"
+              "WhenOpened": "2025-08-30T18:15:09.665Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\appsettings.json",
+              "RelativeDocumentMoniker": "RMS.WebApi\\appsettings.json",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\appsettings.json",
+              "RelativeToolTip": "RMS.WebApi\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-30T17:25:43.816Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\UserRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\UserRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\UserRepository.cs",
+              "ViewState": "AgIAANcAAAAAAAAAAAAhwOIAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-30T17:23:19.194Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UserUpdateDtoValidator.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\UserUpdateDtoValidator.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Validators\\UserUpdateDtoValidator.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\UserUpdateDtoValidator.cs",
+              "RelativeToolTip": "RMS.Application\\Validators\\UserUpdateDtoValidator.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAQwA0AAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-30T17:19:49.99Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UserCreateDtoValidator.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\UserCreateDtoValidator.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Validators\\UserCreateDtoValidator.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\UserCreateDtoValidator.cs",
+              "RelativeToolTip": "RMS.Application\\Validators\\UserCreateDtoValidator.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAQwC4AAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-30T17:19:06.025Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProductsController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ProductsController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\ProductsController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ProductsController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\ProductsController.cs",
+              "ViewState": "AgIAAHMAAAAAAAAAAAAuwDYAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-30T14:29:20.26Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\UsersController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAawJgAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-30T13:30:56.254Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -215,454 +183,34 @@
               "RelativeDocumentMoniker": "RMS.Application\\Implementations\\UserService.cs",
               "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\UserService.cs",
               "RelativeToolTip": "RMS.Application\\Implementations\\UserService.cs",
-              "ViewState": "AgIAAMYAAAAAAAAAAAAAAMwAAABEAAAAAAAAAA==",
+              "ViewState": "AgIAAB0BAAAAAAAAAAAAAB0BAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T05:53:15.069Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "IUserService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Interfaces\\IUserService.cs",
-              "RelativeDocumentMoniker": "RMS.Application\\Interfaces\\IUserService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Interfaces\\IUserService.cs",
-              "RelativeToolTip": "RMS.Application\\Interfaces\\IUserService.cs",
-              "ViewState": "AgIAACcAAAAAAAAAAAA4wA8AAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-16T02:56:21.462Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "RolesController.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\RolesController.cs",
-              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\RolesController.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\RolesController.cs",
-              "RelativeToolTip": "RMS.WebApi\\Controllers\\RolesController.cs",
-              "ViewState": "AgIAAIwAAAAAAAAAAAAAABIAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-11T03:50:54.879Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "RoleService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\RoleService.cs",
-              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\RoleService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\RoleService.cs",
-              "RelativeToolTip": "RMS.Application\\Implementations\\RoleService.cs",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAQwFgAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T05:47:13.318Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserRepository.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\UserRepository.cs",
-              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\UserRepository.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\UserRepository.cs",
-              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\UserRepository.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAA5wCAAAABGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-17T07:24:12.672Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MenusController.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\MenusController.cs",
-              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\MenusController.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\MenusController.cs",
-              "RelativeToolTip": "RMS.WebApi\\Controllers\\MenusController.cs",
-              "ViewState": "AgIAAJcAAAAAAAAAAAAAADYAAAA+AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T05:07:23.026Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "RoleRepository.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\RoleRepository.cs",
-              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\RoleRepository.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\RoleRepository.cs",
-              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\RoleRepository.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAACcAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-17T06:01:52.343Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\UsersController.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "RMS.WebApi\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-11T03:49:30.514Z",
+              "WhenOpened": "2025-08-30T13:30:56.265Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "AuditLogService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\AuditLogService.cs",
-              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\AuditLogService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\AuditLogService.cs",
-              "RelativeToolTip": "RMS.Application\\Implementations\\AuditLogService.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAowA8AAAA+AAAAAAAAAA==",
+              "Title": "Product.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Product.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\Product.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Product.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\Product.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-17T07:24:12.655Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-30T14:12:39.259Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\axega\\AppData\\Local\\SourceServer\\915eb5f3dc4a1adfe71913e7f25074eb2fecbdb3c3e25ce61bac87b96ab48ee6\\Backend\\RMS\\RMS.Application\\Implementations\\UserService.cs",
-              "ToolTip": "C:\\Users\\axega\\AppData\\Local\\SourceServer\\915eb5f3dc4a1adfe71913e7f25074eb2fecbdb3c3e25ce61bac87b96ab48ee6\\Backend\\RMS\\RMS.Application\\Implementations\\UserService.cs [Read Only]",
-              "ViewState": "AgIAAFsBAAAAAAAAAAAowEkBAAAqAAAAAQAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-17T07:32:33.079Z",
-              "EditorCaption": " [Read Only]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\appsettings.json",
-              "RelativeDocumentMoniker": "RMS.WebApi\\appsettings.json",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\appsettings.json",
-              "RelativeToolTip": "RMS.WebApi\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-07-16T04:08:59.819Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
               "Title": "MappingProfile.cs",
               "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\AutoMappers\\MappingProfile.cs",
               "RelativeDocumentMoniker": "RMS.Application\\AutoMappers\\MappingProfile.cs",
               "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\AutoMappers\\MappingProfile.cs",
               "RelativeToolTip": "RMS.Application\\AutoMappers\\MappingProfile.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABIAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAHAAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-11T03:53:48.04Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "RoleApiClientService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Services\\RoleApiClientService.cs",
-              "RelativeDocumentMoniker": "BlazorApp\\Services\\RoleApiClientService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Services\\RoleApiClientService.cs",
-              "RelativeToolTip": "BlazorApp\\Services\\RoleApiClientService.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAADwvxUAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T01:55:23.576Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "UserList.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Users\\UserList.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\Pages\\Users\\UserList.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Users\\UserList.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\Pages\\Users\\UserList.razor",
-              "ViewState": "AgIAADYAAAAAAAAAAAAowEgAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-13T02:23:35.562Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "UserForm.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Users\\UserForm.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\Pages\\Users\\UserForm.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Users\\UserForm.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\Pages\\Users\\UserForm.razor",
-              "ViewState": "AgIAACwAAAAAAAAAAAAAADoAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-13T02:23:12.875Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Program.cs",
-              "RelativeDocumentMoniker": "RMS.WebApi\\Program.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Program.cs",
-              "RelativeToolTip": "RMS.WebApi\\Program.cs",
-              "ViewState": "AgIAAOcAAAAAAAAAAAAowPkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-11T17:12:40.584Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "UserDto.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\UserDTOs\\OutputDTOs\\UserDto.cs",
-              "RelativeDocumentMoniker": "RMS.Domain\\Dtos\\UserDTOs\\OutputDTOs\\UserDto.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\UserDTOs\\OutputDTOs\\UserDto.cs",
-              "RelativeToolTip": "RMS.Domain\\Dtos\\UserDTOs\\OutputDTOs\\UserDto.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAgAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T02:24:43.122Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "UserCreateDto.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\UserDTOs\\InputDTOs\\UserCreateDto.cs",
-              "RelativeDocumentMoniker": "RMS.Domain\\Dtos\\UserDTOs\\InputDTOs\\UserCreateDto.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\UserDTOs\\InputDTOs\\UserCreateDto.cs",
-              "RelativeToolTip": "RMS.Domain\\Dtos\\UserDTOs\\InputDTOs\\UserCreateDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T06:25:24.957Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "ValidationDetailDto.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\ValidationDetailDto.cs",
-              "RelativeDocumentMoniker": "RMS.Domain\\Dtos\\ValidationDetailDto.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\ValidationDetailDto.cs",
-              "RelativeToolTip": "RMS.Domain\\Dtos\\ValidationDetailDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T05:45:13.071Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "MenuService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\MenuService.cs",
-              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\MenuService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\MenuService.cs",
-              "RelativeToolTip": "RMS.Application\\Implementations\\MenuService.cs",
-              "ViewState": "AgIAAMIAAAAAAAAAAAAkwNoAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T05:46:32.759Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "PermissionService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\PermissionService.cs",
-              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\PermissionService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\PermissionService.cs",
-              "RelativeToolTip": "RMS.Application\\Implementations\\PermissionService.cs",
-              "ViewState": "AgIAAFgAAAAAAAAAAAAkwGYAAABCAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T05:47:21.567Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "UserApiClientService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Services\\UserApiClientService.cs",
-              "RelativeDocumentMoniker": "BlazorApp\\Services\\UserApiClientService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Services\\UserApiClientService.cs",
-              "RelativeToolTip": "BlazorApp\\Services\\UserApiClientService.cs",
-              "ViewState": "AgIAAFMAAAAAAAAAAAAkwFsAAAA7AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T01:43:42.562Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "App.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\App.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\App.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\App.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\App.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAABMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-11T04:20:54.66Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "AuthApiClientService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Services\\AuthApiClientService.cs",
-              "RelativeDocumentMoniker": "BlazorApp\\Services\\AuthApiClientService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Services\\AuthApiClientService.cs",
-              "RelativeToolTip": "BlazorApp\\Services\\AuthApiClientService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T01:50:21.371Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "Dashboard.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Dashboard.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\Pages\\Dashboard.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Dashboard.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\Pages\\Dashboard.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHAAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-13T00:51:32.206Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "app.css",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\wwwroot\\app.css",
-              "RelativeDocumentMoniker": "BlazorApp\\wwwroot\\app.css",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\wwwroot\\app.css",
-              "RelativeToolTip": "BlazorApp\\wwwroot\\app.css",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABQAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-07-13T01:28:24.753Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Services\\AuthService.cs",
-              "RelativeDocumentMoniker": "BlazorApp\\Services\\AuthService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Services\\AuthService.cs",
-              "RelativeToolTip": "BlazorApp\\Services\\AuthService.cs",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAAADQAAABYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-12T01:58:07.868Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\AuthController.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "RMS.WebApi\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAACUBAAAAAAAAAAAswAcBAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-11T14:06:15.235Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "MainLayout.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Layout\\MainLayout.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\Layout\\MainLayout.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Layout\\MainLayout.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\Layout\\MainLayout.razor",
-              "ViewState": "AgIAACMAAAAAAAAAAAAAAC8AAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-11T03:49:18.944Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 31,
-              "Title": "Index.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Index.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\Pages\\Index.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Index.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\Pages\\Index.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-12T02:56:32.401Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 30,
-              "Title": "LoginPage.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\LoginPage.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\Pages\\LoginPage.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\LoginPage.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\Pages\\LoginPage.razor",
-              "ViewState": "AgIAACsAAAAAAAAAAAAAADsAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-11T16:54:14.238Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 32,
-              "Title": "AuthLayout.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Layout\\AuthLayout.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\Layout\\AuthLayout.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Layout\\AuthLayout.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\Layout\\AuthLayout.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-12T00:17:03.799Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
-              "Title": "Home.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Home.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\Pages\\Home.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\Pages\\Home.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\Pages\\Home.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-11T04:19:49.728Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 33,
-              "Title": "RedirectToLogin.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\RedirectToLogin.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\RedirectToLogin.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\RedirectToLogin.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\RedirectToLogin.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-12T00:36:02.065Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 35,
-              "Title": "LoginDto.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\LoginDto.cs",
-              "RelativeDocumentMoniker": "RMS.Domain\\Dtos\\LoginDto.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Dtos\\LoginDto.cs",
-              "RelativeToolTip": "RMS.Domain\\Dtos\\LoginDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-11T16:55:44.66Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 36,
-              "Title": "UserConfiguration.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\UserConfiguration.cs",
-              "RelativeDocumentMoniker": "RMS.Infrastructure\\Configurations\\UserConfiguration.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\UserConfiguration.cs",
-              "RelativeToolTip": "RMS.Infrastructure\\Configurations\\UserConfiguration.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAqwEAAAABoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-11T15:04:27.373Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 37,
-              "Title": "_Imports.razor",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\_Imports.razor",
-              "RelativeDocumentMoniker": "BlazorApp\\Components\\_Imports.razor",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\BlazorApp\\Components\\_Imports.razor",
-              "RelativeToolTip": "BlazorApp\\Components\\_Imports.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-11T04:20:32.135Z"
+              "WhenOpened": "2025-08-30T14:09:09.753Z"
             }
           ]
         }

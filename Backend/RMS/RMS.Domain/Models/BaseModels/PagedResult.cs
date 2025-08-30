@@ -16,7 +16,7 @@ namespace RMS.Domain.Models.BaseModels
 
         public PagedResult()
         {
-
+            Items = new List<T>();
         }
 
         public PagedResult(List<T> data, int pageNumber, int pageSize, int totalRecords)
@@ -25,7 +25,7 @@ namespace RMS.Domain.Models.BaseModels
             PageSize = pageSize;
             TotalRecords = totalRecords;
             TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
-            Items = data;
+            Items = data ?? new List<T>();
         }
     }
 }

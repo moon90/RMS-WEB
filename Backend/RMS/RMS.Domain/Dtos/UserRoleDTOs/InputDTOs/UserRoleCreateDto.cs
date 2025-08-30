@@ -11,6 +11,6 @@ namespace RMS.Domain.DTOs.UserRoleDTOs.InputDTOs
         public int UserID { get; set; }
         public int RoleID { get; set; }
         public DateTime AssignedAt { get; set; }
-        public string AssignedBy { get; set; }
+        public required string AssignedBy { get; set; }
     }
 }

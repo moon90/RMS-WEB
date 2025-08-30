@@ -45,7 +45,11 @@ namespace RMS.Core.Extensions
             string methodName = isDescending ? "OrderByDescending" : "OrderBy";
 
             var result = typeof(Queryable).GetMethods()
-                .Where(m => m.Name == methodName && m.GetParameters().Length == 2)
+                .Where(m => m.Name == methodName
+                            && m.IsGenericMethodDefinition // Ensure it's a generic method definition
+                            && m.GetParameters().Length == 2 // Ensure it has two parameters
+                            && m.GetParameters()[0].ParameterType == typeof(IQueryable<>) // First parameter is IQueryable<>
+                            && m.GetParameters()[1].ParameterType == typeof(Expression<>)) // Second parameter is Expression<>
                 .Single()
                 .MakeGenericMethod(typeof(T), property.Type)
                 .Invoke(null, new object[] { source, lambda });

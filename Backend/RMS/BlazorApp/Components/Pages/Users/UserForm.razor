@@ -85,8 +85,8 @@
     private MudForm _form;
     private bool _isValid;
 
-    private UserCreateDto _user = new();
-    private UserUpdateDto _userUpdate = new();
+    private UserCreateDto _user = new() { UserName = string.Empty, Password = string.Empty, FullName = string.Empty };
+    private UserUpdateDto _userUpdate = new() { UserName = string.Empty, FullName = string.Empty };
     private List<IBrowserFile> _uploadedFiles = new();
 
     private IBrowserFile? ProfilePicture => _uploadedFiles.FirstOrDefault();

@@ -9,7 +9,7 @@ namespace RMS.Infrastructure.Interfaces
 {
     public interface IRoleMenuRepository
     {
-        Task<RoleMenu> GetRoleMenuByIdAsync(int roleMenuId);
+        Task<RoleMenu?> GetRoleMenuByIdAsync(int roleMenuId);
         Task<IEnumerable<RoleMenu>> GetRoleMenusByRoleIdAsync(int roleId);
         Task<IEnumerable<RoleMenu>> GetRoleMenusByMenuIdAsync(int menuId);
         Task AddRoleMenuAsync(RoleMenu roleMenu);
@@ -20,5 +20,6 @@ namespace RMS.Infrastructure.Interfaces
         Task<bool> IsMenuAssignedToRoleAsync(int roleId, int menuId);
         Task AssignMenuToRoleAsync(int roleId, int menuId, bool canView, bool canAdd, bool canEdit, bool canDelete);
         Task UnassignMenuFromRoleAsync(int roleId, int menuId);
+        Task<RoleMenu?> GetRoleMenuByRoleIdAndMenuIdAsync(int roleId, int menuId);
     }
 }

@@ -21,29 +21,61 @@ namespace RMS.Infrastructure.Repositories
 
         public async Task AddAsync(AuditLog log)
         {
-            await _context.AuditLogs.AddAsync(log);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.AuditLogs.AddAsync(log);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding audit log: {ex.Message}");
+                throw; // Re-throw the exception for the service layer to handle
+            }
         }
 
         public async Task<IEnumerable<AuditLog>> GetAllAsync()
         {
-            return await _context.AuditLogs.OrderByDescending(x => x.PerformedAt).ToListAsync();
+            try
+            {
+                return await _context.AuditLogs.OrderByDescending(x => x.PerformedAt).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving all audit logs: {ex.Message}");
+                throw; // Re-throw the exception for the service layer to handle
+            }
         }
 
         public async Task<IEnumerable<AuditLog>> GetByEntityTypeAsync(string entityType)
         {
-            return await _context.AuditLogs
-                .Where(x => x.EntityType == entityType)
-                .OrderByDescending(x => x.PerformedAt)
-                .ToListAsync();
+            try
+            {
+                return await _context.AuditLogs
+                    .Where(x => x.EntityType == entityType)
+                    .OrderByDescending(x => x.PerformedAt)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving audit logs by entity type: {ex.Message}");
+                throw; // Re-throw the exception for the service layer to handle
+            }
         }
 
         public async Task<IEnumerable<AuditLog>> GetByUserAsync(string performedBy)
         {
-            return await _context.AuditLogs
-                .Where(x => x.PerformedBy == performedBy)
-                .OrderByDescending(x => x.PerformedAt)
-                .ToListAsync();
+            try
+            {
+                return await _context.AuditLogs
+                    .Where(x => x.PerformedBy == performedBy)
+                    .OrderByDescending(x => x.PerformedAt)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving audit logs by user: {ex.Message}");
+                throw; // Re-throw the exception for the service layer to handle
+            }
         }
     }
 }

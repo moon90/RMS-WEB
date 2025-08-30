@@ -20,93 +20,186 @@ namespace RMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<RoleMenu> GetRoleMenuByIdAsync(int roleMenuId)
+        public async Task<RoleMenu?> GetRoleMenuByIdAsync(int roleMenuId)
         {
-            return await _context.RoleMenus.FindAsync(roleMenuId);
+            try
+            {
+                return await _context.RoleMenus.FindAsync(roleMenuId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving role menu by ID: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task<IEnumerable<RoleMenu>> GetRoleMenusByRoleIdAsync(int roleId)
         {
-            return await _context.RoleMenus
-                .Where(rm => rm.RoleID == roleId)
-                .Include(rm => rm.Menu)
-                .ToListAsync();
+            try
+            {
+                return await _context.RoleMenus
+                    .Where(rm => rm.RoleID == roleId)
+                    .Include(rm => rm.Menu)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving role menus by role ID: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task<IEnumerable<RoleMenu>> GetRoleMenusByMenuIdAsync(int menuId)
         {
-            return await _context.RoleMenus
-                .Where(rm => rm.MenuID == menuId)
-                .ToListAsync();
+            try
+            {
+                return await _context.RoleMenus
+                    .Where(rm => rm.MenuID == menuId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving role menus by menu ID: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task AddRoleMenuAsync(RoleMenu roleMenu)
         {
-            await _context.RoleMenus.AddAsync(roleMenu);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.RoleMenus.AddAsync(roleMenu);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding role menu: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task UpdateRoleMenuAsync(RoleMenu roleMenu)
         {
-            _context.RoleMenus.Update(roleMenu);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.RoleMenus.Update(roleMenu);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating role menu: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task DeleteRoleMenuAsync(int roleMenuId)
         {
-            var roleMenu = await _context.RoleMenus.FindAsync(roleMenuId);
-            if (roleMenu != null)
+            try
             {
-                _context.RoleMenus.Remove(roleMenu);
-                await _context.SaveChangesAsync();
+                var roleMenu = await _context.RoleMenus.FindAsync(roleMenuId);
+                if (roleMenu != null)
+                {
+                    _context.RoleMenus.Remove(roleMenu);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting role menu: {ex.Message}");
+                throw; 
             }
         }
 
         public async Task<bool> IsMenuAssignedToRoleAsync(int roleId, int menuId)
         {
-            return await _context.RoleMenus
-                .AnyAsync(rm => rm.RoleID == roleId && rm.MenuID == menuId);
+            try
+            {
+                return await _context.RoleMenus
+                    .AnyAsync(rm => rm.RoleID == roleId && rm.MenuID == menuId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking if menu is assigned to role: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task AssignMenuToRoleAsync(int roleId, int menuId, bool canView, bool canAdd, bool canEdit, bool canDelete)
         {
-            var roleMenu = await _context.RoleMenus
-                .FirstOrDefaultAsync(rm => rm.RoleID == roleId && rm.MenuID == menuId);
-
-            if (roleMenu == null)
+            try
             {
-                roleMenu = new RoleMenu
+                var roleMenu = await _context.RoleMenus
+                    .FirstOrDefaultAsync(rm => rm.RoleID == roleId && rm.MenuID == menuId);
+
+                if (roleMenu == null)
                 {
-                    RoleID = roleId,
-                    MenuID = menuId,
-                    CanView = canView,
-                    CanAdd = canAdd,
-                    CanEdit = canEdit,
-                    CanDelete = canDelete
-                };
-                await _context.RoleMenus.AddAsync(roleMenu);
-            }
-            else
-            {
-                roleMenu.CanView = canView;
-                roleMenu.CanAdd = canAdd;
-                roleMenu.CanEdit = canEdit;
-                roleMenu.CanDelete = canDelete;
-                _context.RoleMenus.Update(roleMenu);
-            }
+                    roleMenu = new RoleMenu
+                    {
+                        RoleID = roleId,
+                        MenuID = menuId,
+                        CanView = canView,
+                        CanAdd = canAdd,
+                        CanEdit = canEdit,
+                        CanDelete = canDelete
+                    };
+                    await _context.RoleMenus.AddAsync(roleMenu);
+                }
+                else
+                {
+                    roleMenu.CanView = canView;
+                    roleMenu.CanAdd = canAdd;
+                    roleMenu.CanEdit = canEdit;
+                    roleMenu.CanDelete = canDelete;
+                    _context.RoleMenus.Update(roleMenu);
+                }
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error assigning menu to role: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task UnassignMenuFromRoleAsync(int roleId, int menuId)
         {
-            var roleMenu = await _context.RoleMenus
-                .FirstOrDefaultAsync(rm => rm.RoleID == roleId && rm.MenuID == menuId);
-
-            if (roleMenu != null)
+            try
             {
-                _context.RoleMenus.Remove(roleMenu);
-                await _context.SaveChangesAsync();
+                Console.WriteLine($"Attempting to unassign menu. RoleID: {roleId}, MenuID: {menuId}");
+
+                var roleMenu = await _context.RoleMenus
+                    .FirstOrDefaultAsync(rm => rm.RoleID == roleId && rm.MenuID == menuId);
+
+                if (roleMenu != null)
+                {
+                    _context.RoleMenus.Remove(roleMenu);
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine($"Menu unassigned successfully. RoleID: {roleId}, MenuID: {menuId}");
+                }
+                else
+                {
+                    Console.WriteLine($"Menu assignment not found for unassignment. RoleID: {roleId}, MenuID: {menuId}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error unassigning menu from role. RoleID: {roleId}, MenuID: {menuId}. Error: {ex.Message}");
+                throw; 
+            }
+        }
+
+        public async Task<RoleMenu?> GetRoleMenuByRoleIdAndMenuIdAsync(int roleId, int menuId)
+        {
+            try
+            {
+                return await _context.RoleMenus
+                    .FirstOrDefaultAsync(rm => rm.RoleID == roleId && rm.MenuID == menuId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving role menu by role ID and menu ID: {ex.Message}");
+                throw;
             }
         }
     }

@@ -13,6 +13,6 @@ namespace RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs
         public int PermissionID { get; set; }
         public int? SortingOrder { get; set; }
         public DateTime AssignedAt { get; set; }
-        public string AssignedBy { get; set; }
+        public string? AssignedBy { get; set; }
     }
 }

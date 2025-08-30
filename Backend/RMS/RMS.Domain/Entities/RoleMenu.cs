@@ -21,6 +21,6 @@ namespace RMS.Domain.Entities
         public Menu? Menu { get; set; }
 
         public DateTime AssignedAt { get; set; }
-        public string AssignedBy { get; set; }
+        public string? AssignedBy { get; set; }
     }
 }

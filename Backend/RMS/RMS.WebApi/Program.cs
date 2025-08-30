@@ -1,76 +1,26 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using RMS.Application.AutoMappers;
+using RMS.Application;
 using RMS.Application.Implementations;
 using RMS.Application.Interfaces;
-using RMS.Application.Validators;
-using RMS.Domain.Dtos.UserDTOs.InputDTOs;
-using RMS.Domain.DTOs.MenuDTOs.InputDTOs;
-using RMS.Domain.DTOs.RoleDTOs.InputDTOs;
-using RMS.Domain.DTOs.UserDTOs.InputDTOs;
-using RMS.Domain.Interfaces;
-using RMS.Infrastructure.Interfaces;
-using RMS.Infrastructure.IRepositories;
 using RMS.Infrastructure.Persistences;
-using RMS.Infrastructure.Repositories;
 using RMS.WebApi.Filters;
-using System.Reflection;
 using System.Text;
+using RMS.WebApi.Services;
+using RMS.WebApi.Configurations; // Added
+using Microsoft.Extensions.Configuration; // Added
+using Microsoft.Extensions.DependencyInjection; // Added
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Register DbContext with connection string
-builder.Services.AddDbContext<RestaurantDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddApplicationAndInfrastructureServices(builder.Configuration);
+builder.Services.AddScoped<IImageService, ImageService>();
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-builder.Services.AddScoped<IMenuRepository, MenuRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
-builder.Services.AddScoped<IRoleMenuRepository, RoleMenuRepository>();
-builder.Services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
-builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
-
-//builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-// Register services
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IMenuService, MenuService>();
-builder.Services.AddScoped<IEmailSender, EmailSender>();
-builder.Services.AddScoped<IAuditLogService, AuditLogService>();
-builder.Services.AddScoped<IPermissionService, PermissionService>();
-
-
-// Register FluentValidation
-//builder.Services.AddScoped<IValidator<MenuCreateDto>, MenuCreateDtoValidator>();
-//builder.Services.AddScoped<IValidator<MenuUpdateDto>, MenuUpdateDtoValidator>();
-//builder.Services.AddScoped<IValidator<RoleCreateDto>, RoleCreateDtoValidator>();
-//builder.Services.AddScoped<IValidator<RoleUpdateDto>, RoleUpdateDtoValidator>();
-//builder.Services.AddScoped<IValidator<UserCreateDto>, UserCreateDtoValidator>();
-//builder.Services.AddScoped<IValidator<UserUpdateDto>, UserUpdateDtoValidator>();
-//builder.Services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordDtoValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<MenuCreateDtoValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<MenuUpdateDtoValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<RoleCreateDtoValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<RoleUpdateDtoValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UserCreateDtoValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UserUpdateDtoValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordDtoValidator>();
-
-builder.Services.AddValidatorsFromAssemblyContaining<PermissionCreateDtoValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<PermissionUpdateDtoValidator>();
+// Configure ImageSettings
+builder.Services.Configure<ImageSettings>(builder.Configuration.GetSection("ImageSettings")); // Added
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
 builder.Services.AddAuthentication(x =>
@@ -143,7 +93,7 @@ builder.Services.AddScoped<ITokenService, TokenService>(provider =>
         builder.Configuration["Jwt:Key"],
         builder.Configuration["Jwt:Issuer"],
         builder.Configuration["Jwt:Audience"],
-        provider.GetRequiredService<IUserRepository>()
+        provider.GetRequiredService<IUserService>()
     )
 );
 
@@ -155,8 +105,57 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod());
 });
 
-builder.Services.AddAuthorization();
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("USER_VIEW", policy => policy.RequireClaim("Permission", "USER_VIEW"));
+    options.AddPolicy("USER_CREATE", policy => policy.RequireClaim("Permission", "USER_CREATE"));
+    options.AddPolicy("USER_UPDATE", policy => policy.RequireClaim("Permission", "USER_UPDATE"));
+    options.AddPolicy("USER_DELETE", policy => policy.RequireClaim("Permission", "USER_DELETE"));
+    options.AddPolicy("USER_ASSIGN_ROLE", policy => policy.RequireClaim("Permission", "USER_ASSIGN_ROLE"));
+    options.AddPolicy("USER_UNASSIGN_ROLE", policy => policy.RequireClaim("Permission", "USER_UNASSIGN_ROLE"));
+    options.AddPolicy("USER_ASSIGN_ROLES", policy => policy.RequireClaim("Permission", "USER_ASSIGN_ROLES"));
+    options.AddPolicy("USER_UNASSIGN_ROLES", policy => policy.RequireClaim("Permission", "USER_UNASSIGN_ROLES"));
+    options.AddPolicy("USER_UPLOAD_PROFILE_PICTURE", policy => policy.RequireClaim("Permission", "USER_UPLOAD_PROFILE_PICTURE"));
+    options.AddPolicy("USER_VIEW_MENU_PERMISSIONS", policy => policy.RequireClaim("Permission", "USER_VIEW_MENU_PERMISSIONS"));
+    options.AddPolicy("MENU_VIEW", policy => policy.RequireClaim("Permission", "MENU_VIEW"));
+    options.AddPolicy("MENU_CREATE", policy => policy.RequireClaim("Permission", "MENU_CREATE"));
+    options.AddPolicy("MENU_UPDATE", policy => policy.RequireClaim("Permission", "MENU_UPDATE"));
+    options.AddPolicy("MENU_DELETE", policy => policy.RequireClaim("Permission", "MENU_DELETE"));
+    options.AddPolicy("MENU_ASSIGN_ROLE", policy => policy.RequireClaim("Permission", "MENU_ASSIGN_ROLE"));
+    options.AddPolicy("MENU_UNASSIGN_ROLE", policy => policy.RequireClaim("Permission", "MENU_UNASSIGN_ROLE"));
+    options.AddPolicy("AUDIT_LOG_VIEW", policy => policy.RequireClaim("Permission", "AUDIT_LOG_VIEW"));
+    options.AddPolicy("PERMISSION_VIEW", policy => policy.RequireClaim("Permission", "PERMISSION_VIEW"));
+    options.AddPolicy("PERMISSION_CREATE", policy => policy.RequireClaim("Permission", "PERMISSION_CREATE"));
+    options.AddPolicy("PERMISSION_UPDATE", policy => policy.RequireClaim("Permission", "PERMISSION_UPDATE"));
+    options.AddPolicy("PERMISSION_DELETE", policy => policy.RequireClaim("Permission", "PERMISSION_DELETE"));
+    options.AddPolicy("ROLE_VIEW", policy => policy.RequireClaim("Permission", "ROLE_VIEW"));
+    options.AddPolicy("ROLE_CREATE", policy => policy.RequireClaim("Permission", "ROLE_CREATE"));
+    options.AddPolicy("ROLE_UPDATE", policy => policy.RequireClaim("Permission", "ROLE_UPDATE"));
+    options.AddPolicy("ROLE_DELETE", policy => policy.RequireClaim("Permission", "ROLE_DELETE"));
+    options.AddPolicy("ROLE_ASSIGN_PERMISSION", policy => policy.RequireClaim("Permission", "ROLE_ASSIGN_PERMISSION"));
+    options.AddPolicy("ROLE_UNASSIGN_PERMISSION", policy => policy.RequireClaim("Permission", "ROLE_UNASSIGN_PERMISSION"));
+    options.AddPolicy("ROLE_VIEW_MENUS", policy => policy.RequireClaim("Permission", "ROLE_VIEW_MENUS")); // Added
+    options.AddPolicy("CATEGORY_VIEW", policy => policy.RequireClaim("Permission", "CATEGORY_VIEW"));
+    options.AddPolicy("CATEGORY_CREATE", policy => policy.RequireClaim("Permission", "CATEGORY_CREATE"));
+    options.AddPolicy("CATEGORY_UPDATE", policy => policy.RequireClaim("Permission", "CATEGORY_UPDATE"));
+    options.AddPolicy("CATEGORY_DELETE", policy => policy.RequireClaim("Permission", "CATEGORY_DELETE"));
+    options.AddPolicy("UNIT_VIEW", policy => policy.RequireClaim("Permission", "UNIT_VIEW"));
+    options.AddPolicy("UNIT_CREATE", policy => policy.RequireClaim("Permission", "UNIT_CREATE"));
+    options.AddPolicy("UNIT_UPDATE", policy => policy.RequireClaim("Permission", "UNIT_UPDATE"));
+    options.AddPolicy("UNIT_DELETE", policy => policy.RequireClaim("Permission", "UNIT_DELETE"));
+    options.AddPolicy("SUPPLIER_VIEW", policy => policy.RequireClaim("Permission", "SUPPLIER_VIEW"));
+    options.AddPolicy("SUPPLIER_CREATE", policy => policy.RequireClaim("Permission", "SUPPLIER_CREATE"));
+    options.AddPolicy("SUPPLIER_UPDATE", policy => policy.RequireClaim("Permission", "SUPPLIER_UPDATE"));
+    options.AddPolicy("SUPPLIER_DELETE", policy => policy.RequireClaim("Permission", "SUPPLIER_DELETE"));
+    options.AddPolicy("MANUFACTURER_VIEW", policy => policy.RequireClaim("Permission", "MANUFACTURER_VIEW"));
+    options.AddPolicy("MANUFACTURER_CREATE", policy => policy.RequireClaim("Permission", "MANUFACTURER_CREATE"));
+    options.AddPolicy("MANUFACTURER_UPDATE", policy => policy.RequireClaim("Permission", "MANUFACTURER_UPDATE"));
+    options.AddPolicy("MANUFACTURER_DELETE", policy => policy.RequireClaim("Permission", "MANUFACTURER_DELETE"));
+    options.AddPolicy("PRODUCT_VIEW", policy => policy.RequireClaim("Permission", "PRODUCT_VIEW"));
+    options.AddPolicy("PRODUCT_CREATE", policy => policy.RequireClaim("Permission", "PRODUCT_CREATE"));
+    options.AddPolicy("PRODUCT_UPDATE", policy => policy.RequireClaim("Permission", "PRODUCT_UPDATE"));
+    options.AddPolicy("PRODUCT_DELETE", policy => policy.RequireClaim("Permission", "PRODUCT_DELETE"));
+});
 
 builder.Services.AddControllers(options =>
 {
@@ -201,7 +200,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<RestaurantDbContext>();
-    await DbInitializer.InitializeAsync(dbContext); // <-- Call your seeding logic here
+    
 }
 
 app.UseStaticFiles();

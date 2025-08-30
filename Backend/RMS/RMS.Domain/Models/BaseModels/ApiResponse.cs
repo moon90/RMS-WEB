@@ -9,7 +9,7 @@ namespace RMS.Domain.Models.BaseModels
     public class ApiResponse<T>
     {
         public bool Success { get; set; }
-        public string Message { get; set; }
+        public string? Message { get; set; }
         public T? Data { get; set; }
         public ApiErrorCode ErrorCode { get; set; }
 
@@ -29,7 +29,7 @@ namespace RMS.Domain.Models.BaseModels
         /// <returns>ApiResponse with status true and message if any</returns>
         public static ApiResponse<T> CreateSuccessResponse(T data, string message = "Success", ApiErrorCode errorCode = ApiErrorCode.None)
         {
-            return new ApiResponse<T>(true, message, data, errorCode);
+            return new ApiResponse<T>(true, message, data, errorCode) { Message = message };
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace RMS.Domain.Models.BaseModels
         /// <returns>ApiResponse with status false and message if any</returns>
         public static ApiResponse<T> CreateErrorResponse(string message, ApiErrorCode errorCode = ApiErrorCode.ServerError)
         {
-            return new ApiResponse<T>(false, message, default, errorCode);
+            return new ApiResponse<T>(false, message, default!, errorCode) { Message = message };
         }
     }
 }

@@ -8,6 +8,6 @@ namespace RMS.Application.Interfaces
 {
     public interface IAuditLogService
     {
-        Task LogAsync(string action, string entityType, string entityId, string performedBy, string details = null);
+        Task LogAsync(string action, string entityType, string entityId, string performedBy, string? details = null);
     }
 }

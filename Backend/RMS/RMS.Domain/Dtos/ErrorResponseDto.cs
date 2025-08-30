@@ -8,8 +8,8 @@ namespace RMS.Domain.DTOs
 {
     public class ErrorResponseDto
     {
-        public string Message { get; set; } // Main error message
-        public string ErrorCode { get; set; } // Error code for frontend handling
-        public object Details { get; set; }
+        public required string Message { get; set; } // Main error message
+        public required string ErrorCode { get; set; } // Error code for frontend handling
+        public required object Details { get; set; }
     }
 }

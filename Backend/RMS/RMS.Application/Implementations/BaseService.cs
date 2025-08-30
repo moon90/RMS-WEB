@@ -5,6 +5,7 @@ using RMS.Core.Enum;
 using RMS.Core.Exceptions;
 using RMS.Core.Extensions;
 using RMS.Core.Guard;
+using RMS.Domain.Dtos;
 using RMS.Domain.Dtos.Dropdowns;
 using RMS.Domain.Interfaces;
 using RMS.Domain.Models.BaseModels;
@@ -26,7 +27,7 @@ namespace RMS.Application.Implementations
         protected readonly ILogger<TEntity> Logger = logger;
 
         #region Get methods
-        public virtual async Task<Result<TDto>> GetByIdAsync<TDto>(object id) where TDto : class
+        public virtual async Task<ResponseDto<TDto>> GetByIdAsync<TDto>(object id) where TDto : class
         {
             try
             {
@@ -36,82 +37,196 @@ namespace RMS.Application.Implementations
 
                 if (id is int) IntGuardClause.Against.ZeroOrNegative(id, nameof(id));
 
-                var entity = await BaseRepository.GetByIdAsync(id);
+                var result = await BaseRepository.GetByIdAsync(id);
 
-                return Result<TDto>.Success(Mapper.Map<TDto>(entity));
+                if (!result.Succeeded)
+                {
+                    return new ResponseDto<TDto>
+                    {
+                        IsSuccess = false,
+                        Message = result.Error,
+                        Code = "404", // Assuming not found if not succeeded
+                        Details = result.Error
+                    };
+                }
+
+                var entity = result.Data;
+
+                if (entity == null)
+                {
+                    return new ResponseDto<TDto>
+                    {
+                        IsSuccess = false,
+                        Message = $"{typeof(TEntity).Name} not found.",
+                        Code = "404"
+                    };
+                }
+
+                return new ResponseDto<TDto>
+                {
+                    IsSuccess = true,
+                    Message = $"{typeof(TEntity).Name} retrieved successfully.",
+                    Code = "200",
+                    Data = Mapper.Map<TDto>(entity)
+                };
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"{nameof(BaseService<TEntity>)}:{nameof(GetByIdAsync)}: {ex.Message}");
-                return Result<TDto>.Failure(ex.Message);
+                return new ResponseDto<TDto>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving the entity.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public virtual async Task<Result<IEnumerable<DropdownDto>>> GetDropdownAsync(OrderSpecification<TEntity> spec)
+        public virtual async Task<ResponseDto<IEnumerable<DropdownDto>>> GetDropdownAsync(OrderSpecification<TEntity> spec)
         {
             try
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(GetDropdownAsync)}: Building drop down for {typeof(TEntity).Name}");
                 var entities = await BaseRepository.GetOrderedAsync(spec);
 
-                if (entities is null || !entities.Any())
-                    return Result<IEnumerable<DropdownDto>>.Success([]);
+                if (entities == null || !entities.Any())
+                {
+                    return new ResponseDto<IEnumerable<DropdownDto>>
+                    {
+                        IsSuccess = true,
+                        Message = "No items found for dropdown.",
+                        Code = "204",
+                        Data = new List<DropdownDto>()
+                    };
+                }
 
-                return Result<IEnumerable<DropdownDto>>.Success(Mapper.Map<IEnumerable<DropdownDto>>(entities));
+                return new ResponseDto<IEnumerable<DropdownDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Dropdown items retrieved successfully.",
+                    Code = "200",
+                    Data = Mapper.Map<IEnumerable<DropdownDto>>(entities)
+                };
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"{nameof(BaseService<TEntity>)}:{nameof(GetDropdownAsync)}: {ex.Message}");
-                return Result<IEnumerable<DropdownDto>>.Failure(ex.Message);
+                return new ResponseDto<IEnumerable<DropdownDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving dropdown items.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public virtual async Task<Result<IEnumerable<DropdownDto>>> GetDropdownAsync(BaseSpecification<TEntity> spec)
+        public virtual async Task<ResponseDto<IEnumerable<DropdownDto>>> GetDropdownAsync(BaseSpecification<TEntity> spec)
         {
             try
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(GetDropdownAsync)}: Building drop down for {typeof(TEntity).Name}");
 
-                if (spec.Criteria is null)
-                    return Result<IEnumerable<DropdownDto>>.Success([]);
+                if (spec == null)
+                {
+                    return new ResponseDto<IEnumerable<DropdownDto>>
+                    {
+                        IsSuccess = false,
+                        Message = "Specification cannot be null.",
+                        Code = "400"
+                    };
+                }
 
                 var entities = await BaseRepository.GetOrderedAsync(spec);
 
-                if (entities is null || !entities.Any())
-                    return Result<IEnumerable<DropdownDto>>.Success([]);
+                if (entities == null || !entities.Any())
+                {
+                    return new ResponseDto<IEnumerable<DropdownDto>>
+                    {
+                        IsSuccess = true,
+                        Message = "No items found for dropdown.",
+                        Code = "204",
+                        Data = new List<DropdownDto>()
+                    };
+                }
 
-                return Result<IEnumerable<DropdownDto>>.Success(Mapper.Map<IEnumerable<DropdownDto>>(entities));
+                return new ResponseDto<IEnumerable<DropdownDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Dropdown items retrieved successfully.",
+                    Code = "200",
+                    Data = Mapper.Map<IEnumerable<DropdownDto>>(entities)
+                };
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"{nameof(BaseService<TEntity>)}:{nameof(GetDropdownAsync)}: {ex.Message}");
-                return Result<IEnumerable<DropdownDto>>.Failure(ex.Message);
+                return new ResponseDto<IEnumerable<DropdownDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving dropdown items.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public async Task<Result<PagedResult<TDto>>> GetPagedResultAsync<TDto>(PagedQuery query)
+        public async Task<ResponseDto<PagedResult<TDto>>> GetPagedResultAsync<TDto>(PagedQuery query)
         {
             try
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(GetPagedResultAsync)}: Paging {typeof(TEntity).Name} with query: {query}");
 
-                var entities = await BaseRepository.GetPagedResultAsync(query, BaseRepository.GetQueryable());
+                if (query == null)
+                {
+                    return new ResponseDto<PagedResult<TDto>>
+                    {
+                        IsSuccess = false,
+                        Message = "Query cannot be null.",
+                        Code = "400"
+                    };
+                }
 
-                return Result<PagedResult<TDto>>.Success(Mapper.Map<PagedResult<TDto>>(entities));
+                var queryable = BaseRepository.GetQueryable();
+
+                if (!string.IsNullOrEmpty(query.OrderBy))
+                {
+                    queryable = queryable.ApplySorting(query.OrderBy, query.IsDescending ? "desc" : "asc");
+                }
+
+                var entities = await BaseRepository.GetPagedResultAsync(query, queryableInput: queryable);
+
+                return new ResponseDto<PagedResult<TDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Paged results retrieved successfully.",
+                    Code = "200",
+                    Data = Mapper.Map<PagedResult<TDto>>(entities)
+                };
             }
             catch (Exception ex)
             {
-                return Result<PagedResult<TDto>>.Failure(ex.Message);
+                Logger.LogError(ex, $"{nameof(BaseService<TEntity>)}:{nameof(GetPagedResultAsync)}: {ex.Message}");
+                return new ResponseDto<PagedResult<TDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving paged results.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
         #endregion
 
         #region Add & Update Methods
-        public virtual async Task<Result<TDto>> AddAsync<TDto>(TDto dto) where TDto : class
+        public virtual async Task<ResponseDto<TDto>> AddAsync<TDto>(TDto dto) where TDto : class
         {
             try
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(AddAsync)}: Adding {typeof(TEntity).Name}");
+                GuardClause.Against.Null(dto, typeof(TDto).Name);
+
                 var entity = Mapper.Map<TEntity>(dto);
 
                 await BaseRepository.AddAsync(entity);
@@ -119,20 +234,37 @@ namespace RMS.Application.Implementations
                 var saved = await UnitOfWork.SaveChangesAsync();
 
                 if (saved == 0)
-                    return Result<TDto>.Failure($"Error adding the {typeof(TEntity).Name}", ResultType.ServerError);
+                {
+                    return new ResponseDto<TDto>
+                    {
+                        IsSuccess = false,
+                        Message = $"Error adding the {typeof(TEntity).Name}.",
+                        Code = "500"
+                    };
+                }
 
-                dto = Mapper.Map<TDto>(entity);
-
-                return Result<TDto>.Success(dto);
+                return new ResponseDto<TDto>
+                {
+                    IsSuccess = true,
+                    Message = $"{typeof(TEntity).Name} added successfully.",
+                    Code = "201",
+                    Data = Mapper.Map<TDto>(entity)
+                };
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"{nameof(BaseService<TEntity>)}:{nameof(AddAsync)}: {ex.Message}");
-                return Result<TDto>.Failure(ex.Message);
+                return new ResponseDto<TDto>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while adding the entity.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public virtual async Task<Result<TDesDto>> AddAsync<TDesDto, TSrcDto>(TSrcDto dto) where TSrcDto : class where TDesDto : class
+        public virtual async Task<ResponseDto<TDesDto>> AddAsync<TDesDto, TSrcDto>(TSrcDto dto) where TSrcDto : class where TDesDto : class
         {
             try
             {
@@ -146,20 +278,37 @@ namespace RMS.Application.Implementations
                 var saved = await UnitOfWork.SaveChangesAsync();
 
                 if (saved == 0)
-                    return Result<TDesDto>.Failure($"Error adding the {typeof(TEntity).Name}", ResultType.ServerError);
+                {
+                    return new ResponseDto<TDesDto>
+                    {
+                        IsSuccess = false,
+                        Message = $"Error adding the {typeof(TEntity).Name}.",
+                        Code = "500"
+                    };
+                }
 
-                var result = Mapper.Map<TDesDto>(entity);
-
-                return Result<TDesDto>.Success(result);
+                return new ResponseDto<TDesDto>
+                {
+                    IsSuccess = true,
+                    Message = $"{typeof(TEntity).Name} added successfully.",
+                    Code = "201",
+                    Data = Mapper.Map<TDesDto>(entity)
+                };
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"{nameof(BaseService<TEntity>)}:{nameof(AddAsync)}: {ex.Message}");
-                return Result<TDesDto>.Failure(ex.Message);
+                return new ResponseDto<TDesDto>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while adding the entity.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public async Task<Result> UpdateAsync<TDto>(TDto dto, object id, Expression<Func<TEntity, bool>> condition) where TDto : class
+        public async Task<ResponseDto<object>> UpdateAsync<TDto>(TDto dto, object id, Expression<Func<TEntity, bool>> condition) where TDto : class
         {
             try
             {
@@ -171,36 +320,85 @@ namespace RMS.Application.Implementations
                 if (id is int) IntGuardClause.Against.ZeroOrNegative(id, nameof(id));
 
                 if (await BaseRepository.ExistsAsync(condition))
-                    return Result.Failure("Something need unique", ResultType.Exist);
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "Something needs to be unique.",
+                        Code = "409" // Conflict
+                    };
+                }
 
                 var entity = await BaseRepository.GetByIdAsync(id);
+                if (entity == null)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = $"{typeof(TEntity).Name} not found.",
+                        Code = "404"
+                    };
+                }
 
                 Mapper.Map(dto, entity);
 
-                return await UnitOfWork.SaveChangesAsync() == 0
-                    ? Result<TDto>.Failure($"Error adding the {typeof(TEntity).Name}", ResultType.ServerError)
-                    : Result.Success();
+                var saved = await UnitOfWork.SaveChangesAsync();
+
+                if (saved == 0)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = $"Error updating the {typeof(TEntity).Name}.",
+                        Code = "500"
+                    };
+                }
+
+                return new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"{typeof(TEntity).Name} updated successfully.",
+                    Code = "200"
+                };
             }
             catch (InvalidInputException ex)
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(UpdateAsync)}: Input not valid - detail: {ex.Message}");
-                return Result.Failure(ex.Message, ResultType.InvalidInput);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                    Code = "400",
+                    Details = ex.Message
+                };
             }
             catch (NotFoundException ex)
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(UpdateAsync)}: Not found the {typeof(TEntity).Name} - detail: {ex.Message}");
-                return Result.Failure(ex.Message, ResultType.NotFound);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                    Code = "404",
+                    Details = ex.Message
+                };
             }
             catch (Exception ex)
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(UpdateAsync)}: Something went wrong {typeof(TEntity).Name} - detail: {ex.Message}");
-                return Result.Failure(ex.Message, ResultType.ServerError);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while updating the entity.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
         #endregion
 
         #region implemetation for Soft and Hard DELETE methods
-        public virtual async Task<Result> SoftDeleteAsync(object id)
+        public virtual async Task<ResponseDto<object>> SoftDeleteAsync(object id)
         {
             try
             {
@@ -212,191 +410,512 @@ namespace RMS.Application.Implementations
 
                 var entity = await BaseRepository.GetByIdAsync(id);
 
+                if (entity == null)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = $"{typeof(TEntity).Name} not found.",
+                        Code = "404"
+                    };
+                }
+
                 if (entity is ISoftDelete softDeletableEntity)
                 {
                     softDeletableEntity.IsDeleted = true;
-                    return await UnitOfWork.SaveChangesAsync() == 0 ? Result.Failure($"Error deleting the {typeof(TEntity).Name}", ResultType.ServerError) : Result.Success();
+                    var saved = await UnitOfWork.SaveChangesAsync();
+                    if (saved == 0)
+                    {
+                        return new ResponseDto<object>
+                        {
+                            IsSuccess = false,
+                            Message = $"Error soft deleting the {typeof(TEntity).Name}.",
+                            Code = "500"
+                        };
+                    }
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = true,
+                        Message = $"{typeof(TEntity).Name} soft deleted successfully.",
+                        Code = "200"
+                    };
                 }
 
-                return Result.Failure($"Soft delete is not supported for {typeof(TEntity).Name}", ResultType.ServerError);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = $"Soft delete is not supported for {typeof(TEntity).Name}.",
+                    Code = "400"
+                };
             }
             catch (InvalidInputException ex)
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(SoftDeleteAsync)}: Input not valid - detail: {ex.Message}");
-                return Result.Failure(ex.Message, ResultType.InvalidInput);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                    Code = "400",
+                    Details = ex.Message
+                };
             }
             catch (NotFoundException ex)
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(SoftDeleteAsync)}: Not found the {typeof(TEntity).Name} - detail: {ex.Message}");
-                return Result.Failure(ex.Message, ResultType.NotFound);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                    Code = "404",
+                    Details = ex.Message
+                };
             }
             catch (Exception ex)
             {
                 Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(SoftDeleteAsync)}: Something went wrong - detail: {ex.Message}");
-                return Result.Failure(ex.Message, ResultType.ServerError);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while soft deleting the entity.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
         #endregion
 
-        public virtual async Task<Result<IEnumerable<TDto>>> GetBySpecAsync<TDto>(BaseSpecification<TEntity> specs)
+        public virtual async Task<ResponseDto<IEnumerable<TDto>>> GetBySpecAsync<TDto>(BaseSpecification<TEntity> specs)
         {
             try
             {
-                if (specs.IsNull())
-                    return Result<IEnumerable<TDto>>.Failure(MessageExtensions.CouldNotBeNull(nameof(BaseSpecification<TEntity>)));
+                if (specs == null)
+                {
+                    return new ResponseDto<IEnumerable<TDto>>
+                    {
+                        IsSuccess = false,
+                        Message = "Specification cannot be null.",
+                        Code = "400"
+                    };
+                }
 
                 var entity = await BaseRepository.GetBySpecAsync(specs);
 
-                var result = Mapper.Map<IEnumerable<TDto>>(entity.ToList());
-
-                return Result<IEnumerable<TDto>>.Success(result);
+                return new ResponseDto<IEnumerable<TDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Entities retrieved by specification successfully.",
+                    Code = "200",
+                    Data = Mapper.Map<IEnumerable<TDto>>(entity.ToList())
+                };
             }
             catch (Exception ex)
             {
-                return Result<IEnumerable<TDto>>.Failure(ex.Message);
+                return new ResponseDto<IEnumerable<TDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving entities by specification.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public virtual async Task<Result<IQueryable<TEntity>>> GetBySpecAsync(BaseSpecification<TEntity> specs)
+        public virtual async Task<ResponseDto<IQueryable<TEntity>>> GetBySpecAsync(BaseSpecification<TEntity> specs)
         {
             try
             {
-                if (specs.IsNull())
-                    return Result<IQueryable<TEntity>>.Failure(MessageExtensions.CouldNotBeNull(nameof(BaseSpecification<TEntity>)));
+                if (specs == null)
+                {
+                    return new ResponseDto<IQueryable<TEntity>>
+                    {
+                        IsSuccess = false,
+                        Message = "Specification cannot be null.",
+                        Code = "400"
+                    };
+                }
 
                 var queries = await BaseRepository.GetBySpecAsync(specs);
 
-                return Result<IQueryable<TEntity>>.Success(queries.AsQueryable());
+                return new ResponseDto<IQueryable<TEntity>>
+                {
+                    IsSuccess = true,
+                    Message = "Entities retrieved by specification successfully.",
+                    Code = "200",
+                    Data = queries.AsQueryable()
+                };
             }
             catch (Exception ex)
             {
-                return Result<IQueryable<TEntity>>.Failure(ex.Message);
+                return new ResponseDto<IQueryable<TEntity>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving entities by specification.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public virtual async Task<Result<TDto>> GetFisrtOrDefaultBySpecAsync<TDto>(BaseSpecification<TEntity> specs) where TDto : class
+        public virtual async Task<ResponseDto<TDto>> GetFisrtOrDefaultBySpecAsync<TDto>(BaseSpecification<TEntity> specs) where TDto : class
         {
             try
             {
-                if (specs.IsNull())
-                    return Result<TDto>.Failure(MessageExtensions.CouldNotBeNull(nameof(BaseSpecification<TEntity>)));
+                if (specs == null)
+                {
+                    return new ResponseDto<TDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Specification cannot be null.",
+                        Code = "400"
+                    };
+                }
 
                 var result = await BaseRepository.GetFirstOrDefaultBySpecAsync(specs);
 
                 if (!result.Succeeded)
-                    return Result<TDto>.Failure(result.Error);
+                {
+                    return new ResponseDto<TDto>
+                    {
+                        IsSuccess = false,
+                        Message = result.Error,
+                        Code = "404" // Assuming not found if not succeeded
+                    };
+                }
 
                 var dto = Mapper.Map<TDto>(result.Data);
 
-                return Result<TDto>.Success(dto);
+                return new ResponseDto<TDto>
+                {
+                    IsSuccess = true,
+                    Message = "Entity retrieved by specification successfully.",
+                    Code = "200",
+                    Data = dto
+                };
             }
             catch (Exception ex)
             {
-                return Result<TDto>.Failure(ex.Message);
+                return new ResponseDto<TDto>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving the entity by specification.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public virtual async Task<Result<TEntity>> GetFisrtOrDefaultBySpecAsync(BaseSpecification<TEntity> specs)
+        public virtual async Task<ResponseDto<TEntity>> GetFisrtOrDefaultBySpecAsync(BaseSpecification<TEntity> specs)
         {
             try
             {
-                if (specs.IsNull())
-                    return Result<TEntity>.Failure(MessageExtensions.CouldNotBeNull(nameof(BaseSpecification<TEntity>)));
+                if (specs == null)
+                {
+                    return new ResponseDto<TEntity>
+                    {
+                        IsSuccess = false,
+                        Message = "Specification cannot be null.",
+                        Code = "400"
+                    };
+                }
 
-                return await BaseRepository.GetFirstOrDefaultBySpecAsync(specs);
+                var result = await BaseRepository.GetFirstOrDefaultBySpecAsync(specs);
+
+                if (!result.Succeeded)
+                {
+                    return new ResponseDto<TEntity>
+                    {
+                        IsSuccess = false,
+                        Message = result.Error,
+                        Code = "404"
+                    };
+                }
+
+                return new ResponseDto<TEntity>
+                {
+                    IsSuccess = true,
+                    Message = "Entity retrieved by specification successfully.",
+                    Code = "200",
+                    Data = result.Data
+                };
             }
             catch (Exception ex)
             {
-                return Result<TEntity>.Failure(ex.Message);
+                return new ResponseDto<TEntity>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving the entity by specification.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
 
-        public async Task<Result> AddRangeAsync<TDto>(IEnumerable<TDto> dtos)
+        public async Task<ResponseDto<object>> AddRangeAsync<TDto>(IEnumerable<TDto> dtos)
         {
             try
             {
-                if (dtos.IsNull() || !dtos.Any())
-                    return Result.Failure(MessageExtensions.CouldNotBeNullOrEmpty(typeof(TDto).Name));
+                if (dtos == null || !dtos.Any())
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "List of DTOs cannot be null or empty.",
+                        Code = "400"
+                    };
+                }
 
                 var entities = Mapper.Map<IEnumerable<TEntity>>(dtos);
 
-                return await BaseRepository.AddRangeAsync(entities);
+                var result = await BaseRepository.AddRangeAsync(entities);
+
+                if (!result.Succeeded)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = result.Error,
+                        Code = "500"
+                    };
+                }
+
+                return new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = "Entities added successfully.",
+                    Code = "201"
+                };
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while adding entities.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
 
-        public async Task<Result> UpdateRangeAsync<TDto>(IEnumerable<TDto> dtos)
+        public async Task<ResponseDto<object>> UpdateRangeAsync<TDto>(IEnumerable<TDto> dtos)
         {
             try
             {
-                if (dtos.IsNull() || !dtos.Any())
-                    return Result.Failure(MessageExtensions.CouldNotBeNullOrEmpty(typeof(TDto).Name));
+                if (dtos == null || !dtos.Any())
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "List of DTOs cannot be null or empty.",
+                        Code = "400"
+                    };
+                }
 
                 var entities = Mapper.Map<IEnumerable<TEntity>>(dtos);
 
-                return await BaseRepository.UpdateRangeAsync(entities);
+                var result = await BaseRepository.UpdateRangeAsync(entities);
+
+                if (!result.Succeeded)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = result.Error,
+                        Code = "500"
+                    };
+                }
+
+                return new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = "Entities updated successfully.",
+                    Code = "200"
+                };
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while updating entities.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
         #region Delete and remove methods
-        public async Task<Result> RemoveBySpecAsync(BaseSpecification<TEntity> specification)
+        public async Task<ResponseDto<object>> RemoveBySpecAsync(BaseSpecification<TEntity> specification)
         {
             try
             {
-                if (specification.IsNull())
-                    return Result.Failure(MessageExtensions.CouldNotBeNull(typeof(BaseSpecification<TEntity>).Name));
+                if (specification == null)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "Specification cannot be null.",
+                        Code = "400"
+                    };
+                }
 
-                return await BaseRepository.RemoveBySpecAsync(specification);
+                var result = await BaseRepository.RemoveBySpecAsync(specification);
+
+                if (!result.Succeeded)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = result.Error,
+                        Code = "500"
+                    };
+                }
+
+                return new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = "Entities removed by specification successfully.",
+                    Code = "200"
+                };
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while removing entities by specification.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public async Task<Result> RemoveByIdAsync(object id)
+        public async Task<ResponseDto<object>> RemoveByIdAsync(object id)
         {
             try
             {
-                if (id.IsNull())
-                    return Result.Failure(MessageExtensions.CouldNotBeNull(nameof(id)));
+                if (id == null)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "ID cannot be null.",
+                        Code = "400"
+                    };
+                }
 
-                return await BaseRepository.RemoveByIdAsync(id);
+                var result = await BaseRepository.RemoveByIdAsync(id);
+
+                if (!result.Succeeded)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = result.Error,
+                        Code = "500"
+                    };
+                }
+
+                return new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = "Entity removed by ID successfully.",
+                    Code = "200"
+                };
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while removing the entity by ID.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public async Task<Result> DeleteByIdAsync(object id)
+        public async Task<ResponseDto<object>> DeleteByIdAsync(object id)
         {
             try
             {
-                if (id.IsNull())
-                    return Result.Failure(MessageExtensions.CouldNotBeNull(nameof(id)));
+                if (id == null)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "ID cannot be null.",
+                        Code = "400"
+                    };
+                }
 
-                return await BaseRepository.DeleteByIdAsync(id);
+                var result = await BaseRepository.DeleteByIdAsync(id);
+
+                if (!result.Succeeded)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = result.Error,
+                        Code = "500"
+                    };
+                }
+
+                return new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = "Entity deleted by ID successfully.",
+                    Code = "200"
+                };
             }
             catch (Exception ex)
             {
-                return Result.Failure(ex.Message);
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while deleting the entity by ID.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
-        public async Task<Result<TEntity>> GetByIdAsync(object id)
+        public async Task<ResponseDto<TEntity>> GetByIdAsync(object id)
         {
-            var entity = await BaseRepository.GetByIdAsync(id);
-            return Result<TEntity>.Failure("dddd");
+            try
+            {
+                var result = await BaseRepository!.GetByIdAsync(id);
+
+                if (!result.Succeeded)
+                {
+                    return new ResponseDto<TEntity>
+                    {
+                        IsSuccess = false,
+                        Message = result.Error,
+                        Code = "404", // Assuming not found if not succeeded
+                        Details = result.Error
+                    };
+                }
+                return new ResponseDto<TEntity>
+                {
+                    IsSuccess = true,
+                    Message = $"{typeof(TEntity).Name} retrieved successfully.",
+                    Code = "200",
+                    Data = result.Data
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDto<TEntity>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving the entity.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
         #endregion
     }

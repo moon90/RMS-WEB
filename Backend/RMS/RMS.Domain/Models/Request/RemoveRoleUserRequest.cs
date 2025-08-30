@@ -8,7 +8,7 @@ namespace RMS.Domain.Models.Request
 {
     public class RemoveRoleUserRequest
     {
-        public string UserId { get; set; }
-        public string RoleId { get; set; }
+        public required string UserId { get; set; }
+        public required string RoleId { get; set; }
     }
 }

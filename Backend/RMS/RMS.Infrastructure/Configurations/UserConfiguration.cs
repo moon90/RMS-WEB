@@ -25,54 +25,9 @@ namespace RMS.Infrastructure.Configurations
             // Seed initial users
             builder.HasData(
 
-                new User
-                {
-                    Id = 1,
-                    UserName = "admin",
-                    PasswordHash = "c4vD3op8WBxFFjk_XPZoHA", // Replace with actual hashed password
-                    PasswordSalt = "qtixrauL4wM-8gdAhr6rAA", // Replace with actual password salt
-                    FullName = "Admin User",
-                    Email = "admin@example.com",
-                    Phone = "1234567890",
-                    RefreshToken = null,
-                    RefreshTokenExpiry = null,
-                    Status = true,
-                    CreatedBy = "System",
-                    CreatedDate = DateTime.UtcNow,
-                    IsDeleted = false
-                },
-                new User
-                {
-                    Id = 2,
-                    UserName = "manager",
-                    PasswordHash = "d4QTV4pwUJ-pwL2B2Y4V_w", // Replace with actual hashed password - manager
-                    PasswordSalt = "cZ7UtVxlTYIEb97pOqfoBQ", // Replace with actual password salt - manager
-                    FullName = "Manager User",
-                    Email = "manager@example.com",
-                    Phone = "0987654321",
-                    RefreshToken = null,
-                    RefreshTokenExpiry = null,
-                    Status = true,
-                    CreatedBy = "System",
-                    CreatedDate = DateTime.UtcNow,
-                    IsDeleted = false
-                },
-                new User
-                {
-                    Id = 3,
-                    UserName = "user",
-                    PasswordHash = "6Fn94S0iWXBrFbYv5v4Yxg", // Replace with actual hashed password - user
-                    PasswordSalt = "6Fn94S0iWXBrFbYv5v4Yxg", // Replace with actual password salt - user
-                    FullName = "User",
-                    Email = "user@example.com",
-                    Phone = "0987654321",
-                    RefreshToken = null,
-                    RefreshTokenExpiry = null,
-                    Status = true,
-                    CreatedBy = "System",
-                    CreatedDate = DateTime.UtcNow,
-                    IsDeleted = false
-                }
+                new User { Id = 1, UserName = "admin", FullName = "System Administrator", Email = "admin@example.com", Phone = "0000000000", PasswordHash = "c4vD3op8WBxFFjk_XPZoHA", PasswordSalt = "qtixrauL4wM-8gdAhr6rAA", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
+                    new User { Id = 2, UserName = "manager", FullName = "Manager User", Email = "manager@example.com", Phone = "0987654321", PasswordHash = "d4QTV4pwUJ-pwL2B2Y4V_w", PasswordSalt = "cZ7UtVxlTYIEb97pOqfoBQ", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
+                    new User { Id = 3, UserName = "user", FullName = "Standard User", Email = "user@example.com", Phone = "0987654321", PasswordHash = "6Fn94S0iWXBrFbYv5v4Yxg", PasswordSalt = "6Fn94S0iWXBrFbYv5v4Yxg", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false }
 
             );
         }

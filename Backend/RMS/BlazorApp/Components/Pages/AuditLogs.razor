@@ -1,0 +1,88 @@
+@page "/auditlogs"
+@using BlazorApp.Services
+@using RMS.Domain.Entities
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuditLogApiClientService AuditLogService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+
+<PageTitle>Audit Logs</PageTitle>
+
+<MudText Typo="Typo.h4" Class="mb-4">Audit Logs</MudText>
+
+@if (auditLogs == null)
+{
+    <MudProgressCircular Indeterminate="true" />
+    <MudText>Loading audit logs...</MudText>
+}
+else if (auditLogs.Any())
+{
+    <MudTable Items="@auditLogs" Hover="true" Bordered="true" Striped="true">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Action</MudTh>
+            <MudTh>Entity Type</MudTh>
+            <MudTh>Entity ID</MudTh>
+            <MudTh>Performed By</MudTh>
+            <MudTh>Performed At</MudTh>
+            <MudTh>Details</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Action">@context.Action</MudTd>
+            <MudTd DataLabel="EntityType">@context.EntityType</MudTd>
+            <MudTd DataLabel="EntityId">@context.EntityId</MudTd>
+            <MudTd DataLabel="PerformedBy">@context.PerformedBy</MudTd>
+            <MudTd DataLabel="PerformedAt">@context.PerformedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</MudTd>
+            <MudTd DataLabel="Details">@context.Details</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+else
+{
+    <MudText>No audit logs found.</MudText>
+}
+
+@code {
+    private IEnumerable<AuditLog>? auditLogs;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity?.IsAuthenticated ?? true)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        // Check for AUDIT_LOG_VIEW permission
+        if (!user.HasClaim("Permission", "AUDIT_LOG_VIEW"))
+        {
+            Navigation.NavigateTo("/AccessDenied");
+            return;
+        }
+
+        try
+        {
+            var response = await AuditLogService.GetAllAuditLogsAsync();
+            if (response.IsSuccess)
+            {
+                auditLogs = response.Data;
+            }
+            else
+            {
+                errorMessage = response.Message;
+                // Log the error or display it to the user
+                Console.WriteLine($"Error fetching audit logs: {response.Message}");
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An unexpected error occurred while fetching audit logs.";
+            Console.WriteLine($"Exception fetching audit logs: {ex.Message}");
+        }
+    }
+}

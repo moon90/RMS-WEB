@@ -18,6 +18,7 @@ namespace RMS.Domain.Entities
         public Permission? Permission { get; set; }
 
         public DateTime AssignedAt { get; set; }
-        public string AssignedBy { get; set; }
+        public string? AssignedBy { get; set; }
+        public int? SortingOrder { get; set; }
     }
 }

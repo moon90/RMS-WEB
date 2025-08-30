@@ -28,31 +28,10 @@ namespace RMS.Infrastructure.Configurations
 
             // Seed initial user roles
             builder.HasData(
-                new UserRole
-                {
-                    Id = 1,
-                    UserID = 1, // Admin user
-                    RoleID = 1,  // Admin role
-                    AssignedBy = "System", // ✅ Required field
-                    AssignedAt = DateTime.UtcNow
-                },
-                new UserRole
-                {
-                    Id = 2,
-                    UserID = 2, // Manager user
-                    RoleID = 2,  // Manager role
-                    AssignedBy = "System", // ✅ Required field
-                    AssignedAt = DateTime.UtcNow
-                },
-                new UserRole
-                {
-                    Id = 3,
-                    UserID = 3, // Manager user
-                    RoleID = 3,  // Manager role
-                    AssignedBy = "System", // ✅ Required field
-                    AssignedAt = DateTime.UtcNow
-                }
-            );
+                    new UserRole { Id = 1, UserID = 1, RoleID = 1, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Admin user -> Admin role
+                    new UserRole { Id = 2, UserID = 2, RoleID = 2, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Manager user -> Manager role
+                    new UserRole { Id = 3, UserID = 3, RoleID = 3, AssignedBy = "System", AssignedAt = DateTime.UtcNow }  // Standard user -> User role
+                );
         }
     }
 }

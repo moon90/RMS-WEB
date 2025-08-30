@@ -20,67 +20,188 @@ namespace RMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Menu> GetMenuByIdAsync(int menuId)
+        public async Task<Menu?> GetMenuByIdAsync(int menuId)
         {
-            return await _context.Menus.FindAsync(menuId);
+            try
+            {
+                return await _context.Menus.FindAsync(menuId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving menu by ID: {ex.Message}");
+                throw; // Re-throw for service layer to handle
+            }
+        }
+
+        public async Task<Menu?> GetMenuByNameAsync(string menuName)
+        {
+            try
+            {
+                return await _context.Menus.FirstOrDefaultAsync(m => m.MenuName == menuName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving menu by name: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<IEnumerable<Menu>> GetAllMenusAsync()
         {
-            return await _context.Menus.ToListAsync();
+            try
+            {
+                return await _context.Menus.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving all menus: {ex.Message}");
+                throw; // Re-throw for service layer to handle
+            }
         }
 
-        public async Task<(IEnumerable<Menu> Menus, int TotalCount)> GetAllMenusAsync(int pageNumber, int pageSize)
+        public async Task<(IEnumerable<Menu> Menus, int TotalCount)> GetAllMenusAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection)
         {
-            var query = _context.Menus.AsQueryable();
+            try
+            {
+                var query = _context.Menus.AsQueryable();
 
-            // Calculate the number of items to skip
-            var skip = (pageNumber - 1) * pageSize;
+                // Apply search filter
+                if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    query = query.Where(m => m.MenuName.Contains(searchQuery) ||
+                                             m.MenuPath.Contains(searchQuery) ||
+                                             m.MenuIcon.Contains(searchQuery) ||
+                                             m.ControllerName.Contains(searchQuery) ||
+                                             m.ActionName.Contains(searchQuery) ||
+                                             m.ModuleName.Contains(searchQuery));
+                }
 
-            // Get the total count of roles
-            var totalCount = await query.CountAsync();
+                // Apply sorting
+                if (!string.IsNullOrWhiteSpace(sortColumn))
+                {
+                    switch (sortColumn.ToLower())
+                    {
+                        case "menuname":
+                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.MenuName) : query.OrderBy(m => m.MenuName);
+                            break;
+                        case "menupath":
+                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.MenuPath) : query.OrderBy(m => m.MenuPath);
+                            break;
+                        case "menuicon":
+                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.MenuIcon) : query.OrderBy(m => m.MenuIcon);
+                            break;
+                        case "controllername":
+                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.ControllerName) : query.OrderBy(m => m.ControllerName);
+                            break;
+                        case "actionname":
+                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.ActionName) : query.OrderBy(m => m.ActionName);
+                            break;
+                        case "modulename":
+                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.ModuleName) : query.OrderBy(m => m.ModuleName);
+                            break;
+                        case "displayorder":
+                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.DisplayOrder) : query.OrderBy(m => m.DisplayOrder);
+                            break;
+                        default:
+                            query = query.OrderBy(m => m.Id); // Default sort
+                            break;
+                    }
+                }
+                else
+                {
+                    query = query.OrderBy(m => m.Id); // Default sort if no column is specified
+                }
 
-            // Apply pagination
-            var menus = await query
-                .Skip(skip)
-                .Take(pageSize)
-                .ToListAsync();
+                // Get the total count of menus after filtering
+                var totalCount = await query.CountAsync();
 
-            return (menus, totalCount);
+                // Apply pagination
+                var menus = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return (menus, totalCount);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving paged menus: {ex.Message}");
+                throw; // Re-throw for service layer to handle
+            }
         }
 
         public async Task<IEnumerable<Menu>> GetMenusByParentIdAsync(int? parentId)
         {
-            return await _context.Menus
-                .Where(m => m.ParentID == parentId)
-                .ToListAsync();
+            try
+            {
+                return await _context.Menus
+                    .Where(m => m.ParentID == parentId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving menus by parent ID: {ex.Message}");
+                throw; // Re-throw for service layer to handle
+            }
         }
 
         public async Task AddMenuAsync(Menu menu)
         {
-            await _context.Menus.AddAsync(menu);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Menus.AddAsync(menu);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding menu: {ex.Message}");
+                throw; // Re-throw for service layer to handle
+            }
         }
 
         public async Task UpdateMenuAsync(Menu menu)
         {
-            _context.Menus.Update(menu);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Menus.Update(menu);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating menu: {ex.Message}");
+                throw; // Re-throw for service layer to handle
+            }
         }
 
         public async Task DeleteMenuAsync(int menuId)
         {
-            var menu = await _context.Menus.FindAsync(menuId);
-            if (menu != null)
+            try
             {
-                _context.Menus.Remove(menu);
-                await _context.SaveChangesAsync();
+                var menu = await _context.Menus.FindAsync(menuId);
+                if (menu != null)
+                {
+                    _context.Menus.Remove(menu);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting menu: {ex.Message}");
+                throw; // Re-throw for service layer to handle
             }
         }
 
         public async Task<bool> MenuExistsAsync(int menuId)
         {
-            return await _context.Menus.AnyAsync(m => m.Id == menuId);
+            try
+            {
+                return await _context.Menus.AnyAsync(m => m.Id == menuId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking if menu exists: {ex.Message}");
+                throw; // Re-throw for service layer to handle
+            }
         }
     }
 }

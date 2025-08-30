@@ -28,7 +28,7 @@
 </MudContainer>
 
 @code {
-    private LoginDto loginModel = new LoginDto();
+    private LoginDto loginModel = new LoginDto { UserName = string.Empty, Password = string.Empty };
     private bool success;
     private string[] errors = { };
     private MudForm form;

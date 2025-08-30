@@ -25,6 +25,7 @@ namespace RMS.Application.Implementations
         private readonly IRoleMenuRepository _roleMenuRepository;
         private readonly IAuditLogService _auditLogService;
         private readonly IRoleRepository _roleRepository; // Added
+        private readonly IMenuService _menuService; // Added
 
         private readonly IMapper _mapper;
         private readonly IValidator<UserCreateDto> _userCreateValidator;
@@ -39,7 +40,8 @@ namespace RMS.Application.Implementations
             IRolePermissionRepository rolePermissionRepository,
             IRoleMenuRepository roleMenuRepository,
             IAuditLogService auditLogService,
-            IRoleRepository roleRepository) // Added
+            IRoleRepository roleRepository,
+            IMenuService menuService) // Added
         {
             _userRepository = userRepository;
             _userRoleRepository = userRoleRepository;
@@ -49,31 +51,59 @@ namespace RMS.Application.Implementations
             _rolePermissionRepository = rolePermissionRepository;
             _roleMenuRepository = roleMenuRepository;
             _auditLogService = auditLogService;
-            _roleRepository = roleRepository; // Assign the injected roleRepository
-        }
+            _roleRepository = roleRepository;
+            _menuService = menuService;
+        } // Assign the injected roleRepository
 
         public async Task<ResponseDto<UserDto>> AuthenticateAsync(string username, string password)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(username);
-            if (user == null || !VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+            try
+            {
+                var user = await _userRepository.GetUserByUsernameAsync(username);
+                if (user == null || !VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+                {
+                    return new ResponseDto<UserDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Invalid username or password.",
+                        Code = "401"
+                    };
+                }
+
+                var userDto = _mapper.Map<UserDto>(user);
+
+                // Populate roles for the UserDto
+                var userRoles = await _userRoleRepository.GetUserRolesByUserIdAsync(user.Id);
+                if (userRoles != null && userRoles.Any())
+                {
+                    foreach (var userRole in userRoles)
+                    {
+                        var role = await _roleRepository.GetRoleByIdAsync(userRole.RoleID);
+                        if (role != null)
+                        {
+                            userDto.Roles.Add(role.RoleName);
+                        }
+                    }
+                }
+
+                return new ResponseDto<UserDto>
+                {
+                    IsSuccess = true,
+                    Message = "Authentication successful.",
+                    Code = "200",
+                    Data = userDto
+                };
+            }
+            catch (Exception ex)
             {
                 return new ResponseDto<UserDto>
                 {
                     IsSuccess = false,
-                    Message = "Invalid username or password.",
-                    Code = "401"
+                    Message = "An error occurred during authentication.",
+                    Code = "500",
+                    Details = ex.Message
                 };
             }
-
-            var userDto = _mapper.Map<UserDto>(user);
-
-            return new ResponseDto<UserDto>
-            {
-                IsSuccess = true,
-                Message = "Authentication successful.",
-                Code = "200",
-                Data = userDto
-            };
         }
 
         private bool VerifyPassword(string password, string storedHash, string storedSalt)
@@ -83,252 +113,309 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<List<string>>> GetRolePermissionsAsync(int userId)
         {
-            var userRoles = await _userRoleRepository.GetUserRolesByUserIdAsync(userId);
+            try
+            {
+                var userRoles = await _userRoleRepository.GetUserRolesByUserIdAsync(userId);
 
-            if (userRoles == null || !userRoles.Any())
+                if (userRoles == null || !userRoles.Any())
+                {
+                    return new ResponseDto<List<string>>
+                    {
+                        IsSuccess = false,
+                        Message = "User has no roles assigned.",
+                        Code = "404"
+                    };
+                }
+
+                var permissions = new List<string>();
+
+                foreach (var role in userRoles)
+                {
+                    var rolePermissions = await _rolePermissionRepository.GetPermissionsForRoleAsync(role.RoleID);
+                    permissions.AddRange(rolePermissions.Select(p => p.PermissionKey));
+                }
+
+                var distinctPermissions = permissions.Distinct().ToList();
+
+                
+
+                if (!distinctPermissions.Any())
+                {
+                    return new ResponseDto<List<string>>
+                    {
+                        IsSuccess = false,
+                        Message = "No permissions found for assigned roles.",
+                        Code = "403"
+                    };
+                }
+
+                return new ResponseDto<List<string>>
+                {
+                    IsSuccess = true,
+                    Message = "Permissions retrieved successfully.",
+                    Code = "200",
+                    Data = distinctPermissions
+                };
+            }
+            catch (Exception ex)
             {
                 return new ResponseDto<List<string>>
                 {
                     IsSuccess = false,
-                    Message = "User has no roles assigned.",
-                    Code = "404"
+                    Message = "An error occurred while retrieving role permissions.",
+                    Code = "500",
+                    Details = ex.Message
                 };
             }
-
-            var permissions = new List<string>();
-
-            foreach (var role in userRoles)
-            {
-                var rolePermissions = await _rolePermissionRepository.GetPermissionsForRoleAsync(role.RoleID);
-                permissions.AddRange(rolePermissions.Select(p => p.PermissionName));
-            }
-
-            var distinctPermissions = permissions.Distinct().ToList();
-
-            if (!distinctPermissions.Any())
-            {
-                return new ResponseDto<List<string>>
-                {
-                    IsSuccess = false,
-                    Message = "No permissions found for assigned roles.",
-                    Code = "403"
-                };
-            }
-
-            return new ResponseDto<List<string>>
-            {
-                IsSuccess = true,
-                Message = "Permissions retrieved successfully.",
-                Code = "200",
-                Data = distinctPermissions
-            };
         }
 
-        public async Task<ResponseDto<List<MenuPermissionDto>>> GetMenuPermissionsAsync(int userId)
+        public async Task<ResponseDto<IEnumerable<UserMenuPermissionDto>>> GetMenuPermissionsAsync(int userId)
         {
-            var userRoles = await _userRoleRepository.GetUserRolesByUserIdAsync(userId);
+            return await _menuService.GetUserMenuPermissionsAsync(userId);
+        }
 
-            if (userRoles == null || !userRoles.Any())
+        public async Task<ResponseDto<IEnumerable<UserRole>>> GetUserRolesByUserIdAsync(int userId)
+        {
+            try
             {
-                return new ResponseDto<List<MenuPermissionDto>>
+                var userRoles = await _userRoleRepository.GetUserRolesByUserIdAsync(userId);
+
+                if (userRoles == null || !userRoles.Any())
                 {
-                    IsSuccess = false,
-                    Message = "User has no roles assigned.",
-                    Code = "404"
+                    return new ResponseDto<IEnumerable<UserRole>>
+                    {
+                        IsSuccess = false,
+                        Message = "No roles found for this user.",
+                        Code = "404"
+                    };
+                }
+
+                return new ResponseDto<IEnumerable<UserRole>>
+                {
+                    IsSuccess = true,
+                    Message = "User roles retrieved successfully.",
+                    Code = "200",
+                    Data = userRoles
                 };
             }
-
-            var menuPermissions = new List<MenuPermissionDto>();
-
-            foreach (var role in userRoles)
+            catch (Exception ex)
             {
-                var roleMenus = await _roleMenuRepository.GetRoleMenusByRoleIdAsync(role.RoleID);
-
-                menuPermissions.AddRange(roleMenus.Select(m => new MenuPermissionDto
-                {
-                    MenuID = m.Menu.Id,
-                    MenuName = m.Menu.MenuName,
-                    CanView = m.CanView,
-                    CanAdd = m.CanAdd,
-                    CanEdit = m.CanEdit,
-                    CanDelete = m.CanDelete
-                }));
-            }
-
-            if (!menuPermissions.Any())
-            {
-                return new ResponseDto<List<MenuPermissionDto>>
+                return new ResponseDto<IEnumerable<UserRole>>
                 {
                     IsSuccess = false,
-                    Message = "No menu permissions found for user roles.",
-                    Code = "403"
+                    Message = "An error occurred while retrieving user roles.",
+                    Code = "500",
+                    Details = ex.Message
                 };
             }
-
-            return new ResponseDto<List<MenuPermissionDto>>
-            {
-                IsSuccess = true,
-                Message = "Menu permissions retrieved successfully.",
-                Code = "200",
-                Data = menuPermissions
-            };
         }
 
 
         public async Task<ResponseDto<IEnumerable<UserDto>>> GetAllUsersAsync()
         {
-            var users = await _userRepository.GetAllUsersAsync();
+            try
+            {
+                var users = await _userRepository.GetAllUsersAsync();
 
-            if (users == null || !users.Any())
+                if (users == null || !users.Any())
+                {
+                    return new ResponseDto<IEnumerable<UserDto>>
+                    {
+                        IsSuccess = false,
+                        Message = "No users found.",
+                        Code = "404"
+                    };
+                }
+
+                var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
+
+                return new ResponseDto<IEnumerable<UserDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Users retrieved successfully.",
+                    Code = "200",
+                    Data = userDtos
+                };
+            }
+            catch (Exception ex)
             {
                 return new ResponseDto<IEnumerable<UserDto>>
                 {
                     IsSuccess = false,
-                    Message = "No users found.",
-                    Code = "404"
+                    Message = "An error occurred while retrieving users.",
+                    Code = "500",
+                    Details = ex.Message
                 };
             }
-
-            var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
-
-            return new ResponseDto<IEnumerable<UserDto>>
-            {
-                IsSuccess = true,
-                Message = "Users retrieved successfully.",
-                Code = "200",
-                Data = userDtos
-            };
         }
 
         public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, string? role)
         {
-            var (users, totalCount) = await _userRepository.GetAllUsersAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, role);
+            try
+            {
+                var (users, totalCount) = await _userRepository.GetAllUsersAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, role);
 
-            var userDtos = _mapper.Map<List<UserDto>>(users);
+                var userDtos = _mapper.Map<List<UserDto>>(users);
 
-            var pagedResult = new PagedResult<UserDto>(userDtos, pageNumber, pageSize, totalCount);
-            return pagedResult;
+                var pagedResult = new PagedResult<UserDto>(userDtos, pageNumber, pageSize, totalCount);
+                return pagedResult;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as appropriate for your application's error handling strategy
+                // For now, returning an empty PagedResult on error.
+                return new PagedResult<UserDto>(new List<UserDto>(), pageNumber, pageSize, 0);
+            }
         }
 
         public async Task<ResponseDto<UserDto>> GetUserByIdAsync(int userId)
         {
-            var user = await _userRepository.GetUserByIdAsync(userId);
-            if (user == null)
+            try
+            {
+                var user = await _userRepository.GetUserByIdAsync(userId);
+                if (user == null)
+                {
+                    return new ResponseDto<UserDto>
+                    {
+                        IsSuccess = false,
+                        Message = "User not found.",
+                        Code = "404"
+                    };
+                }
+
+                return new ResponseDto<UserDto>
+                {
+                    IsSuccess = true,
+                    Message = "User retrieved successfully.",
+                    Code = "200",
+                    Data = _mapper.Map<UserDto>(user)
+                };
+            }
+            catch (Exception ex)
             {
                 return new ResponseDto<UserDto>
                 {
                     IsSuccess = false,
-                    Message = "User not found.",
-                    Code = "404"
+                    Message = "An error occurred while retrieving the user.",
+                    Code = "500",
+                    Details = ex.Message
                 };
             }
-
-            return new ResponseDto<UserDto>
-            {
-                IsSuccess = true,
-                Message = "User retrieved successfully.",
-                Code = "200",
-                Data = _mapper.Map<UserDto>(user)
-            };
         }
 
         public async Task<ResponseDto<UserDto>> GetUserByUsernameAsync(string username)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(username);
+            try
+            {
+                var user = await _userRepository.GetUserByUsernameAsync(username);
 
-            if (user == null)
+                if (user == null)
+                {
+                    return new ResponseDto<UserDto>
+                    {
+                        IsSuccess = false,
+                        Message = "User not found.",
+                        Code = "404"
+                    };
+                }
+
+                var userDto = _mapper.Map<UserDto>(user);
+
+                return new ResponseDto<UserDto>
+                {
+                    IsSuccess = true,
+                    Message = "User retrieved successfully.",
+                    Code = "200",
+                    Data = userDto
+                };
+            }
+            catch (Exception ex)
             {
                 return new ResponseDto<UserDto>
                 {
                     IsSuccess = false,
-                    Message = "User not found.",
-                    Code = "404"
+                    Message = "An error occurred while retrieving the user by username.",
+                    Code = "500",
+                    Details = ex.Message
                 };
             }
-
-            var userDto = _mapper.Map<UserDto>(user);
-
-            return new ResponseDto<UserDto>
-            {
-                IsSuccess = true,
-                Message = "User retrieved successfully.",
-                Code = "200",
-                Data = userDto
-            };
         }
 
         public async Task<ResponseDto<UserDto>> CreateUserAsync(UserCreateDto userCreateDto)
         {
-            var validationResult = await _userCreateValidator.ValidateAsync(userCreateDto);
-            if (!validationResult.IsValid)
+            try
+            {
+                var validationResult = await _userCreateValidator.ValidateAsync(userCreateDto);
+                if (!validationResult.IsValid)
+                {
+                    return new ResponseDto<UserDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Validation failed.",
+                        Code = "400",
+                        Details = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                    };
+                }
+
+                var (passwordHash, passwordSalt) = PasswordHelper.CreatePasswordHash(userCreateDto.Password);
+
+                var user = _mapper.Map<User>(userCreateDto);
+
+                if (string.IsNullOrEmpty(user.ProfilePictureUrl))
+                {
+                    user.ProfilePictureUrl = "/images/profiles/default.png";
+                }
+
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+
+                await _userRepository.AddUserAsync(user);
+
+                var defaultRole = await _roleRepository.GetRoleByNameAsync("User");
+                if (defaultRole != null)
+                {
+                    await _userRoleRepository.AssignRoleToUserAsync(user.Id, defaultRole.Id, userCreateDto.UserName);
+                }
+                else
+                {
+                    return new ResponseDto<UserDto>
+                    {
+                        IsSuccess = false,
+                        Message = "User created, but default 'User' role not found or assigned.",
+                        Code = "404"
+                    };
+                }
+
+                var userDto = _mapper.Map<UserDto>(user);
+
+                // ADD AUDIT LOG HERE
+                await _auditLogService.LogAsync(
+                    action: "CreateUser",
+                    entityType: "User",
+                    entityId: $"UserId:{user.Id}",
+                    performedBy: user.UserName, // Or the user who performed the action if available (e.g., admin)
+                    details: $"New user '{user.UserName}' created."
+                );
+                // END AUDIT LOG
+
+                return new ResponseDto<UserDto>
+                {
+                    IsSuccess = true,
+                    Message = "User created successfully.",
+                    Code = "201",
+                    Data = userDto
+                };
+            }
+            catch (Exception ex)
             {
                 return new ResponseDto<UserDto>
                 {
                     IsSuccess = false,
-                    Message = "Validation failed.",
-                    Code = "400",
-                    Details = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                    Message = "An error occurred while creating the user.",
+                    Code = "500",
+                    Details = ex.Message
                 };
             }
-
-            if (await _userRepository.GetUserByUsernameAsync(userCreateDto.UserName) != null)
-            {
-                return new ResponseDto<UserDto>
-                {
-                    IsSuccess = false,
-                    Message = "Username already exists.",
-                    Code = "409"
-                };
-            }
-
-            if (await _userRepository.GetUserByEmailAsync(userCreateDto.Email) != null)
-            {
-                return new ResponseDto<UserDto>
-                {
-                    IsSuccess = false,
-                    Message = "Email already exists.",
-                    Code = "409"
-                };
-            }
-
-            var (passwordHash, passwordSalt) = PasswordHelper.CreatePasswordHash(userCreateDto.Password);
-
-            var user = _mapper.Map<User>(userCreateDto);
-
-            if (string.IsNullOrEmpty(user.ProfilePictureUrl))
-            {
-                user.ProfilePictureUrl = "/images/profiles/default.png";
-            }
-
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-
-            await _userRepository.AddUserAsync(user);
-
-            var defaultRole = await _roleRepository.GetRoleByNameAsync("User");
-            if (defaultRole != null)
-            {
-                await _userRoleRepository.AssignRoleToUserAsync(user.Id, defaultRole.Id, userCreateDto.UserName);
-            }
-            else
-            {
-                return new ResponseDto<UserDto>
-                {
-                    IsSuccess = false,
-                    Message = "User created, but default 'User' role not found or assigned.",
-                    Code = "404"
-                };
-            }
-
-            var userDto = _mapper.Map<UserDto>(user);
-
-            return new ResponseDto<UserDto>
-            {
-                IsSuccess = true,
-                Message = "User created successfully.",
-                Code = "201",
-                Data = userDto
-            };
         }
 
         public async Task<ResponseDto<UserDto>> UpdateUserAsync(UserUpdateDto userUpdateDto)
@@ -356,43 +443,30 @@ namespace RMS.Application.Implementations
                 };
             }
 
-            var existingUserByUsername = await _userRepository.GetUserByUsernameAsync(userUpdateDto.UserName);
-            if (existingUserByUsername != null && existingUserByUsername.Id != userUpdateDto.UserID)
-            {
-                return new ResponseDto<UserDto>
-                {
-                    IsSuccess = false,
-                    Message = "Username already exists.",
-                    Code = "409"
-                };
-            }
-
-            var existingUserByEmail = await _userRepository.GetUserByEmailAsync(userUpdateDto.Email);
-            if (existingUserByEmail != null && existingUserByEmail.Id != userUpdateDto.UserID)
-            {
-                return new ResponseDto<UserDto>
-                {
-                    IsSuccess = false,
-                    Message = "Email already exists.",
-                    Code = "409"
-                };
-            }
-
             _mapper.Map(userUpdateDto, user);
 
+            // This block handles profile picture URL update, but the actual file deletion
+            // is now handled in the UsersController.
             if (!string.IsNullOrEmpty(userUpdateDto.ProfilePictureUrl) && user.ProfilePictureUrl != userUpdateDto.ProfilePictureUrl)
             {
-                if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
-                {
-                    var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.ProfilePictureUrl.TrimStart('/'));
-                    if (File.Exists(oldFilePath))
-                    {
-                        File.Delete(oldFilePath);
-                    }
-                }
+                // The old file deletion logic is moved to the controller
+                // if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
+                // {
+                //     var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.ProfilePictureUrl.TrimStart('/'));
+                //     if (File.Exists(oldFilePath))
+                //     {
+                //         File.Delete(oldFilePath);
+                //     }
+                // }
 
                 user.ProfilePictureUrl = userUpdateDto.ProfilePictureUrl;
             }
+            else if (string.IsNullOrEmpty(userUpdateDto.ProfilePictureUrl) && !string.IsNullOrEmpty(user.ProfilePictureUrl))
+            {
+                // If the DTO explicitly clears the URL, and there was an old one, clear it in the entity
+                user.ProfilePictureUrl = null;
+            }
+
 
             await _userRepository.UpdateUserAsync(user);
 
@@ -764,46 +838,8 @@ namespace RMS.Application.Implementations
             };
         }
 
-        public async Task<ResponseDto<string>> UploadProfilePictureAsync(int userId, IFormFile file)
+        public async Task<ResponseDto<string>> UploadProfilePictureAsync(int userId, string imageUrl) // Modified signature
         {
-            if (file == null || file.Length == 0)
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = "No file uploaded.",
-                    Code = "400"
-                };
-            }
-
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-
-            if (!allowedExtensions.Contains(extension))
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = "Invalid file type.",
-                    Code = "415",
-                    Details = $"Allowed: {string.Join(", ", allowedExtensions)}"
-                };
-            }
-
-            var fileName = $"{Guid.NewGuid()}{extension}";
-            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "profiles");
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            var filePath = Path.Combine(uploadPath, fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            var relativeUrl = $"/images/profiles/{fileName}";
-
             var user = await _userRepository.GetUserByIdAsync(userId);
             if (user == null)
             {
@@ -815,7 +851,9 @@ namespace RMS.Application.Implementations
                 };
             }
 
-            user.ProfilePictureUrl = relativeUrl;
+            // The old profile picture should be deleted by the controller before calling this method.
+            // This method only updates the URL in the database.
+            user.ProfilePictureUrl = imageUrl;
             await _userRepository.UpdateUserAsync(user);
 
             return new ResponseDto<string>
@@ -823,7 +861,7 @@ namespace RMS.Application.Implementations
                 IsSuccess = true,
                 Message = "Profile picture uploaded successfully.",
                 Code = "200",
-                Data = relativeUrl
+                Data = imageUrl // Return the new URL
             };
         }
 

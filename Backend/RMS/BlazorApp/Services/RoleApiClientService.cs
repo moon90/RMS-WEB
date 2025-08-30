@@ -4,6 +4,7 @@ using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Domain.Dtos;
 using RMS.Domain.DTOs.RoleDTOs;
 using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
+using RMS.Domain.DTOs.RoleMenuDTOs.OutputDTOs; // Added
 using RMS.Domain.Models.BaseModels;
 
 namespace BlazorApp.Services;
@@ -29,9 +30,54 @@ public class RoleApiClientService
                 Message = $"API call failed: {response.ReasonPhrase}"
             };
         }
-        //var result = await response.Content.ReadFromJsonAsync<ResponseDto<PagedResult<UserDto>>>();
+
         var result = await response.Content.ReadFromJsonAsync<ResponseDto<PagedResult<RoleDto>>>();
-        return result ?? new ResponseDto<PagedResult<RoleDto>>
+        if (result == null)
+        {
+            return new ResponseDto<PagedResult<RoleDto>>
+            {
+                IsSuccess = false,
+                Message = "Failed to deserialize response or response was empty."
+            };
+        }
+
+        return result;
+    }
+
+    public async Task<ResponseDto<IEnumerable<RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs.RolePermissionDto>>> GetRolePermissionsAsync(int roleId)
+    {
+        var response = await _httpClient.GetAsync($"api/roles/{roleId}/permissions");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return new ResponseDto<IEnumerable<RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs.RolePermissionDto>>
+            {
+                IsSuccess = false,
+                Message = $"API call failed: {response.ReasonPhrase}"
+            };
+        }
+        var result = await response.Content.ReadFromJsonAsync<ResponseDto<IEnumerable<RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs.RolePermissionDto>>>();
+        return result ?? new ResponseDto<IEnumerable<RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs.RolePermissionDto>>
+        {
+            IsSuccess = false,
+            Message = "Failed to deserialize response."
+        };
+    }
+
+    public async Task<ResponseDto<IEnumerable<RoleMenuDto>>> GetRoleMenusByRoleIdAsync(int roleId)
+    {
+        var response = await _httpClient.GetAsync($"api/roles/{roleId}/menus");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return new ResponseDto<IEnumerable<RoleMenuDto>>
+            {
+                IsSuccess = false,
+                Message = $"API call failed: {response.ReasonPhrase}"
+            };
+        }
+        var result = await response.Content.ReadFromJsonAsync<ResponseDto<IEnumerable<RoleMenuDto>>>();
+        return result ?? new ResponseDto<IEnumerable<RoleMenuDto>>
         {
             IsSuccess = false,
             Message = "Failed to deserialize response."

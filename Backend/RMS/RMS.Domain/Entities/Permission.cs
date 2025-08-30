@@ -10,10 +10,10 @@ namespace RMS.Domain.Entities
     {
         public int Id { get; set; }
         // Display name for UI or logs
-        public string PermissionName { get; set; }  // e.g., "Create User", "Delete Product"
+        public required string PermissionName { get; set; }  // e.g., "Create User", "Delete Product"
 
         // Unique permission key used internally or in policies
-        public string PermissionKey { get; set; }   // e.g., "USER_CREATE", "PRODUCT_DELETE"
+        public required string PermissionKey { get; set; }   // e.g., "USER_CREATE", "PRODUCT_DELETE"
 
         // Optional: maps to Controller and Action (for dynamic enforcement or auditing)
         public string? ControllerName { get; set; } // e.g., "User"

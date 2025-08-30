@@ -5,6 +5,7 @@ using RMS.Domain.Dtos;
 using RMS.Domain.Dtos.PermissionDTOs.InputDTOs;
 using RMS.Domain.Dtos.PermissionDTOs.OutputDTOs;
 using RMS.Domain.Entities;
+using RMS.Domain.Models.BaseModels;
 using RMS.Infrastructure.Interfaces;
 
 namespace RMS.Application.Implementations
@@ -24,133 +25,232 @@ namespace RMS.Application.Implementations
             _permissionUpdateValidator = permissionUpdateValidator;
         }
 
-        public async Task<ResponseDto<IEnumerable<PermissionDto>>> GetAllPermissionsAsync()
+        public async Task<PagedResult<PermissionDto>> GetAllPermissionsAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
-            var permissions = await _permissionRepository.GetAllPermissionsAsync();
-            var permissionDtos = _mapper.Map<IEnumerable<PermissionDto>>(permissions);
-
-            return new ResponseDto<IEnumerable<PermissionDto>>
+            try
             {
-                IsSuccess = true,
-                Message = "Permissions retrieved successfully.",
-                Code = "200",
-                Data = permissionDtos
-            };
+                var (permissions, totalCount) = await _permissionRepository.GetAllPermissionsAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
+
+                var permissionDtos = _mapper.Map<List<PermissionDto>>(permissions);
+
+                var pagedResult = new PagedResult<PermissionDto>(permissionDtos, pageNumber, pageSize, totalCount);
+                return pagedResult;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetAllPermissionsAsync (paged): {ex.Message}");
+                throw; // Re-throw or handle as appropriate for your application's error handling strategy
+            }
         }
 
         public async Task<ResponseDto<PermissionDto>> GetPermissionByIdAsync(int permissionId)
         {
-            var permission = await _permissionRepository.GetPermissionByIdAsync(permissionId);
+            try
+            {
+                var permission = await _permissionRepository.GetPermissionByIdAsync(permissionId);
 
-            if (permission == null)
+                if (permission == null)
+                {
+                    return new ResponseDto<PermissionDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Permission not found.",
+                        Code = "404"
+                    };
+                }
+
+                var permissionDto = _mapper.Map<PermissionDto>(permission);
+
+                return new ResponseDto<PermissionDto>
+                {
+                    IsSuccess = true,
+                    Message = "Permission retrieved successfully.",
+                    Code = "200",
+                    Data = permissionDto
+                };
+            }
+            catch (Exception ex)
             {
                 return new ResponseDto<PermissionDto>
                 {
                     IsSuccess = false,
-                    Message = "Permission not found.",
-                    Code = "404"
+                    Message = "An error occurred while retrieving the permission.",
+                    Code = "500",
+                    Details = ex.Message
                 };
             }
-
-            var permissionDto = _mapper.Map<PermissionDto>(permission);
-
-            return new ResponseDto<PermissionDto>
-            {
-                IsSuccess = true,
-                Message = "Permission retrieved successfully.",
-                Code = "200",
-                Data = permissionDto
-            };
         }
 
-        public async Task<ResponseDto<int>> CreatePermissionAsync(PermissionCreateDto permissionCreateDto)
+        public async Task<ResponseDto<PermissionDto>> CreatePermissionAsync(PermissionCreateDto permissionCreateDto)
         {
-            var validationResult = await _permissionCreateValidator.ValidateAsync(permissionCreateDto);
-            if (!validationResult.IsValid)
+            try
             {
-                return new ResponseDto<int>
+                var validationResult = await _permissionCreateValidator.ValidateAsync(permissionCreateDto);
+                if (!validationResult.IsValid)
                 {
-                    IsSuccess = false,
-                    Message = "Validation failed.",
-                    Code = "400",
-                    Data = 0,
-                    Details = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                    return new ResponseDto<PermissionDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Validation failed.",
+                        Code = "400",
+                        Details = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                    };
+                }
+
+                if (await _permissionRepository.GetPermissionByNameAsync(permissionCreateDto.PermissionName) != null)
+                {
+                    return new ResponseDto<PermissionDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Permission name already exists.",
+                        Code = "409"
+                    };
+                }
+
+                if (await _permissionRepository.GetPermissionByKeyAsync(permissionCreateDto.PermissionKey) != null)
+                {
+                    return new ResponseDto<PermissionDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Permission key already exists.",
+                        Code = "409"
+                    };
+                }
+
+                var permission = _mapper.Map<Permission>(permissionCreateDto);
+                await _permissionRepository.AddPermissionAsync(permission);
+
+                var permissionDto = _mapper.Map<PermissionDto>(permission);
+
+                return new ResponseDto<PermissionDto>
+                {
+                    IsSuccess = true,
+                    Message = "Permission created successfully.",
+                    Code = "201",
+                    Data = permissionDto
                 };
             }
-
-            var permission = _mapper.Map<Permission>(permissionCreateDto);
-            await _permissionRepository.AddPermissionAsync(permission);
-
-            return new ResponseDto<int>
+            catch (Exception ex)
             {
-                IsSuccess = true,
-                Message = "Permission created successfully.",
-                Code = "201",
-                Data = permission.Id
-            };
+                return new ResponseDto<PermissionDto>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while creating the permission.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
-        public async Task<ResponseDto<bool>> UpdatePermissionAsync(PermissionUpdateDto permissionUpdateDto)
+        public async Task<ResponseDto<PermissionDto>> UpdatePermissionAsync(PermissionUpdateDto permissionUpdateDto)
         {
-            var validationResult = await _permissionUpdateValidator.ValidateAsync(permissionUpdateDto);
-            if (!validationResult.IsValid)
+            try
             {
-                return new ResponseDto<bool>
+                var validationResult = await _permissionUpdateValidator.ValidateAsync(permissionUpdateDto);
+                if (!validationResult.IsValid)
                 {
-                    IsSuccess = false,
-                    Message = "Validation failed.",
-                    Code = "400",
-                    Details = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                    return new ResponseDto<PermissionDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Validation failed.",
+                        Code = "400",
+                        Details = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                    };
+                }
+
+                var permission = await _permissionRepository.GetPermissionByIdAsync(permissionUpdateDto.Id);
+                if (permission == null)
+                {
+                    return new ResponseDto<PermissionDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Permission not found.",
+                        Code = "404"
+                    };
+                }
+
+                var existingPermissionByName = await _permissionRepository.GetPermissionByNameAsync(permissionUpdateDto.PermissionName);
+                if (existingPermissionByName != null && existingPermissionByName.Id != permissionUpdateDto.Id)
+                {
+                    return new ResponseDto<PermissionDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Permission name already exists.",
+                        Code = "409"
+                    };
+                }
+
+                var existingPermissionByKey = await _permissionRepository.GetPermissionByKeyAsync(permissionUpdateDto.PermissionKey);
+                if (existingPermissionByKey != null && existingPermissionByKey.Id != permissionUpdateDto.Id)
+                {
+                    return new ResponseDto<PermissionDto>
+                    {
+                        IsSuccess = false,
+                        Message = "Permission key already exists.",
+                        Code = "409"
+                    };
+                }
+
+                _mapper.Map(permissionUpdateDto, permission);
+                await _permissionRepository.UpdatePermissionAsync(permission);
+
+                var updatedPermissionDto = _mapper.Map<PermissionDto>(permission);
+
+                return new ResponseDto<PermissionDto>
+                {
+                    IsSuccess = true,
+                    Message = "Permission updated successfully.",
+                    Code = "200",
+                    Data = updatedPermissionDto
                 };
             }
-
-            var permission = await _permissionRepository.GetPermissionByIdAsync(permissionUpdateDto.Id);
-            if (permission == null)
+            catch (Exception ex)
             {
-                return new ResponseDto<bool>
+                return new ResponseDto<PermissionDto>
                 {
                     IsSuccess = false,
-                    Message = "Permission not found.",
-                    Code = "404",
-                    Data = false
+                    Message = "An error occurred while updating the permission.",
+                    Code = "500",
+                    Details = ex.Message
                 };
             }
-
-            _mapper.Map(permissionUpdateDto, permission);
-            await _permissionRepository.UpdatePermissionAsync(permission);
-
-            return new ResponseDto<bool>
-            {
-                IsSuccess = true,
-                Message = "Permission updated successfully.",
-                Code = "200",
-                Data = true
-            };
         }
 
-        public async Task<ResponseDto<bool>> DeletePermissionAsync(int permissionId)
+        public async Task<ResponseDto<string>> DeletePermissionAsync(int permissionId)
         {
-            var permission = await _permissionRepository.GetPermissionByIdAsync(permissionId);
-            if (permission == null)
+            try
             {
-                return new ResponseDto<bool>
+                var permission = await _permissionRepository.GetPermissionByIdAsync(permissionId);
+                if (permission == null)
                 {
-                    IsSuccess = false,
-                    Message = "Permission not found.",
-                    Code = "404",
-                    Data = false
+                    return new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "Permission not found.",
+                        Code = "404"
+                    };
+                }
+
+                await _permissionRepository.DeletePermissionAsync(permissionId);
+
+                return new ResponseDto<string>
+                {
+                    IsSuccess = true,
+                    Message = "Permission deleted successfully.",
+                    Code = "200",
+                    Data = $"PermissionId:{permissionId}"
                 };
             }
-
-            await _permissionRepository.DeletePermissionAsync(permissionId);
-
-            return new ResponseDto<bool>
+            catch (Exception ex)
             {
-                IsSuccess = true,
-                Message = "Permission deleted successfully.",
-                Code = "200",
-                Data = true
-            };
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while deleting the permission.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
     }

@@ -37,6 +37,7 @@ builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
     provider.GetRequiredService<CustomAuthenticationStateProvider>());
 builder.Services.AddScoped<UserApiClientService>();
 builder.Services.AddScoped<RoleApiClientService>();
+builder.Services.AddScoped<AuditLogApiClientService>();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddHttpContextAccessor();

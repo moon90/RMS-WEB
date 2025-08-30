@@ -10,8 +10,8 @@ namespace RMS.Domain.Models.Request
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 20;
-        public string Filter { get; set; }
-        public string Group { get; set; }
-        public string Sort { get; set; }
+        public string? Filter { get; set; }
+        public string? Group { get; set; }
+        public string? Sort { get; set; }
     }
 }

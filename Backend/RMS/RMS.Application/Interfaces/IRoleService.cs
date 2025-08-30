@@ -4,6 +4,7 @@ using RMS.Domain.DTOs.RoleDTOs.InputDTOs;
 using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
 using RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs;
 using RMS.Domain.Models.BaseModels;
+using RMS.Domain.DTOs.RoleMenuDTOs.OutputDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +27,7 @@ namespace RMS.Application.Interfaces
 
         Task<ResponseDto<List<int>>> AssignPermissionsToRoleAsync(int roleId, List<int> permissionIds);
         Task<ResponseDto<List<int>>> UnassignPermissionsFromRoleAsync(int roleId, List<int> permissionIds);
+        Task<ResponseDto<IEnumerable<RolePermissionDto>>> GetRolePermissionsByRoleIdAsync(int roleId);
+        Task<ResponseDto<IEnumerable<RoleMenuDto>>> GetRoleMenusByRoleIdAsync(int roleId);
     }
 }

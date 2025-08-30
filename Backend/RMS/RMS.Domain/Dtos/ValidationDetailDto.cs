@@ -8,7 +8,7 @@ namespace RMS.Domain.Dtos
 {
     public class ValidationDetailDto
     {
-        public string PropertyName { get; set; }
-        public string ErrorMessage { get; set; }
+        public required string PropertyName { get; set; }
+        public required string ErrorMessage { get; set; }
     }
 }
