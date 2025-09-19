@@ -1,7 +1,7 @@
 
 using RMS.Application.DTOs.SupplierDTOs.InputDTOs;
 using RMS.Application.DTOs.SupplierDTOs.OutputDTOs;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.Models.BaseModels;
 
 namespace RMS.Application.Interfaces

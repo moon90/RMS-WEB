@@ -3,44 +3,376 @@
   "WorkspaceRootPath": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\ingredientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\ingredientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\productingredientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\productingredientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\kitchencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\kitchencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\unitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\unitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\unitconversionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\unitconversionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\supplierservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\supplierservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\stocktransactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\stocktransactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\staffservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\staffservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\splitpaymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\splitpaymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\saleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\saleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\roleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\roleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\purchaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\purchaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\promotionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\promotionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\productingredientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\productingredientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\permissionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\permissionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\menuservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\menuservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\manufacturerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\manufacturerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\inventoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\inventoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\ingredientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\ingredientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\imageprocessingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\imageprocessingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\diningtableservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\diningtableservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\customerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\customerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\baseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\baseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\auditlogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\auditlogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\implementations\\alertservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\implementations\\alertservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\configurations\\auditlogconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\configurations\\auditlogconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\configurations\\rolepermissionconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\configurations\\rolepermissionconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\configurations\\purchaseconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\configurations\\purchaseconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\persistences\\restaurantdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\persistences\\restaurantdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\automappers\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\automappers\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\configureservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\configureservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\interfaces\\ialertservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\interfaces\\ialertservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\enum\\alerttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\enum\\alerttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\enum\\diningtablestatusenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\enum\\diningtablestatusenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\dtos\\orders\\createorderdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\dtos\\orders\\createorderdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\dtos\\orders\\orderdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\dtos\\orders\\orderdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\dtos\\orders\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\dtos\\orders\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\productingredient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\productingredient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\ingredient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\ingredient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\lowstockalertscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\lowstockalertscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\persistences\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\persistences\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\validators\\salevalidators\\createsaledtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\validators\\salevalidators\\createsaledtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\specification\\salewithcategoryspecification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\specification\\salewithcategoryspecification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\purchasescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\purchasescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\validators\\userupdatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\validators\\userupdatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\validators\\usercreatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\validators\\usercreatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\migrations\\20250917072113_addsalesandpurchasesentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\migrations\\20250917072113_addsalesandpurchasesentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\validators\\rolecreatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\validators\\rolecreatedtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250917071819_AddSalesAndPurchasesEntities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:RMS.Infrastructure\\Migrations\\20250917071819_AddSalesAndPurchasesEntities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\configurations\\customerconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\configurations\\customerconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\dtos\\purchasedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\dtos\\purchasedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\promotionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\promotionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\salescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\salescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\saledetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\saledetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\configurations\\saledetailconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\configurations\\saledetailconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\sale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\sale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\configurations\\saleconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\configurations\\saleconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\configurations\\purchasedetailconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\configurations\\purchasedetailconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\purchasedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\purchasedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\purchase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\purchase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\dtos\\inventorydtos\\outputdtos\\inventorydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\dtos\\inventorydtos\\outputdtos\\inventorydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\dtos\\productdtos\\outputdtos\\productdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\dtos\\productdtos\\outputdtos\\productdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\dtos\\productdtos\\inputdtos\\updateproductdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\dtos\\productdtos\\inputdtos\\updateproductdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.application\\automappers\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{10004B76-6F71-4884-BCD0-86573C028C18}|RMS.Application\\RMS.Application.csproj|solutionrelative:rms.application\\automappers\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\categoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\categoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\diningtablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\diningtablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\persistences\\restaurantdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\persistences\\restaurantdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\auditlogrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\auditlogrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\inventoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\inventoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\orderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\orderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\promotionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\promotionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\purchaserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\purchaserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\repositories\\salerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\repositories\\salerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\auditlogcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\auditlogcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\inventorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\inventorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\diningtablescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\diningtablescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.domain\\entities\\promotion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10A2E40F-5C24-49DC-98CA-5A2DBE5E5F03}|RMS.Domain\\RMS.Domain.csproj|solutionrelative:rms.domain\\entities\\promotion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\configurations\\productconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\configurations\\productconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\manufacturerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\manufacturerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\supplierscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\supplierscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.webapi\\controllers\\unitscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B96A268-D566-4165-B0DC-DA7E493C06CF}|RMS.WebApi\\RMS.WebApi.csproj|solutionrelative:rms.webapi\\controllers\\unitscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|d:\\projects\\rmsweb\\runningprojects\\backend\\rms\\rms.infrastructure\\migrations\\20250918091801_addcategorytopurchaseandsale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9207343B-3065-4AAA-818A-2ABBFFAECDBC}|RMS.Infrastructure\\RMS.Infrastructure.csproj|solutionrelative:rms.infrastructure\\migrations\\20250918091801_addcategorytopurchaseandsale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -50,8 +382,48 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 13,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TokenService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\TokenService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\TokenService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\TokenService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\TokenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:53.924Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "IngredientController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\IngredientController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\IngredientController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\IngredientController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\IngredientController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:56:39.713Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "KitchenController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\KitchenController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\KitchenController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\KitchenController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\KitchenController.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAYwBoAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:17:53.505Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
@@ -86,131 +458,1122 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "20250830181509_AddUploadImageFunctionality.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs",
-              "RelativeDocumentMoniker": "RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs",
-              "RelativeToolTip": "RMS.Infrastructure\\Migrations\\20250830181509_AddUploadImageFunctionality.cs",
-              "ViewState": "AgIAAM0AAAAAAAAAAAAQwNIAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T18:15:09.665Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\appsettings.json",
-              "RelativeDocumentMoniker": "RMS.WebApi\\appsettings.json",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\appsettings.json",
-              "RelativeToolTip": "RMS.WebApi\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-08-30T17:25:43.816Z",
+              "Title": "UnitConversionService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\UnitConversionService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\UnitConversionService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\UnitConversionService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\UnitConversionService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:54.121Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UserRepository.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\UserRepository.cs",
-              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\UserRepository.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\UserRepository.cs",
-              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\UserRepository.cs",
-              "ViewState": "AgIAANcAAAAAAAAAAAAhwOIAAAAWAAAAAAAAAA==",
+              "DocumentIndex": 10,
+              "Title": "SaleService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\SaleService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\SaleService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\SaleService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\SaleService.cs",
+              "ViewState": "AgIAAGIAAAAAAAAAAADwv24AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T17:23:19.194Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "UserUpdateDtoValidator.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\UserUpdateDtoValidator.cs",
-              "RelativeDocumentMoniker": "RMS.Application\\Validators\\UserUpdateDtoValidator.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\UserUpdateDtoValidator.cs",
-              "RelativeToolTip": "RMS.Application\\Validators\\UserUpdateDtoValidator.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAQwA0AAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T17:19:49.99Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "UserCreateDtoValidator.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\UserCreateDtoValidator.cs",
-              "RelativeDocumentMoniker": "RMS.Application\\Validators\\UserCreateDtoValidator.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\UserCreateDtoValidator.cs",
-              "RelativeToolTip": "RMS.Application\\Validators\\UserCreateDtoValidator.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAQwC4AAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T17:19:06.025Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ProductsController.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ProductsController.cs",
-              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\ProductsController.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ProductsController.cs",
-              "RelativeToolTip": "RMS.WebApi\\Controllers\\ProductsController.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAmwCsAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T14:29:20.26Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\UsersController.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "RMS.WebApi\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAIQAAAAAAAAAAAAawJgAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T13:30:56.254Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\UserService.cs",
-              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\UserService.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\UserService.cs",
-              "RelativeToolTip": "RMS.Application\\Implementations\\UserService.cs",
-              "ViewState": "AgIAAB0BAAAAAAAAAAAAAB0BAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T13:30:56.265Z",
+              "WhenOpened": "2025-09-18T09:06:53.946Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "Product.cs",
-              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Product.cs",
-              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\Product.cs",
-              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Product.cs",
-              "RelativeToolTip": "RMS.Domain\\Entities\\Product.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAjAAAAAAAAAA==",
+              "Title": "StaffService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\StaffService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\StaffService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\StaffService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\StaffService.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAADwvyYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T14:12:39.259Z"
+              "WhenOpened": "2025-09-16T13:31:10.8Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UnitService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\UnitService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\UnitService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\UnitService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\UnitService.cs",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAewGgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T08:08:59.443Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProductIngredientController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ProductIngredientController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\ProductIngredientController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ProductIngredientController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\ProductIngredientController.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAYwDEAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-15T17:08:16.08Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
+              "Title": "SplitPaymentService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\SplitPaymentService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\SplitPaymentService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\SplitPaymentService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\SplitPaymentService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:53.595Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "RoleService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\RoleService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\RoleService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\RoleService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\RoleService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:53.437Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "StockTransactionService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\StockTransactionService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\StockTransactionService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\StockTransactionService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\StockTransactionService.cs",
+              "ViewState": "AgIAACsBAAAAAAAAAAAiwBUAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T14:26:51.944Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SupplierService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\SupplierService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\SupplierService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\SupplierService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\SupplierService.cs",
+              "ViewState": "AgIAAI4AAAAAAAAAAAAmwJkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T08:36:30.569Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ProductService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\ProductService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\ProductService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\ProductService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\ProductService.cs",
+              "ViewState": "AgIAAKQAAAAAAAAAAAAgwKwAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-15T14:56:21.822Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ProductIngredientService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\ProductIngredientService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\ProductIngredientService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\ProductIngredientService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\ProductIngredientService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:53.168Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "PermissionService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\PermissionService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\PermissionService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\PermissionService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\PermissionService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:52.951Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "MenuService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\MenuService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\MenuService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\MenuService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\MenuService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:52.795Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "PromotionService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\PromotionService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\PromotionService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\PromotionService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\PromotionService.cs",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAAAHQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T14:25:23.808Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "PurchaseService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\PurchaseService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\PurchaseService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\PurchaseService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\PurchaseService.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAwwGAAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:39:32.516Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "InventoryService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\InventoryService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\InventoryService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\InventoryService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\InventoryService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:52.666Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "IngredientService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\IngredientService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\IngredientService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\IngredientService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\IngredientService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:52.577Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ImageProcessingService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\ImageProcessingService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\ImageProcessingService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\ImageProcessingService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\ImageProcessingService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:52.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "EmailSender.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\EmailSender.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\EmailSender.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\EmailSender.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\EmailSender.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:52.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "BaseService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\BaseService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\BaseService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\BaseService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\BaseService.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAADwvw0AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:23:51.757Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ManufacturerService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\ManufacturerService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\ManufacturerService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\ManufacturerService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\ManufacturerService.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAiwIcAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:27:57.497Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "AuditLogService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\AuditLogService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\AuditLogService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\AuditLogService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\AuditLogService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:52.126Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "AlertService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\AlertService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\AlertService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\AlertService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\AlertService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T21:13:52.031Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "CategoryService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\CategoryService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\CategoryService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\CategoryService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\CategoryService.cs",
+              "ViewState": "AgIAAAYBAAAAAAAAAAAwwBUBAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:42:34.743Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "CustomerService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\CustomerService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\CustomerService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\CustomerService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\CustomerService.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAAABYAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:25:42.688Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "DiningTableService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\DiningTableService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Implementations\\DiningTableService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Implementations\\DiningTableService.cs",
+              "RelativeToolTip": "RMS.Application\\Implementations\\DiningTableService.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAAAIQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T14:29:22.947Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "AuditLogConfiguration.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\AuditLogConfiguration.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Configurations\\AuditLogConfiguration.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\AuditLogConfiguration.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Configurations\\AuditLogConfiguration.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T20:30:53.029Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "RolePermissionConfiguration.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\RolePermissionConfiguration.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Configurations\\RolePermissionConfiguration.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\RolePermissionConfiguration.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Configurations\\RolePermissionConfiguration.cs",
+              "ViewState": "AgIAAHAAAAAAAAAAAAAQwHsAAACDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T20:28:32.891Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
               "Title": "MappingProfile.cs",
               "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\AutoMappers\\MappingProfile.cs",
               "RelativeDocumentMoniker": "RMS.Application\\AutoMappers\\MappingProfile.cs",
               "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\AutoMappers\\MappingProfile.cs",
               "RelativeToolTip": "RMS.Application\\AutoMappers\\MappingProfile.cs",
-              "ViewState": "AgIAAHAAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAPcAAAAAAAAAAAAIwAgBAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T14:09:09.753Z"
+              "WhenOpened": "2025-09-15T17:25:04.79Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "RestaurantDbContext.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Persistences\\RestaurantDbContext.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Persistences\\RestaurantDbContext.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Persistences\\RestaurantDbContext.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Persistences\\RestaurantDbContext.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAkwC8AAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T12:03:57.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "PurchaseConfiguration.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\PurchaseConfiguration.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Configurations\\PurchaseConfiguration.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\PurchaseConfiguration.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Configurations\\PurchaseConfiguration.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwCEAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:51:09.602Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Program.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Program.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Program.cs",
+              "RelativeToolTip": "RMS.WebApi\\Program.cs",
+              "ViewState": "AgIAALkAAAAAAAAAAAAAADUBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T18:01:49.944Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "ConfigureServices.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\ConfigureServices.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\ConfigureServices.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\ConfigureServices.cs",
+              "RelativeToolTip": "RMS.Application\\ConfigureServices.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAIwGAAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-15T15:49:35.514Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "IAlertService.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Interfaces\\IAlertService.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Interfaces\\IAlertService.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Interfaces\\IAlertService.cs",
+              "RelativeToolTip": "RMS.Application\\Interfaces\\IAlertService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T18:51:53.292Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "AlertType.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Enum\\AlertType.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Enum\\AlertType.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Enum\\AlertType.cs",
+              "RelativeToolTip": "RMS.Domain\\Enum\\AlertType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T18:07:57.221Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "DiningTableStatusEnum.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Enum\\DiningTableStatusEnum.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Enum\\DiningTableStatusEnum.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Enum\\DiningTableStatusEnum.cs",
+              "RelativeToolTip": "RMS.Domain\\Enum\\DiningTableStatusEnum.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T18:07:59.691Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "CreateOrderDetailDto.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\Orders\\CreateOrderDetailDto.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\DTOs\\Orders\\CreateOrderDetailDto.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\Orders\\CreateOrderDetailDto.cs",
+              "RelativeToolTip": "RMS.Application\\DTOs\\Orders\\CreateOrderDetailDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T17:50:45.68Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "OrderDetailDto.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\Orders\\OrderDetailDto.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\DTOs\\Orders\\OrderDetailDto.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\Orders\\OrderDetailDto.cs",
+              "RelativeToolTip": "RMS.Application\\DTOs\\Orders\\OrderDetailDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T17:50:41.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "OrderDto.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\Orders\\OrderDto.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\DTOs\\Orders\\OrderDto.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\Orders\\OrderDto.cs",
+              "RelativeToolTip": "RMS.Application\\DTOs\\Orders\\OrderDto.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA7wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T17:49:35.22Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "Ingredient.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Ingredient.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\Ingredient.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Ingredient.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\Ingredient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T11:02:58.337Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "LowStockAlertsController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\LowStockAlertsController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\LowStockAlertsController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\LowStockAlertsController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\LowStockAlertsController.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAswBEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T10:46:35.379Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Persistences\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Persistences\\UnitOfWork.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Persistences\\UnitOfWork.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Persistences\\UnitOfWork.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAowDcAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T09:40:54.137Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-15T14:56:21.537Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "ProductIngredient.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\ProductIngredient.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\ProductIngredient.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\ProductIngredient.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\ProductIngredient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T11:03:01.136Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "CreateSaleDtoValidator.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\SaleValidators\\CreateSaleDtoValidator.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Validators\\SaleValidators\\CreateSaleDtoValidator.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\SaleValidators\\CreateSaleDtoValidator.cs",
+              "RelativeToolTip": "RMS.Application\\Validators\\SaleValidators\\CreateSaleDtoValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T09:21:42.881Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 92,
+              "Title": "20250918091801_AddCategoryToPurchaseAndSale.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250918091801_AddCategoryToPurchaseAndSale.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Migrations\\20250918091801_AddCategoryToPurchaseAndSale.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250918091801_AddCategoryToPurchaseAndSale.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Migrations\\20250918091801_AddCategoryToPurchaseAndSale.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T09:18:01.789Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "SaleWithCategorySpecification.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Specification\\SaleWithCategorySpecification.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Specification\\SaleWithCategorySpecification.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Specification\\SaleWithCategorySpecification.cs",
+              "RelativeToolTip": "RMS.Domain\\Specification\\SaleWithCategorySpecification.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T09:09:25.923Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "20250917072113_AddSalesAndPurchasesEntities.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250917072113_AddSalesAndPurchasesEntities.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Migrations\\20250917072113_AddSalesAndPurchasesEntities.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250917072113_AddSalesAndPurchasesEntities.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Migrations\\20250917072113_AddSalesAndPurchasesEntities.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T07:21:13.586Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "CustomerConfiguration.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\CustomerConfiguration.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Configurations\\CustomerConfiguration.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\CustomerConfiguration.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Configurations\\CustomerConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T07:12:25.648Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\UserRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\UserRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\UserRepository.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAWwEMAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T07:49:27.79Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "PurchaseDto.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\PurchaseDto.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\DTOs\\PurchaseDto.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\PurchaseDto.cs",
+              "RelativeToolTip": "RMS.Application\\DTOs\\PurchaseDto.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAYAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T07:07:17.352Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "PurchasesController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\PurchasesController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\PurchasesController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\PurchasesController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\PurchasesController.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBYAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T07:07:09.998Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\UsersController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAWwCQAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T07:49:27.764Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "20250917071819_AddSalesAndPurchasesEntities.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250917071819_AddSalesAndPurchasesEntities.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Migrations\\20250917071819_AddSalesAndPurchasesEntities.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Migrations\\20250917071819_AddSalesAndPurchasesEntities.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Migrations\\20250917071819_AddSalesAndPurchasesEntities.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T07:18:19.742Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "RoleCreateDtoValidator.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\RoleCreateDtoValidator.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\Validators\\RoleCreateDtoValidator.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\Validators\\RoleCreateDtoValidator.cs",
+              "RelativeToolTip": "RMS.Application\\Validators\\RoleCreateDtoValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T07:18:39.806Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "SalesController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\SalesController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\SalesController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\SalesController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\SalesController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T07:06:26.249Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
+              "Title": "SaleDetail.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\SaleDetail.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\SaleDetail.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\SaleDetail.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\SaleDetail.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:52:41.128Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 61,
+              "Title": "Sale.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Sale.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\Sale.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Sale.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\Sale.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:52:28.121Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 62,
+              "Title": "SaleConfiguration.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\SaleConfiguration.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Configurations\\SaleConfiguration.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\SaleConfiguration.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Configurations\\SaleConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:52:23.211Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 64,
+              "Title": "PurchaseDetail.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\PurchaseDetail.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\PurchaseDetail.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\PurchaseDetail.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\PurchaseDetail.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:51:53.67Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "SaleDetailConfiguration.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\SaleDetailConfiguration.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Configurations\\SaleDetailConfiguration.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\SaleDetailConfiguration.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Configurations\\SaleDetailConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:52:38.798Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "PromotionsController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\PromotionsController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\PromotionsController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\PromotionsController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\PromotionsController.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAwBcAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-15T17:27:03.899Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 63,
+              "Title": "PurchaseDetailConfiguration.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\PurchaseDetailConfiguration.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Configurations\\PurchaseDetailConfiguration.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\PurchaseDetailConfiguration.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Configurations\\PurchaseDetailConfiguration.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwCIAAABHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:51:46.271Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 65,
+              "Title": "Purchase.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Purchase.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\Purchase.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Purchase.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\Purchase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:51:21.014Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 66,
+              "Title": "Inventory.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Inventory.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\Inventory.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Inventory.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\Inventory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:44:58.244Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 67,
+              "Title": "InventoryDto.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\InventoryDTOs\\OutputDTOs\\InventoryDto.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\DTOs\\InventoryDTOs\\OutputDTOs\\InventoryDto.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\InventoryDTOs\\OutputDTOs\\InventoryDto.cs",
+              "RelativeToolTip": "RMS.Application\\DTOs\\InventoryDTOs\\OutputDTOs\\InventoryDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:44:47.261Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 68,
+              "Title": "ProductDto.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\ProductDTOs\\OutputDTOs\\ProductDto.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\DTOs\\ProductDTOs\\OutputDTOs\\ProductDto.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\ProductDTOs\\OutputDTOs\\ProductDto.cs",
+              "RelativeToolTip": "RMS.Application\\DTOs\\ProductDTOs\\OutputDTOs\\ProductDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:37:44.291Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 69,
+              "Title": "UpdateProductDto.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\ProductDTOs\\InputDTOs\\UpdateProductDto.cs",
+              "RelativeDocumentMoniker": "RMS.Application\\DTOs\\ProductDTOs\\InputDTOs\\UpdateProductDto.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Application\\DTOs\\ProductDTOs\\InputDTOs\\UpdateProductDto.cs",
+              "RelativeToolTip": "RMS.Application\\DTOs\\ProductDTOs\\InputDTOs\\UpdateProductDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T19:37:36.257Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 71,
+              "Title": "BaseRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\BaseRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\BaseRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\BaseRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\BaseRepository.cs",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAAAFkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:05:34.023Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 70,
+              "Title": "Product.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Product.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\Product.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Product.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\Product.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T08:48:59.8Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 72,
+              "Title": "CategoryRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\CategoryRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\CategoryRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\CategoryRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\CategoryRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:42:24.142Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 73,
+              "Title": "DiningTableRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\DiningTableRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\DiningTableRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\DiningTableRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\DiningTableRepository.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAuwBUAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:13:02.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 75,
+              "Title": "AuditLogRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\AuditLogRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\AuditLogRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\AuditLogRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\AuditLogRepository.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwBAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:08:45.429Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 76,
+              "Title": "InventoryRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\InventoryRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\InventoryRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\InventoryRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\InventoryRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAIwA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:09:26.613Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 74,
+              "Title": "RestaurantDbContextFactory.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Persistences\\RestaurantDbContextFactory.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Persistences\\RestaurantDbContextFactory.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Persistences\\RestaurantDbContextFactory.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Persistences\\RestaurantDbContextFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAABdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T12:04:17.568Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 77,
+              "Title": "OrderRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\OrderRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\OrderRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\OrderRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\OrderRepository.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABUAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T13:04:27.273Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 80,
+              "Title": "SaleRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\SaleRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\SaleRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\SaleRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\SaleRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T11:58:53.618Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 78,
+              "Title": "PromotionRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\PromotionRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\PromotionRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\PromotionRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\PromotionRepository.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAswAQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T11:57:44.931Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 79,
+              "Title": "PurchaseRepository.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\PurchaseRepository.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Repositories\\PurchaseRepository.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Repositories\\PurchaseRepository.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Repositories\\PurchaseRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAkAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T11:43:55.045Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 81,
+              "Title": "AuditLogController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\AuditLogController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\AuditLogController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\AuditLogController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\AuditLogController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-15T17:13:03.177Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 82,
+              "Title": "InventoryController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\InventoryController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\InventoryController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\InventoryController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\InventoryController.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAYwDEAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-15T16:54:42.291Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 84,
+              "Title": "OrdersController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\OrdersController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\OrdersController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\OrdersController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\OrdersController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAtwBwAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T17:41:00.279Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 86,
+              "Title": "Promotion.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Promotion.cs",
+              "RelativeDocumentMoniker": "RMS.Domain\\Entities\\Promotion.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Domain\\Entities\\Promotion.cs",
+              "RelativeToolTip": "RMS.Domain\\Entities\\Promotion.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T09:16:11.054Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 87,
+              "Title": "ProductConfiguration.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\ProductConfiguration.cs",
+              "RelativeDocumentMoniker": "RMS.Infrastructure\\Configurations\\ProductConfiguration.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.Infrastructure\\Configurations\\ProductConfiguration.cs",
+              "RelativeToolTip": "RMS.Infrastructure\\Configurations\\ProductConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T09:07:15.422Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 83,
+              "Title": "DiningTablesController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\DiningTablesController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\DiningTablesController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\DiningTablesController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\DiningTablesController.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAYwDYAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-15T14:56:21.738Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 85,
+              "Title": "ProductsController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ProductsController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\ProductsController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ProductsController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\ProductsController.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAADcAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T07:50:58.185Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 88,
+              "Title": "CategoriesController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\CategoriesController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\CategoriesController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\CategoriesController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\CategoriesController.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAWwBsAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T07:50:58.292Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 89,
+              "Title": "ManufacturersController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ManufacturersController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\ManufacturersController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\ManufacturersController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\ManufacturersController.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAYwD0AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T08:33:22.314Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 90,
+              "Title": "SuppliersController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\SuppliersController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\SuppliersController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\SuppliersController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\SuppliersController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAiwCYAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T08:27:40.195Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 91,
+              "Title": "UnitsController.cs",
+              "DocumentMoniker": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UnitsController.cs",
+              "RelativeDocumentMoniker": "RMS.WebApi\\Controllers\\UnitsController.cs",
+              "ToolTip": "D:\\PROJECTS\\RMSWeb\\RunningProjects\\Backend\\RMS\\RMS.WebApi\\Controllers\\UnitsController.cs",
+              "RelativeToolTip": "RMS.WebApi\\Controllers\\UnitsController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAiwCcAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T07:47:56.546Z"
             }
           ]
         }

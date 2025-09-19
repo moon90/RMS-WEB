@@ -1,12 +1,14 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
-using RMS.Domain.DTOs;
-using RMS.Domain.DTOs.UserDTOs.InputDTOs;
-using RMS.WebApi.Services;
+using RMS.Application.Services.Processing;
+using RMS.Application.DTOs;
+using RMS.WebApi.Configurations;
+using RMS.Application.DTOs.UserDTOs.InputDTOs;
+
 
 namespace RMS.WebApi.Controllers
 {
@@ -16,12 +18,14 @@ namespace RMS.WebApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IImageService _imageService; // Added
+        private readonly IImageProcessingService _imageProcessingService;
+        private readonly ImageSettings _imageSettings;
 
-        public UsersController(IUserService userService, IImageService imageService) // Modified
+        public UsersController(IUserService userService, IImageProcessingService imageProcessingService, IOptions<ImageSettings> imageSettings)
         {
             _userService = userService;
-            _imageService = imageService; // Added
+            _imageProcessingService = imageProcessingService;
+            _imageSettings = imageSettings.Value;
         }
 
         [HttpGet]
@@ -146,6 +150,27 @@ namespace RMS.WebApi.Controllers
                 {
                     IsSuccess = false,
                     Message = "An error occurred while updating the user.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpPut("{id}/status")]
+        [Authorize(Policy = "USER_TOGGLE_STATUS")] // New permission
+        public async Task<IActionResult> UpdateUserStatus(int id, [FromBody] UserStatusUpdateDto dto)
+        {
+            try
+            {
+                var result = await _userService.UpdateUserStatusAsync(id, dto.Status);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while updating user status.",
                     Code = "INTERNAL_SERVER_ERROR",
                     Details = ex.Message
                 });
@@ -296,30 +321,9 @@ namespace RMS.WebApi.Controllers
                     });
                 }
 
-                // Get existing user to retrieve old profile picture URL
-                var existingUserResult = await _userService.GetUserByIdAsync(userId);
-                if (!existingUserResult.IsSuccess || existingUserResult.Data == null)
-                {
-                    return NotFound(new ResponseDto<string>
-                    {
-                        IsSuccess = false,
-                        Message = "User not found.",
-                        Code = "USER_NOT_FOUND"
-                    });
-                }
-                var existingUser = existingUserResult.Data;
+                var imageBytes = await _imageProcessingService.ProcessImage(file, _imageSettings.ProfilePictureWidth, _imageSettings.ProfilePictureHeight);
 
-                // Save new profile picture
-                var newProfilePictureUrl = await _imageService.SaveImageAsync(file, "profile-pictures");
-
-                // If saving is successful, delete the old profile picture
-                if (!string.IsNullOrEmpty(newProfilePictureUrl) && !string.IsNullOrEmpty(existingUser.ProfilePictureUrl))
-                {
-                    _imageService.DeleteImage(existingUser.ProfilePictureUrl);
-                }
-
-                // Update user's profile picture URL in the database
-                var result = await _userService.UploadProfilePictureAsync(userId, newProfilePictureUrl);
+                var result = await _userService.UploadProfilePictureAsync(userId, imageBytes);
                 return result.IsSuccess ? Ok(result) : BadRequest(result);
             }
             catch (ArgumentException ex) // Catch specific validation exception from ImageService

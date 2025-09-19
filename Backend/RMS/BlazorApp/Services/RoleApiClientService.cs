@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.DTOs.RoleDTOs;
 using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
 using RMS.Domain.DTOs.RoleMenuDTOs.OutputDTOs; // Added

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using RMS.Domain.Dtos.PermissionDTOs.InputDTOs;
+using RMS.Application.DTOs.PermissionDTOs.InputDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

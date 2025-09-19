@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
-using RMS.Domain.Dtos.PermissionDTOs.InputDTOs;
-using RMS.Domain.Dtos.PermissionDTOs.OutputDTOs;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.PermissionDTOs.InputDTOs;
+using RMS.Application.DTOs.PermissionDTOs.OutputDTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
 using RMS.Infrastructure.Interfaces;

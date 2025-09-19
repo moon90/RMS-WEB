@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs.ManufacturerDTOs.InputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using System.Threading.Tasks;
 
 namespace RMS.WebApi.Controllers

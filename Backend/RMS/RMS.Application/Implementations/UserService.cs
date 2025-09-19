@@ -1,19 +1,13 @@
 using AutoMapper;
 using FluentValidation;
-using Microsoft.AspNetCore.Http;
-using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.UserDTOs.InputDTOs;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Application.Helpers;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
-using RMS.Domain.DTOs;
-using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
-using RMS.Domain.DTOs.UserDTOs.InputDTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
 using RMS.Infrastructure.Interfaces;
-using RMS.Infrastructure.IRepositories;
-using System.Linq;
 
 namespace RMS.Application.Implementations
 {
@@ -361,11 +355,6 @@ namespace RMS.Application.Implementations
 
                 var user = _mapper.Map<User>(userCreateDto);
 
-                if (string.IsNullOrEmpty(user.ProfilePictureUrl))
-                {
-                    user.ProfilePictureUrl = "/images/profiles/default.png";
-                }
-
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
 
@@ -444,29 +433,6 @@ namespace RMS.Application.Implementations
             }
 
             _mapper.Map(userUpdateDto, user);
-
-            // This block handles profile picture URL update, but the actual file deletion
-            // is now handled in the UsersController.
-            if (!string.IsNullOrEmpty(userUpdateDto.ProfilePictureUrl) && user.ProfilePictureUrl != userUpdateDto.ProfilePictureUrl)
-            {
-                // The old file deletion logic is moved to the controller
-                // if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
-                // {
-                //     var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.ProfilePictureUrl.TrimStart('/'));
-                //     if (File.Exists(oldFilePath))
-                //     {
-                //         File.Delete(oldFilePath);
-                //     }
-                // }
-
-                user.ProfilePictureUrl = userUpdateDto.ProfilePictureUrl;
-            }
-            else if (string.IsNullOrEmpty(userUpdateDto.ProfilePictureUrl) && !string.IsNullOrEmpty(user.ProfilePictureUrl))
-            {
-                // If the DTO explicitly clears the URL, and there was an old one, clear it in the entity
-                user.ProfilePictureUrl = null;
-            }
-
 
             await _userRepository.UpdateUserAsync(user);
 
@@ -838,7 +804,7 @@ namespace RMS.Application.Implementations
             };
         }
 
-        public async Task<ResponseDto<string>> UploadProfilePictureAsync(int userId, string imageUrl) // Modified signature
+        public async Task<ResponseDto<string>> UploadProfilePictureAsync(int userId, byte[] profilePicture)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
             if (user == null)
@@ -851,9 +817,7 @@ namespace RMS.Application.Implementations
                 };
             }
 
-            // The old profile picture should be deleted by the controller before calling this method.
-            // This method only updates the URL in the database.
-            user.ProfilePictureUrl = imageUrl;
+            user.ProfilePicture = profilePicture;
             await _userRepository.UpdateUserAsync(user);
 
             return new ResponseDto<string>
@@ -861,9 +825,54 @@ namespace RMS.Application.Implementations
                 IsSuccess = true,
                 Message = "Profile picture uploaded successfully.",
                 Code = "200",
-                Data = imageUrl // Return the new URL
+                Data = "Profile picture updated."
             };
         }
 
+        public async Task<ResponseDto<string>> UpdateUserStatusAsync(int userId, bool status)
+        {
+            try
+            {
+                var user = await _userRepository.GetUserByIdAsync(userId);
+                if (user == null)
+                {
+                    return new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "User not found.",
+                        Code = "404"
+                    };
+                }
+
+                user.Status = status;
+                await _userRepository.UpdateUserAsync(user);
+
+                await _auditLogService.LogAsync(
+                    action: "UpdateUserStatus",
+                    entityType: "User",
+                    entityId: $"UserId:{userId}",
+                    performedBy: "System", // Or the user who performed the action
+                    details: $"User status for {user.UserName} updated to {status}."
+                );
+
+                return new ResponseDto<string>
+                {
+                    IsSuccess = true,
+                    Message = "User status updated successfully.",
+                    Code = "200",
+                    Data = $"UserId:{userId}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while updating user status.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
+        }
     }
 }

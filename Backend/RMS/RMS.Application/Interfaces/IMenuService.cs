@@ -1,9 +1,9 @@
 ﻿using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
-using RMS.Domain.Dtos;
-using RMS.Domain.DTOs.MenuDTOs.InputDTOs;
-using RMS.Domain.DTOs.RoleMenuDTOs.InputDTOs;
-using RMS.Domain.DTOs.RoleMenuDTOs.OutputDTOs;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.MenuDTOs.InputDTOs;
+using RMS.Application.DTOs.RoleMenuDTOs.InputDTOs;
+using RMS.Application.DTOs.RoleMenuDTOs.OutputDTOs;
 using RMS.Domain.Models.BaseModels;
 
 namespace RMS.Application.Interfaces

@@ -1,7 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RMS.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using RMS.Domain.Interfaces;
 using RMS.Infrastructure.Interfaces;
 using RMS.Infrastructure.Persistences;
+using RMS.Domain.Extensions;
 
 namespace RMS.Infrastructure.Repositories
 {
@@ -57,34 +64,11 @@ namespace RMS.Infrastructure.Repositories
                 // Sorting
                 if (!string.IsNullOrWhiteSpace(sortColumn))
                 {
-                    switch (sortColumn.ToLower())
-                    {
-                        case "userid":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.Id) : query.OrderBy(u => u.Id);
-                            break;
-                        case "username":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.UserName) : query.OrderBy(u => u.UserName);
-                            break;
-                        case "fullname":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.FullName) : query.OrderBy(u => u.FullName);
-                            break;
-                        case "email":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.Email) : query.OrderBy(u => u.Email);
-                            break;
-                        case "phone":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.Phone) : query.OrderBy(u => u.Phone);
-                            break;
-                        case "status":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(u => u.Status) : query.OrderBy(u => u.Status);
-                            break;
-                        default:
-                            query = query.OrderBy(u => u.Id); // Default sort
-                            break;
-                    }
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
                 }
                 else
                 {
-                    query = query.OrderBy(u => u.Id); // Default sort if no column specified
+                    query = query.OrderBy(u => u.Id); // Default sort if no column is specified
                 }
 
                 // Get the total count of users after filtering

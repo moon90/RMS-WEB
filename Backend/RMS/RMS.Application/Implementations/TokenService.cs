@@ -1,7 +1,7 @@
 using Microsoft.IdentityModel.Tokens;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Infrastructure.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

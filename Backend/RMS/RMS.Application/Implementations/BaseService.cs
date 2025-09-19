@@ -5,14 +5,15 @@ using RMS.Core.Enum;
 using RMS.Core.Exceptions;
 using RMS.Core.Extensions;
 using RMS.Core.Guard;
-using RMS.Domain.Dtos;
-using RMS.Domain.Dtos.Dropdowns;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.Dropdowns;
 using RMS.Domain.Interfaces;
 using RMS.Domain.Models.BaseModels;
 using RMS.Domain.Queries;
 using RMS.Domain.Specification;
 using RMS.Infrastructure.IRepositories;
 using System.Linq.Expressions;
+using RMS.Domain.Extensions;
 
 namespace RMS.Application.Implementations
 {
@@ -37,20 +38,7 @@ namespace RMS.Application.Implementations
 
                 if (id is int) IntGuardClause.Against.ZeroOrNegative(id, nameof(id));
 
-                var result = await BaseRepository.GetByIdAsync(id);
-
-                if (!result.Succeeded)
-                {
-                    return new ResponseDto<TDto>
-                    {
-                        IsSuccess = false,
-                        Message = result.Error,
-                        Code = "404", // Assuming not found if not succeeded
-                        Details = result.Error
-                    };
-                }
-
-                var entity = result.Data;
+                var entity = await BaseRepository.GetByIdAsync(id);
 
                 if (entity == null)
                 {
@@ -77,45 +65,6 @@ namespace RMS.Application.Implementations
                 {
                     IsSuccess = false,
                     Message = "An error occurred while retrieving the entity.",
-                    Code = "500",
-                    Details = ex.Message
-                };
-            }
-        }
-
-        public virtual async Task<ResponseDto<IEnumerable<DropdownDto>>> GetDropdownAsync(OrderSpecification<TEntity> spec)
-        {
-            try
-            {
-                Logger.LogInformation($"{nameof(BaseService<TEntity>)}:{nameof(GetDropdownAsync)}: Building drop down for {typeof(TEntity).Name}");
-                var entities = await BaseRepository.GetOrderedAsync(spec);
-
-                if (entities == null || !entities.Any())
-                {
-                    return new ResponseDto<IEnumerable<DropdownDto>>
-                    {
-                        IsSuccess = true,
-                        Message = "No items found for dropdown.",
-                        Code = "204",
-                        Data = new List<DropdownDto>()
-                    };
-                }
-
-                return new ResponseDto<IEnumerable<DropdownDto>>
-                {
-                    IsSuccess = true,
-                    Message = "Dropdown items retrieved successfully.",
-                    Code = "200",
-                    Data = Mapper.Map<IEnumerable<DropdownDto>>(entities)
-                };
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"{nameof(BaseService<TEntity>)}:{nameof(GetDropdownAsync)}: {ex.Message}");
-                return new ResponseDto<IEnumerable<DropdownDto>>
-                {
-                    IsSuccess = false,
-                    Message = "An error occurred while retrieving dropdown items.",
                     Code = "500",
                     Details = ex.Message
                 };
@@ -192,7 +141,7 @@ namespace RMS.Application.Implementations
 
                 if (!string.IsNullOrEmpty(query.OrderBy))
                 {
-                    queryable = queryable.ApplySorting(query.OrderBy, query.IsDescending ? "desc" : "asc");
+                    queryable = queryable.ApplySort(query.OrderBy, query.IsDescending ? "desc" : "asc");
                 }
 
                 var entities = await BaseRepository.GetPagedResultAsync(query, queryableInput: queryable);
@@ -570,19 +519,20 @@ namespace RMS.Application.Implementations
                     };
                 }
 
-                var result = await BaseRepository.GetFirstOrDefaultBySpecAsync(specs);
+                var entities = await BaseRepository.GetBySpecAsync(specs);
+                var entity = entities.FirstOrDefault();
 
-                if (!result.Succeeded)
+                if (entity == null)
                 {
                     return new ResponseDto<TDto>
                     {
                         IsSuccess = false,
-                        Message = result.Error,
+                        Message = $"{typeof(TEntity).Name} not found.",
                         Code = "404" // Assuming not found if not succeeded
                     };
                 }
 
-                var dto = Mapper.Map<TDto>(result.Data);
+                var dto = Mapper.Map<TDto>(entity);
 
                 return new ResponseDto<TDto>
                 {
@@ -618,14 +568,15 @@ namespace RMS.Application.Implementations
                     };
                 }
 
-                var result = await BaseRepository.GetFirstOrDefaultBySpecAsync(specs);
+                var entities = await BaseRepository.GetBySpecAsync(specs);
+                var entity = entities.FirstOrDefault();
 
-                if (!result.Succeeded)
+                if (entity == null)
                 {
                     return new ResponseDto<TEntity>
                     {
                         IsSuccess = false,
-                        Message = result.Error,
+                        Message = $"{typeof(TEntity).Name} not found.",
                         Code = "404"
                     };
                 }
@@ -635,7 +586,7 @@ namespace RMS.Application.Implementations
                     IsSuccess = true,
                     Message = "Entity retrieved by specification successfully.",
                     Code = "200",
-                    Data = result.Data
+                    Data = entity
                 };
             }
             catch (Exception ex)
@@ -667,14 +618,19 @@ namespace RMS.Application.Implementations
 
                 var entities = Mapper.Map<IEnumerable<TEntity>>(dtos);
 
-                var result = await BaseRepository.AddRangeAsync(entities);
+                foreach (var entity in entities)
+                {
+                    await BaseRepository.AddAsync(entity);
+                }
 
-                if (!result.Succeeded)
+                var saved = await UnitOfWork.SaveChangesAsync();
+
+                if (saved == 0)
                 {
                     return new ResponseDto<object>
                     {
                         IsSuccess = false,
-                        Message = result.Error,
+                        Message = "Error adding entities.",
                         Code = "500"
                     };
                 }
@@ -715,14 +671,19 @@ namespace RMS.Application.Implementations
 
                 var entities = Mapper.Map<IEnumerable<TEntity>>(dtos);
 
-                var result = await BaseRepository.UpdateRangeAsync(entities);
+                foreach (var entity in entities)
+                {
+                    await BaseRepository.UpdateAsync(entity);
+                }
 
-                if (!result.Succeeded)
+                var saved = await UnitOfWork.SaveChangesAsync();
+
+                if (saved == 0)
                 {
                     return new ResponseDto<object>
                     {
                         IsSuccess = false,
-                        Message = result.Error,
+                        Message = "Error updating entities.",
                         Code = "500"
                     };
                 }
@@ -761,14 +722,31 @@ namespace RMS.Application.Implementations
                     };
                 }
 
-                var result = await BaseRepository.RemoveBySpecAsync(specification);
+                var entitiesToDelete = await BaseRepository.GetBySpecAsync(specification);
 
-                if (!result.Succeeded)
+                if (!entitiesToDelete.Any())
                 {
                     return new ResponseDto<object>
                     {
                         IsSuccess = false,
-                        Message = result.Error,
+                        Message = "No entities found matching the specification for removal.",
+                        Code = "404"
+                    };
+                }
+
+                foreach (var entity in entitiesToDelete)
+                {
+                    await BaseRepository.DeleteAsync(entity);
+                }
+
+                var saved = await UnitOfWork.SaveChangesAsync();
+
+                if (saved == 0)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "Error removing entities by specification.",
                         Code = "500"
                     };
                 }
@@ -806,14 +784,26 @@ namespace RMS.Application.Implementations
                     };
                 }
 
-                var result = await BaseRepository.RemoveByIdAsync(id);
-
-                if (!result.Succeeded)
+                var entity = await BaseRepository.GetByIdAsync(id);
+                if (entity == null)
                 {
                     return new ResponseDto<object>
                     {
                         IsSuccess = false,
-                        Message = result.Error,
+                        Message = $"{typeof(TEntity).Name} not found.",
+                        Code = "404"
+                    };
+                }
+
+                await BaseRepository.DeleteAsync(entity);
+                var saved = await UnitOfWork.SaveChangesAsync();
+
+                if (saved == 0)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = $"Error removing the {typeof(TEntity).Name}.",
                         Code = "500"
                     };
                 }
@@ -851,14 +841,26 @@ namespace RMS.Application.Implementations
                     };
                 }
 
-                var result = await BaseRepository.DeleteByIdAsync(id);
-
-                if (!result.Succeeded)
+                var entity = await BaseRepository.GetByIdAsync(id);
+                if (entity == null)
                 {
                     return new ResponseDto<object>
                     {
                         IsSuccess = false,
-                        Message = result.Error,
+                        Message = $"{typeof(TEntity).Name} not found.",
+                        Code = "404"
+                    };
+                }
+
+                await BaseRepository.DeleteAsync(entity);
+                var saved = await UnitOfWork.SaveChangesAsync();
+
+                if (saved == 0)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = $"Error deleting the {typeof(TEntity).Name}.",
                         Code = "500"
                     };
                 }
@@ -886,16 +888,15 @@ namespace RMS.Application.Implementations
         {
             try
             {
-                var result = await BaseRepository!.GetByIdAsync(id);
+                var entity = await BaseRepository!.GetByIdAsync(id);
 
-                if (!result.Succeeded)
+                if (entity == null)
                 {
                     return new ResponseDto<TEntity>
                     {
                         IsSuccess = false,
-                        Message = result.Error,
+                        Message = $"{typeof(TEntity).Name} not found.",
                         Code = "404", // Assuming not found if not succeeded
-                        Details = result.Error
                     };
                 }
                 return new ResponseDto<TEntity>
@@ -903,7 +904,7 @@ namespace RMS.Application.Implementations
                     IsSuccess = true,
                     Message = $"{typeof(TEntity).Name} retrieved successfully.",
                     Code = "200",
-                    Data = result.Data
+                    Data = entity
                 };
             }
             catch (Exception ex)

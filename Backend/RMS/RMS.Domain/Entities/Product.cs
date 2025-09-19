@@ -13,11 +13,10 @@ namespace RMS.Domain.Entities
         public string? ProductBarcode { get; set; }
         public byte[]? ProductImage { get; set; }
         public byte[]? ThumbnailImage { get; set; }
-        public string? ImageUrl { get; set; }
-        public string? ThumbnailUrl { get; set; }
         public int? CategoryID { get; set; }
         public int? SupplierID { get; set; }
         public int? ManufacturerID { get; set; }
+        
         public DateTime? ExpireDate { get; set; }
 
         // Navigation properties

@@ -102,7 +102,74 @@ namespace RMS.Infrastructure.Configurations
                 new RolePermission { Id = 61, RoleID = 1, PermissionID = 47, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PRODUCT_VIEW
                 new RolePermission { Id = 62, RoleID = 1, PermissionID = 48, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PRODUCT_CREATE
                 new RolePermission { Id = 63, RoleID = 1, PermissionID = 49, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PRODUCT_UPDATE
-                new RolePermission { Id = 64, RoleID = 1, PermissionID = 50, AssignedBy = "System", AssignedAt = DateTime.UtcNow }  // PRODUCT_DELETE
+                new RolePermission { Id = 64, RoleID = 1, PermissionID = 50, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // PRODUCT_DELETE
+
+                // Admin Role (ID 1) gets Customer permissions
+                new RolePermission { Id = 65, RoleID = 1, PermissionID = 51, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // CUSTOMER_VIEW
+                new RolePermission { Id = 66, RoleID = 1, PermissionID = 52, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // CUSTOMER_CREATE
+                new RolePermission { Id = 67, RoleID = 1, PermissionID = 53, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // CUSTOMER_UPDATE
+                new RolePermission { Id = 68, RoleID = 1, PermissionID = 54, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // CUSTOMER_DELETE
+
+                // Admin Role (ID 1) gets Staff permissions
+                new RolePermission { Id = 69, RoleID = 1, PermissionID = 55, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STAFF_VIEW
+                new RolePermission { Id = 70, RoleID = 1, PermissionID = 56, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STAFF_CREATE
+                new RolePermission { Id = 71, RoleID = 1, PermissionID = 57, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STAFF_UPDATE
+                new RolePermission { Id = 72, RoleID = 1, PermissionID = 58, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // STAFF_DELETE
+
+                // Admin Role (ID 1) gets Inventory permissions
+                new RolePermission { Id = 73, RoleID = 1, PermissionID = 59, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INVENTORY_VIEW
+                new RolePermission { Id = 74, RoleID = 1, PermissionID = 60, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INVENTORY_CREATE
+                new RolePermission { Id = 75, RoleID = 1, PermissionID = 61, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INVENTORY_UPDATE
+                new RolePermission { Id = 76, RoleID = 1, PermissionID = 62, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // INVENTORY_DELETE
+                new RolePermission { Id = 89, RoleID = 1, PermissionID = 75, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INVENTORY_LOW_STOCK_VIEW
+
+                // Admin Role (ID 1) gets Stock Transaction permissions
+                new RolePermission { Id = 77, RoleID = 1, PermissionID = 63, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STOCK_TRANSACTION_VIEW
+                new RolePermission { Id = 78, RoleID = 1, PermissionID = 64, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STOCK_TRANSACTION_CREATE
+                new RolePermission { Id = 79, RoleID = 1, PermissionID = 65, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STOCK_TRANSACTION_UPDATE
+                new RolePermission { Id = 80, RoleID = 1, PermissionID = 66, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // STOCK_TRANSACTION_DELETE
+
+                // Admin Role (ID 1) gets Ingredient permissions
+                new RolePermission { Id = 81, RoleID = 1, PermissionID = 67, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INGREDIENT_VIEW
+                new RolePermission { Id = 82, RoleID = 1, PermissionID = 68, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INGREDIENT_CREATE
+                new RolePermission { Id = 83, RoleID = 1, PermissionID = 69, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INGREDIENT_UPDATE
+                new RolePermission { Id = 84, RoleID = 1, PermissionID = 70, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // INGREDIENT_DELETE
+
+                // Admin Role (ID 1) gets Product Ingredient permissions
+                new RolePermission { Id = 85, RoleID = 1, PermissionID = 71, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PRODUCT_INGREDIENT_VIEW
+                new RolePermission { Id = 86, RoleID = 1, PermissionID = 72, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PRODUCT_INGREDIENT_CREATE
+                new RolePermission { Id = 87, RoleID = 1, PermissionID = 73, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PRODUCT_INGREDIENT_UPDATE
+                new RolePermission { Id = 88, RoleID = 1, PermissionID = 74, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // PRODUCT_INGREDIENT_DELETE
+
+                // Admin Role (ID 1) gets Order permissions
+                new RolePermission { Id = 90, RoleID = 1, PermissionID = 76, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // ORDER_VIEW
+                new RolePermission { Id = 91, RoleID = 1, PermissionID = 77, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // ORDER_CREATE
+                new RolePermission { Id = 92, RoleID = 1, PermissionID = 78, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // ORDER_UPDATE
+                new RolePermission { Id = 93, RoleID = 1, PermissionID = 79, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // ORDER_DELETE
+
+                // Admin Role (ID 1) gets Dining Table permissions
+                new RolePermission { Id = 94, RoleID = 1, PermissionID = 80, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // DINING_TABLE_VIEW
+                new RolePermission { Id = 95, RoleID = 1, PermissionID = 81, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // DINING_TABLE_CREATE
+                new RolePermission { Id = 96, RoleID = 1, PermissionID = 82, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // DINING_TABLE_UPDATE
+                new RolePermission { Id = 97, RoleID = 1, PermissionID = 83, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // DINING_TABLE_DELETE
+
+                // Admin Role (ID 1) gets Promotion permissions
+                new RolePermission { Id = 98, RoleID = 1, PermissionID = 87, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PROMOTION_VIEW
+                new RolePermission { Id = 99, RoleID = 1, PermissionID = 88, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PROMOTION_CREATE
+                new RolePermission { Id = 100, RoleID = 1, PermissionID = 89, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PROMOTION_UPDATE
+                new RolePermission { Id = 101, RoleID = 1, PermissionID = 90, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // PROMOTION_DELETE
+
+                // Admin Role (ID 1) gets Purchase permissions
+                new RolePermission { Id = 102, RoleID = 1, PermissionID = 91, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PURCHASE_VIEW
+                new RolePermission { Id = 103, RoleID = 1, PermissionID = 92, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PURCHASE_CREATE
+                new RolePermission { Id = 104, RoleID = 1, PermissionID = 93, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PURCHASE_UPDATE
+                new RolePermission { Id = 105, RoleID = 1, PermissionID = 94, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // PURCHASE_DELETE
+
+                // Admin Role (ID 1) gets Sales permissions
+                new RolePermission { Id = 106, RoleID = 1, PermissionID = 95, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // SALE_VIEW
+                new RolePermission { Id = 107, RoleID = 1, PermissionID = 96, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // SALE_CREATE
+                new RolePermission { Id = 108, RoleID = 1, PermissionID = 97, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // SALE_UPDATE
+                new RolePermission { Id = 109, RoleID = 1, PermissionID = 98, AssignedBy = "System", AssignedAt = DateTime.UtcNow }  // SALE_DELETE
             );
         }
     }

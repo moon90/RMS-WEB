@@ -1,4 +1,4 @@
-﻿using RMS.Domain.Dtos.Dropdowns;
+﻿using RMS.Application.DTOs.Dropdowns;
 using RMS.Domain.Models.BaseModels;
 using System;
 using System.Collections.Generic;

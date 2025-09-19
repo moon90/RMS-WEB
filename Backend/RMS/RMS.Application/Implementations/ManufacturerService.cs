@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using RMS.Application.DTOs.ManufacturerDTOs.InputDTOs;
 using RMS.Application.DTOs.ManufacturerDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Interfaces;
 using RMS.Domain.Models.BaseModels;
@@ -13,6 +13,9 @@ using RMS.Domain.Queries;
 using RMS.Infrastructure.IRepositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RMS.Domain.Extensions;
+using System.Linq;
 
 namespace RMS.Application.Implementations
 {
@@ -46,12 +49,14 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<ManufacturerDto>> GetByIdAsync(int id)
         {
-            var manufacturerResult = await _manufacturerRepository.GetByIdAsync(id);
-            if (!manufacturerResult.Succeeded || manufacturerResult.Data == null)
+            var query = _manufacturerRepository.GetQueryable();
+            var manufacturer = await query.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (manufacturer == null)
             {
                 return new ResponseDto<ManufacturerDto> { IsSuccess = false, Message = "Manufacturer not found.", Code = "404" };
             }
-            var manufacturerDto = _mapper.Map<ManufacturerDto>(manufacturerResult.Data);
+            var manufacturerDto = _mapper.Map<ManufacturerDto>(manufacturer);
             return new ResponseDto<ManufacturerDto> { IsSuccess = true, Data = manufacturerDto, Code = "200" };
         }
 
@@ -69,7 +74,16 @@ namespace RMS.Application.Implementations
                 query = query.Where(m => m.ManufacturerName.Contains(searchQuery));
             }
 
-            var pagedResult = await _manufacturerRepository.GetPagedResultAsync(new PagedQuery { PageNumber = pageNumber, PageSize = pageSize }, null, false, query);
+            if (!string.IsNullOrEmpty(sortColumn))
+            {
+                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+            }
+            else
+            {
+                query = query.OrderBy(m => m.ManufacturerName);
+            }
+
+            var pagedResult = await query.ToPagedList(pageNumber, pageSize);
             var manufacturerDtos = _mapper.Map<List<ManufacturerDto>>(pagedResult.Items);
             return new PagedResult<ManufacturerDto>(manufacturerDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
         }
@@ -100,24 +114,14 @@ namespace RMS.Application.Implementations
                 return new ResponseDto<ManufacturerDto> { IsSuccess = false, Message = "Validation failed.", Code = "400", Details = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }) };
             }
 
-            var existingManufacturerResult = await _manufacturerRepository.GetByIdAsync(updateDto.Id);
-            if (!existingManufacturerResult.Succeeded || existingManufacturerResult.Data == null)
+            var existingManufacturer = await _manufacturerRepository.GetByIdAsync(updateDto.Id);
+            if (existingManufacturer == null)
             {
                 return new ResponseDto<ManufacturerDto> { IsSuccess = false, Message = "Manufacturer not found.", Code = "404" };
             }
 
-            var existingManufacturer = existingManufacturerResult.Data;
             _mapper.Map(updateDto, existingManufacturer);
-            var updateResult = await _manufacturerRepository.UpdateAsync(existingManufacturer);
-            if (!updateResult.Succeeded)
-            {
-                return new ResponseDto<ManufacturerDto>
-                {
-                    IsSuccess = false,
-                    Message = updateResult.Error,
-                    Code = "500"
-                };
-            }
+            await _manufacturerRepository.UpdateAsync(existingManufacturer);
             await _unitOfWork.SaveChangesAsync();
 
             var manufacturerDto = _mapper.Map<ManufacturerDto>(existingManufacturer);
@@ -128,25 +132,14 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<string>> DeleteAsync(int id)
         {
-            var manufacturerResult = await _manufacturerRepository.GetByIdAsync(id);
-            if (!manufacturerResult.Succeeded || manufacturerResult.Data == null)
+            var manufacturer = await _manufacturerRepository.GetByIdAsync(id);
+            if (manufacturer == null)
             {
                 return new ResponseDto<string> { IsSuccess = false, Message = "Manufacturer not found.", Code = "404" };
             }
-            var manufacturer = manufacturerResult.Data;
 
-            var deleteResult = await _manufacturerRepository.DeleteByIdAsync(id);
+            await _manufacturerRepository.DeleteAsync(manufacturer);
             await _unitOfWork.SaveChangesAsync();
-
-            if (!deleteResult.Succeeded)
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = deleteResult.Error,
-                    Code = "500"
-                };
-            }
 
             await _auditLogService.LogAsync("DeleteManufacturer", "Manufacturer", $"ManufacturerId:{id}", "System", $"Manufacturer '{manufacturer.ManufacturerName}' deleted.");
 
@@ -155,26 +148,15 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<string>> UpdateStatusAsync(int id, bool status)
         {
-            var manufacturerResult = await _manufacturerRepository.GetByIdAsync(id);
-            if (!manufacturerResult.Succeeded || manufacturerResult.Data == null)
+            var manufacturer = await _manufacturerRepository.GetByIdAsync(id);
+            if (manufacturer == null)
             {
                 return new ResponseDto<string> { IsSuccess = false, Message = "Manufacturer not found.", Code = "404" };
             }
-            var manufacturer = manufacturerResult.Data;
 
             manufacturer.Status = status;
-            var updateResult = await _manufacturerRepository.UpdateAsync(manufacturer);
+            await _manufacturerRepository.UpdateAsync(manufacturer);
             await _unitOfWork.SaveChangesAsync();
-
-            if (!updateResult.Succeeded)
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = updateResult.Error,
-                    Code = "500"
-                };
-            }
 
             await _auditLogService.LogAsync("UpdateManufacturerStatus", "Manufacturer", $"ManufacturerId:{id}", "System", $"Manufacturer '{manufacturer.ManufacturerName}' status updated to {(status ? "Active" : "Inactive")}.");
 

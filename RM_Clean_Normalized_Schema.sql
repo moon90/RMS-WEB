@@ -1,4 +1,3 @@
-
 -- =============================================
 -- RM Database - Normalized and Clean Schema
 -- =============================================
@@ -145,7 +144,7 @@ CREATE TABLE RolePermissions (
 );
 
 -- ================
--- Audit & Alerts
+-- Audit
 -- ================
 
 CREATE TABLE AuditLog (
@@ -158,103 +157,6 @@ CREATE TABLE AuditLog (
     ChangedBy NVARCHAR(100) NOT NULL,
     ChangedOn DATETIME DEFAULT GETUTCDATE()
 );
-
-CREATE TABLE Alerts (
-    AlertID INT IDENTITY(1,1) PRIMARY KEY,
-    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
-    AlertMessage NVARCHAR(250) NOT NULL,
-    IsAcknowledged BIT DEFAULT 0,
-    AlertDate DATETIME DEFAULT GETUTCDATE(),
-    CreatedOn DATETIME DEFAULT GETUTCDATE()
-);
-
-
--- =============================================
--- Stored Procedures
--- =============================================
-
--- Adjust Inventory Stock
-CREATE PROCEDURE usp_AdjustInventory
-    @ProductID INT,
-    @TransactionType VARCHAR(10),
-    @Quantity INT,
-    @Remarks NVARCHAR(250) = NULL
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    DECLARE @CurrentStock INT;
-
-    SELECT @CurrentStock = CurrentStock FROM Inventory WHERE ProductID = @ProductID;
-
-    IF @CurrentStock IS NULL
-    BEGIN
-        RAISERROR('Product does not exist in Inventory.', 16, 1);
-        RETURN;
-    END
-
-    IF @TransactionType = 'IN'
-    BEGIN
-        UPDATE Inventory
-        SET CurrentStock = CurrentStock + @Quantity,
-            LastUpdated = GETUTCDATE()
-        WHERE ProductID = @ProductID;
-    END
-    ELSE IF @TransactionType = 'OUT'
-    BEGIN
-        UPDATE Inventory
-        SET CurrentStock = CurrentStock - @Quantity,
-            LastUpdated = GETUTCDATE()
-        WHERE ProductID = @ProductID;
-
-        DECLARE @MinStock INT;
-        SELECT @MinStock = MinStockLevel FROM Inventory WHERE ProductID = @ProductID;
-
-        IF @CurrentStock - @Quantity < @MinStock
-        BEGIN
-            INSERT INTO Alerts (ProductID, AlertMessage)
-            VALUES (@ProductID, 'Stock level is below minimum threshold.');
-        END
-    END
-    ELSE
-    BEGIN
-        RAISERROR('Invalid Transaction Type. Use ''IN'' or ''OUT''.', 16, 1);
-    END
-END;
-GO
-
--- Get Low Stock Products
-CREATE PROCEDURE usp_GetLowStockProducts
-AS
-BEGIN
-    SELECT 
-        p.ProductID, 
-        p.ProductName, 
-        i.CurrentStock, 
-        i.MinStockLevel
-    FROM Products p
-    JOIN Inventory i ON p.ProductID = i.ProductID
-    WHERE i.CurrentStock < i.MinStockLevel;
-END;
-GO
-
--- User Login
-CREATE PROCEDURE usp_UserLogin
-    @UserName NVARCHAR(100),
-    @PasswordHash NVARCHAR(256)
-AS
-BEGIN
-    SELECT 
-        u.UserID,
-        u.UserName,
-        r.RoleName
-    FROM Users u
-    LEFT JOIN UserRoles ur ON u.UserID = ur.UserID
-    LEFT JOIN Roles r ON ur.RoleID = r.RoleID
-    WHERE u.UserName = @UserName AND u.PasswordHash = @PasswordHash AND u.IsDeleted = 0;
-END;
-GO
-
 
 -- =============================================
 -- Redesigned RM Schema for Best Practices
@@ -396,6 +298,14 @@ CREATE TABLE SaleDetails (
     UnitPrice DECIMAL(18,2) NOT NULL,
     Discount DECIMAL(18,2) DEFAULT 0,
     TotalAmount DECIMAL(18,2) NOT NULL
+);
+
+CREATE TABLE SplitPayments (
+    SplitPaymentID INT IDENTITY(1,1) PRIMARY KEY,
+    SaleID INT NOT NULL FOREIGN KEY REFERENCES Sales(SaleID),
+    Amount DECIMAL(18,2) NOT NULL,
+    PaymentMethod VARCHAR(50) NOT NULL,
+    CreatedOn DATETIME DEFAULT GETUTCDATE()
 );
 
 

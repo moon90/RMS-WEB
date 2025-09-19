@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using RMS.Domain.DTOs.RoleDTOs.InputDTOs;
+using RMS.Application.DTOs.RoleDTOs.InputDTOs;
 
 namespace RMS.Application.Validators
 {

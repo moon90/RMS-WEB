@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.DTOs.UserDTOs.InputDTOs;
 using RMS.Domain.Models.BaseModels;
 

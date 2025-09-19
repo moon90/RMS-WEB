@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.Entities;
 
 namespace BlazorApp.Services;

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using RMS.Application.DTOs.UnitDTOs.InputDTOs;
 using RMS.Application.DTOs.UnitDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Interfaces;
 using RMS.Domain.Models.BaseModels;
@@ -13,6 +13,9 @@ using RMS.Domain.Queries;
 using RMS.Infrastructure.IRepositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RMS.Domain.Extensions;
+using System.Linq;
 
 namespace RMS.Application.Implementations
 {
@@ -46,12 +49,12 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<UnitDto>> GetByIdAsync(int id)
         {
-            var unitResult = await _unitRepository.GetByIdAsync(id);
-            if (!unitResult.Succeeded || unitResult.Data == null)
+            var unit = await _unitRepository.GetByIdAsync(id);
+            if (unit == null)
             {
                 return new ResponseDto<UnitDto> { IsSuccess = false, Message = "Unit not found.", Code = "404" };
             }
-            var unitDto = _mapper.Map<UnitDto>(unitResult.Data);
+            var unitDto = _mapper.Map<UnitDto>(unit);
             return new ResponseDto<UnitDto> { IsSuccess = true, Data = unitDto, Code = "200" };
         }
 
@@ -67,6 +70,15 @@ namespace RMS.Application.Implementations
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 query = query.Where(u => u.Name.Contains(searchQuery) || u.ShortCode.Contains(searchQuery));
+            }
+
+            if (!string.IsNullOrEmpty(sortColumn))
+            {
+                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+            }
+            else
+            {
+                query = query.OrderBy(u => u.Name);
             }
 
             var pagedResult = await _unitRepository.GetPagedResultAsync(new PagedQuery { PageNumber = pageNumber, PageSize = pageSize }, null, false, query);
@@ -100,24 +112,14 @@ namespace RMS.Application.Implementations
                 return new ResponseDto<UnitDto> { IsSuccess = false, Message = "Validation failed.", Code = "400", Details = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }) };
             }
 
-            var existingUnitResult = await _unitRepository.GetByIdAsync(updateDto.Id);
-            if (!existingUnitResult.Succeeded || existingUnitResult.Data == null)
+            var existingUnit = await _unitRepository.GetByIdAsync(updateDto.Id);
+            if (existingUnit == null)
             {
                 return new ResponseDto<UnitDto> { IsSuccess = false, Message = "Unit not found.", Code = "404" };
             }
 
-            var existingUnit = existingUnitResult.Data;
             _mapper.Map(updateDto, existingUnit);
-            var updateResult = await _unitRepository.UpdateAsync(existingUnit);
-            if (!updateResult.Succeeded)
-            {
-                return new ResponseDto<UnitDto>
-                {
-                    IsSuccess = false,
-                    Message = updateResult.Error,
-                    Code = "500"
-                };
-            }
+            await _unitRepository.UpdateAsync(existingUnit);
             await _unitOfWork.SaveChangesAsync();
 
             var unitDto = _mapper.Map<UnitDto>(existingUnit);
@@ -128,25 +130,14 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<string>> DeleteAsync(int id)
         {
-            var unitResult = await _unitRepository.GetByIdAsync(id);
-            if (!unitResult.Succeeded || unitResult.Data == null)
+            var unit = await _unitRepository.GetByIdAsync(id);
+            if (unit == null)
             {
                 return new ResponseDto<string> { IsSuccess = false, Message = "Unit not found.", Code = "404" };
             }
-            var unit = unitResult.Data;
 
-            var deleteResult = await _unitRepository.DeleteByIdAsync(id);
+            await _unitRepository.DeleteAsync(unit);
             await _unitOfWork.SaveChangesAsync();
-
-            if (!deleteResult.Succeeded)
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = deleteResult.Error,
-                    Code = "500"
-                };
-            }
 
             await _auditLogService.LogAsync("DeleteUnit", "Unit", $"UnitId:{id}", "System", $"Unit '{unit.Name}' deleted.");
 
@@ -155,26 +146,15 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<string>> UpdateStatusAsync(int id, bool status)
         {
-            var unitResult = await _unitRepository.GetByIdAsync(id);
-            if (!unitResult.Succeeded || unitResult.Data == null)
+            var unit = await _unitRepository.GetByIdAsync(id);
+            if (unit == null)
             {
                 return new ResponseDto<string> { IsSuccess = false, Message = "Unit not found.", Code = "404" };
             }
-            var unit = unitResult.Data;
 
             unit.Status = status;
-            var updateResult = await _unitRepository.UpdateAsync(unit);
+            await _unitRepository.UpdateAsync(unit);
             await _unitOfWork.SaveChangesAsync();
-
-            if (!updateResult.Succeeded)
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = updateResult.Error,
-                    Code = "500"
-                };
-            }
 
             await _auditLogService.LogAsync("UpdateUnitStatus", "Unit", $"UnitId:{id}", "System", $"Unit '{unit.Name}' status updated to {(status ? "Active" : "Inactive")}.");
 

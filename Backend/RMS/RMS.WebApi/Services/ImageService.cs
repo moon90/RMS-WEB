@@ -1,26 +1,23 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
-using System.Linq; // Added for LINQ
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options; // Added
-using RMS.WebApi.Configurations; // Added
+using Microsoft.Extensions.Options;
+using RMS.WebApi.Configurations;
 
 namespace RMS.WebApi.Services
 {
     public class ImageService : IImageService
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly ImageSettings _imageSettings; // Added
+        private readonly ImageSettings _imageSettings;
 
-        public ImageService(IWebHostEnvironment webHostEnvironment, IOptions<ImageSettings> imageSettings) // Modified
+        public ImageService(IOptions<ImageSettings> imageSettings)
         {
-            _webHostEnvironment = webHostEnvironment;
-            _imageSettings = imageSettings.Value; // Added
+            _imageSettings = imageSettings.Value;
         }
 
-        public async Task<string> SaveImageAsync(IFormFile imageFile, string folderName)
+        public async Task<byte[]> GetImageBytesAsync(IFormFile imageFile)
         {
             if (imageFile == null || imageFile.Length == 0)
             {
@@ -40,37 +37,10 @@ namespace RMS.WebApi.Services
                 throw new ArgumentException($"File size exceeds the maximum limit of {_imageSettings.MaxFileSizeMB} MB.");
             }
 
-            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderName);
-            if (!Directory.Exists(uploadsFolder))
+            using (var memoryStream = new MemoryStream())
             {
-                Directory.CreateDirectory(uploadsFolder);
-            }
-
-            var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(fileStream);
-            }
-
-            return $"/{folderName}/{uniqueFileName}"; // Return relative URL
-        }
-
-        public void DeleteImage(string imageUrl)
-        {
-            if (string.IsNullOrEmpty(imageUrl))
-            {
-                return;
-            }
-
-            var fileName = Path.GetFileName(imageUrl);
-            var folderName = Path.GetDirectoryName(imageUrl).TrimStart('/');
-            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, folderName, fileName);
-
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
+                await imageFile.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
             }
         }
     }

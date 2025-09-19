@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using RMS.Domain.Interfaces;
 using RMS.Infrastructure.Interfaces;
 using RMS.Infrastructure.Persistences;
+using RMS.Domain.Extensions;
 
 namespace RMS.Infrastructure.Repositories
 {
@@ -61,18 +62,7 @@ namespace RMS.Infrastructure.Repositories
                 // Apply sorting
                 if (!string.IsNullOrEmpty(sortColumn))
                 {
-                    switch (sortColumn.ToLower())
-                    {
-                        case "rolename":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(r => r.RoleName) : query.OrderBy(r => r.RoleName);
-                            break;
-                        case "id":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(r => r.Id) : query.OrderBy(r => r.Id);
-                            break;
-                        default:
-                            query = query.OrderBy(r => r.Id); // Default sort
-                            break;
-                    }
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
                 }
                 else
                 {

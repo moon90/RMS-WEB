@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.UserDTOs.InputDTOs;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Application.Helpers;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
-using RMS.Domain.Dtos.UserDTOs.InputDTOs;
-using RMS.Domain.DTOs;
-using RMS.Domain.DTOs.UserDTOs.InputDTOs;
-using RMS.Domain.Models.BaseModels;
 
 namespace RMS.WebApi.Controllers
 {

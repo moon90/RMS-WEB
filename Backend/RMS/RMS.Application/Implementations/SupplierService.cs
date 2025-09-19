@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using RMS.Application.DTOs.SupplierDTOs.InputDTOs;
 using RMS.Application.DTOs.SupplierDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Interfaces;
 using RMS.Domain.Models.BaseModels;
@@ -13,6 +13,9 @@ using RMS.Domain.Queries;
 using RMS.Infrastructure.IRepositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RMS.Domain.Extensions;
+using System.Linq;
 
 namespace RMS.Application.Implementations
 {
@@ -46,12 +49,12 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<SupplierDto>> GetByIdAsync(int id)
         {
-            var supplierResult = await _supplierRepository.GetByIdAsync(id);
-            if (!supplierResult.Succeeded || supplierResult.Data == null)
+            var supplier = await _supplierRepository.GetByIdAsync(id);
+            if (supplier == null)
             {
                 return new ResponseDto<SupplierDto> { IsSuccess = false, Message = "Supplier not found.", Code = "404" };
             }
-            var supplierDto = _mapper.Map<SupplierDto>(supplierResult.Data);
+            var supplierDto = _mapper.Map<SupplierDto>(supplier);
             return new ResponseDto<SupplierDto> { IsSuccess = true, Data = supplierDto, Code = "200" };
         }
 
@@ -67,6 +70,15 @@ namespace RMS.Application.Implementations
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 query = query.Where(s => s.SupplierName.Contains(searchQuery) || s.ContactPerson.Contains(searchQuery));
+            }
+
+            if (!string.IsNullOrEmpty(sortColumn))
+            {
+                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+            }
+            else
+            {
+                query = query.OrderBy(s => s.SupplierName); // Default sort
             }
 
             var pagedResult = await _supplierRepository.GetPagedResultAsync(new PagedQuery { PageNumber = pageNumber, PageSize = pageSize }, null, false, query);
@@ -100,24 +112,14 @@ namespace RMS.Application.Implementations
                 return new ResponseDto<SupplierDto> { IsSuccess = false, Message = "Validation failed.", Code = "400", Details = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }) };
             }
 
-            var existingSupplierResult = await _supplierRepository.GetByIdAsync(updateDto.Id);
-            if (!existingSupplierResult.Succeeded || existingSupplierResult.Data == null)
+            var existingSupplier = await _supplierRepository.GetByIdAsync(updateDto.Id);
+            if (existingSupplier == null)
             {
                 return new ResponseDto<SupplierDto> { IsSuccess = false, Message = "Supplier not found.", Code = "404" };
             }
 
-            var existingSupplier = existingSupplierResult.Data;
             _mapper.Map(updateDto, existingSupplier);
-            var updateResult = await _supplierRepository.UpdateAsync(existingSupplier);
-            if (!updateResult.Succeeded)
-            {
-                return new ResponseDto<SupplierDto>
-                {
-                    IsSuccess = false,
-                    Message = updateResult.Error,
-                    Code = "500"
-                };
-            }
+            await _supplierRepository.UpdateAsync(existingSupplier);
             await _unitOfWork.SaveChangesAsync();
 
             var supplierDto = _mapper.Map<SupplierDto>(existingSupplier);
@@ -128,25 +130,14 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<string>> DeleteAsync(int id)
         {
-            var supplierResult = await _supplierRepository.GetByIdAsync(id);
-            if (!supplierResult.Succeeded || supplierResult.Data == null)
+            var supplier = await _supplierRepository.GetByIdAsync(id);
+            if (supplier == null)
             {
                 return new ResponseDto<string> { IsSuccess = false, Message = "Supplier not found.", Code = "404" };
             }
-            var supplier = supplierResult.Data;
 
-            var deleteResult = await _supplierRepository.DeleteByIdAsync(id);
+            await _supplierRepository.DeleteAsync(supplier);
             await _unitOfWork.SaveChangesAsync();
-
-            if (!deleteResult.Succeeded)
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = deleteResult.Error,
-                    Code = "500"
-                };
-            }
 
             await _auditLogService.LogAsync("DeleteSupplier", "Supplier", $"SupplierId:{id}", "System", $"Supplier '{supplier.SupplierName}' deleted.");
 
@@ -155,26 +146,15 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<string>> UpdateStatusAsync(int id, bool status)
         {
-            var supplierResult = await _supplierRepository.GetByIdAsync(id);
-            if (!supplierResult.Succeeded || supplierResult.Data == null)
+            var supplier = await _supplierRepository.GetByIdAsync(id);
+            if (supplier == null)
             {
                 return new ResponseDto<string> { IsSuccess = false, Message = "Supplier not found.", Code = "404" };
             }
-            var supplier = supplierResult.Data;
 
             supplier.Status = status;
-            var updateResult = await _supplierRepository.UpdateAsync(supplier);
+            await _supplierRepository.UpdateAsync(supplier);
             await _unitOfWork.SaveChangesAsync();
-
-            if (!updateResult.Succeeded)
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = updateResult.Error,
-                    Code = "500"
-                };
-            }
 
             await _auditLogService.LogAsync("UpdateSupplierStatus", "Supplier", $"SupplierId:{id}", "System", $"Supplier '{supplier.SupplierName}' status updated to {(status ? "Active" : "Inactive")}.");
 

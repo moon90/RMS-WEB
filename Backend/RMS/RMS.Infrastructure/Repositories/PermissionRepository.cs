@@ -4,6 +4,8 @@ using RMS.Infrastructure.Interfaces;
 using RMS.Infrastructure.Persistences;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RMS.Domain.Extensions;
+using System.Linq;
 
 namespace RMS.Infrastructure.Repositories
 {
@@ -73,35 +75,18 @@ namespace RMS.Infrastructure.Repositories
                     query = query.Where(p => p.Status == status.Value);
                 }
 
-                // Get total count before pagination
-                var totalCount = await query.CountAsync();
-
                 // Apply sorting
                 if (!string.IsNullOrWhiteSpace(sortColumn))
                 {
-                    switch (sortColumn.ToLower())
-                    {
-                        case "permissionname":
-                            query = sortDirection == "asc" ? query.OrderBy(p => p.PermissionName) : query.OrderByDescending(p => p.PermissionName);
-                            break;
-                        case "permissionkey":
-                            query = sortDirection == "asc" ? query.OrderBy(p => p.PermissionKey) : query.OrderByDescending(p => p.PermissionKey);
-                            break;
-                        case "modulename":
-                            query = sortDirection == "asc" ? query.OrderBy(p => p.ModuleName) : query.OrderByDescending(p => p.ModuleName);
-                            break;
-                        case "createddate":
-                            query = sortDirection == "asc" ? query.OrderBy(p => p.CreatedDate) : query.OrderByDescending(p => p.CreatedDate);
-                            break;
-                        default:
-                            query = query.OrderBy(p => p.Id); // Default sort
-                            break;
-                    }
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
                 }
                 else
                 {
                     query = query.OrderBy(p => p.Id); // Default sort if no column specified
                 }
+
+                // Get total count before pagination
+                var totalCount = await query.CountAsync();
 
                 // Apply pagination
                 var permissions = await query

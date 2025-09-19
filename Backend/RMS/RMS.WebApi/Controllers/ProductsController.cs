@@ -1,13 +1,12 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using RMS.Application.DTOs.ProductDTOs.InputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http; // Added
-using RMS.WebApi.Services; // Added
-using System; // Added for Exception
+using RMS.Application.DTOs;
+using RMS.WebApi.Configurations;
+using RMS.Application.Services.Processing; // Added for Exception
 
 namespace RMS.WebApi.Controllers
 {
@@ -17,12 +16,14 @@ namespace RMS.WebApi.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
-        private readonly IImageService _imageService; // Added
+        private readonly IImageProcessingService _imageProcessingService;
+        private readonly ImageSettings _imageSettings;
 
-        public ProductsController(IProductService productService, IImageService imageService) // Modified
+        public ProductsController(IProductService productService, IImageProcessingService imageProcessingService, IOptions<ImageSettings> imageSettings) // Modified
         {
             _productService = productService;
-            _imageService = imageService; // Added
+            _imageProcessingService = imageProcessingService;
+            _imageSettings = imageSettings.Value;
         }
 
         [HttpGet("{id}")]
@@ -48,11 +49,11 @@ namespace RMS.WebApi.Controllers
 
         [HttpGet]
         [Authorize(Policy = "PRODUCT_VIEW")]
-        public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null)
+        public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null, [FromQuery] int? categoryId = null)
         {
             try
             {
-                var result = await _productService.GetAllAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
+                var result = await _productService.GetAllAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, categoryId);
 
                 var response = new ResponseDto<object>
                 {
@@ -84,19 +85,18 @@ namespace RMS.WebApi.Controllers
             {
                 if (productImageFile != null)
                 {
-                    createDto.ImageUrl = await _imageService.SaveImageAsync(productImageFile, "products");
+                    var imageBytes = await _imageProcessingService.ProcessImage(productImageFile, _imageSettings.ProductImageWidth, _imageSettings.ProductImageHeight);
+                    createDto.ProductImage = ConvertBytesToBase64(imageBytes);
                 }
                 if (thumbnailImageFile != null)
                 {
-                    createDto.ThumbnailUrl = await _imageService.SaveImageAsync(thumbnailImageFile, "products");
+                    var thumbnailBytes = await _imageProcessingService.ProcessImage(thumbnailImageFile, _imageSettings.ThumbnailImageWidth, _imageSettings.ThumbnailImageHeight);
+                    createDto.ThumbnailImage = ConvertBytesToBase64(thumbnailBytes);
                 }
 
                 var result = await _productService.CreateAsync(createDto);
                 if (!result.IsSuccess)
                 {
-                    // If creation fails, delete uploaded images
-                    if (!string.IsNullOrEmpty(createDto.ImageUrl)) _imageService.DeleteImage(createDto.ImageUrl);
-                    if (!string.IsNullOrEmpty(createDto.ThumbnailUrl)) _imageService.DeleteImage(createDto.ThumbnailUrl);
                     return BadRequest(result);
                 }
 
@@ -140,73 +140,49 @@ namespace RMS.WebApi.Controllers
                     });
                 }
 
-                // Get existing product to check old image URLs
+                // Fetch the existing product to preserve image data if no new file is uploaded
                 var existingProductResult = await _productService.GetByIdAsync(id);
                 if (!existingProductResult.IsSuccess || existingProductResult.Data == null)
                 {
-                    return NotFound(new ResponseDto<string>
-                    {
-                        IsSuccess = false,
-                        Message = "Product not found.",
-                        Code = "PRODUCT_NOT_FOUND"
-                    });
+                    return NotFound(new ResponseDto<string> { IsSuccess = false, Message = "Product not found.", Code = "404" });
                 }
                 var existingProduct = existingProductResult.Data;
 
-                // Handle Product Image
+                // Handle ProductImage
                 if (productImageFile != null)
                 {
-                    // Save new image
-                    var newImageUrl = await _imageService.SaveImageAsync(productImageFile, "products");
-                    if (!string.IsNullOrEmpty(newImageUrl))
-                    {
-                        // Delete old image if it exists
-                        if (!string.IsNullOrEmpty(existingProduct.ImageUrl))
-                        {
-                            _imageService.DeleteImage(existingProduct.ImageUrl);
-                        }
-                        updateDto.ImageUrl = newImageUrl;
-                    }
+                    var imageBytes = await _imageProcessingService.ProcessImage(productImageFile, _imageSettings.ProductImageWidth, _imageSettings.ProductImageHeight);
+                    updateDto.ProductImage = ConvertBytesToBase64(imageBytes);
                 }
-                else if (string.IsNullOrEmpty(updateDto.ImageUrl) && !string.IsNullOrEmpty(existingProduct.ImageUrl))
+                else if (updateDto.ProductImage == "") // If client sends empty string, clear the image
                 {
-                    // If no new file is provided and ImageUrl is explicitly cleared in DTO, delete old image
-                    _imageService.DeleteImage(existingProduct.ImageUrl);
+                    updateDto.ProductImage = null;
                 }
+                else if (updateDto.ProductImage == null) // If no new file, and DTO has no Base64 string, retain the existing one from DB
+                {
+                    updateDto.ProductImage = existingProduct.ProductImage;
+                }
+                // else: updateDto.ProductImage already contains a Base64 string (either existing or new from client) - do nothing
 
-                // Handle Thumbnail Image
+                // Handle ThumbnailImage
                 if (thumbnailImageFile != null)
                 {
-                    // Save new thumbnail
-                    var newThumbnailUrl = await _imageService.SaveImageAsync(thumbnailImageFile, "products");
-                    if (!string.IsNullOrEmpty(newThumbnailUrl))
-                    {
-                        // Delete old thumbnail if it exists
-                        if (!string.IsNullOrEmpty(existingProduct.ThumbnailUrl))
-                        {
-                            _imageService.DeleteImage(existingProduct.ThumbnailUrl);
-                        }
-                        updateDto.ThumbnailUrl = newThumbnailUrl;
-                    }
+                    var thumbnailBytes = await _imageProcessingService.ProcessImage(thumbnailImageFile, _imageSettings.ThumbnailImageWidth, _imageSettings.ThumbnailImageHeight);
+                    updateDto.ThumbnailImage = ConvertBytesToBase64(thumbnailBytes);
                 }
-                else if (string.IsNullOrEmpty(updateDto.ThumbnailUrl) && !string.IsNullOrEmpty(existingProduct.ThumbnailUrl))
+                else if (updateDto.ThumbnailImage == "") // If client sends empty string, clear the image
                 {
-                    // If no new file is provided and ThumbnailUrl is explicitly cleared in DTO, delete old thumbnail
-                    _imageService.DeleteImage(existingProduct.ThumbnailUrl);
+                    updateDto.ThumbnailImage = null;
                 }
+                else if (updateDto.ThumbnailImage == null) // If no new file, and DTO has no Base64 string, retain the existing one from DB
+                {
+                    updateDto.ThumbnailImage = existingProduct.ThumbnailImage;
+                }
+                // else: updateDto.ThumbnailImage already contains a Base64 string (either existing or new from client) - do nothing
 
                 var result = await _productService.UpdateAsync(updateDto);
                 if (!result.IsSuccess)
                 {
-                    // If update fails, and new images were uploaded, delete them to prevent orphaned files
-                    if (productImageFile != null && !string.IsNullOrEmpty(updateDto.ImageUrl))
-                    {
-                        _imageService.DeleteImage(updateDto.ImageUrl);
-                    }
-                    if (thumbnailImageFile != null && !string.IsNullOrEmpty(updateDto.ThumbnailUrl))
-                    {
-                        _imageService.DeleteImage(updateDto.ThumbnailUrl);
-                    }
                     return BadRequest(result);
                 }
 
@@ -274,6 +250,10 @@ namespace RMS.WebApi.Controllers
                     Details = ex.Message
                 });
             }
+        }
+    private string? ConvertBytesToBase64(byte[]? bytes)
+        {
+            return bytes != null ? $"data:image/png;base64,{Convert.ToBase64String(bytes)}" : null;
         }
     }
 }

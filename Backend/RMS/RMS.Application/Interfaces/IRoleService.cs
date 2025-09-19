@@ -1,10 +1,10 @@
 ﻿using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
-using RMS.Domain.Dtos;
-using RMS.Domain.DTOs.RoleDTOs.InputDTOs;
-using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
-using RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.RoleDTOs.InputDTOs;
+using RMS.Application.DTOs.RoleDTOs.OutputDTOs;
+using RMS.Application.DTOs.RolePermissionDTOs.OutputDTOs;
 using RMS.Domain.Models.BaseModels;
-using RMS.Domain.DTOs.RoleMenuDTOs.OutputDTOs;
+using RMS.Application.DTOs.RoleMenuDTOs.OutputDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +21,7 @@ namespace RMS.Application.Interfaces
         Task<ResponseDto<RoleDto>> CreateRoleAsync(RoleCreateDto roleCreateDto);
         Task<ResponseDto<string>> UpdateRoleAsync(RoleUpdateDto roleUpdateDto);
         Task<ResponseDto<string>> DeleteRoleAsync(int roleId);
+        Task<ResponseDto<string>> UpdateRoleStatusAsync(int roleId, bool status);
 
         Task<ResponseDto<string>> AssignPermissionToRoleAsync(RolePermissionDto rolePermissionDto);
         Task<ResponseDto<string>> UnassignPermissionFromRoleAsync(int roleId, int permissionId);

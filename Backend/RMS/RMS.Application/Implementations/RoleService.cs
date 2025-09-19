@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.RoleDTOs.InputDTOs;
+using RMS.Application.DTOs.RoleDTOs.OutputDTOs;
+using RMS.Application.DTOs.RoleMenuDTOs.OutputDTOs;
+using RMS.Application.DTOs.RolePermissionDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
-using RMS.Domain.DTOs.RoleDTOs.InputDTOs;
-using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
-using RMS.Domain.DTOs.RoleMenuDTOs.OutputDTOs;
-using RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
 using RMS.Infrastructure.Interfaces;
@@ -496,6 +495,44 @@ namespace RMS.Application.Implementations
                 {
                     IsSuccess = false,
                     Message = "An error occurred while retrieving menus for the role.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
+        }
+
+        public async Task<ResponseDto<string>> UpdateRoleStatusAsync(int roleId, bool status)
+        {
+            try
+            {
+                var role = await _roleRepository.GetRoleByIdAsync(roleId);
+                if (role == null)
+                {
+                    return new ResponseDto<string>
+                    {
+                        IsSuccess = false,
+                        Message = "Role not found.",
+                        Code = "404"
+                    };
+                }
+
+                role.Status = status;
+                await _roleRepository.UpdateRoleAsync(role);
+
+                return new ResponseDto<string>
+                {
+                    IsSuccess = true,
+                    Message = "Role status updated successfully.",
+                    Code = "200",
+                    Data = $"RoleId:{roleId}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while updating role status.",
                     Code = "500",
                     Details = ex.Message
                 };

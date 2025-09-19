@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RMS.Infrastructure.IRepositories
 {
-    public interface IAuditLogRepository
+    public interface IAuditLogRepository : IBaseRepository<AuditLog>
     {
         Task AddAsync(AuditLog log);
         Task<IEnumerable<AuditLog>> GetAllAsync();

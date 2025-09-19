@@ -2,14 +2,14 @@
 using FluentValidation;
 using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
-using RMS.Domain.DTOs.MenuDTOs.InputDTOs;
-using RMS.Domain.DTOs.RoleMenuDTOs.OutputDTOs;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.MenuDTOs.InputDTOs;
+using RMS.Application.DTOs.RoleMenuDTOs.OutputDTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Infrastructure.Interfaces;
-using RMS.Domain.DTOs.RoleMenuDTOs.InputDTOs;
+using RMS.Application.DTOs.RoleMenuDTOs.InputDTOs;
 
 namespace RMS.Application.Implementations
 {

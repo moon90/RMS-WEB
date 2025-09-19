@@ -1,0 +1,15 @@
+namespace RMS.Application.DTOs.MenuDTOs.OutputDTOs
+{
+    public class MenuDto
+    {
+        public int MenuID { get; set; }
+        public string? MenuName { get; set; }
+        public int? ParentID { get; set; }
+        public string? MenuPath { get; set; }
+        public string? MenuIcon { get; set; }
+        public string? ControllerName { get; set; }
+        public string? ActionName { get; set; }
+        public string? ModuleName { get; set; }
+        public int DisplayOrder { get; set; }
+    }
+}

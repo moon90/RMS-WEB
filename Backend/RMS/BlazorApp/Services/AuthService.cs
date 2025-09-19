@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using RMS.Domain.Dtos.UserDTOs.InputDTOs;
 using RMS.Domain.DTOs.UserDTOs.InputDTOs;
-using RMS.Domain.Dtos;
-using RMS.Domain.DTOs;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs;
 using System.Text.Json;
 using Microsoft.JSInterop;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;

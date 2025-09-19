@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 
+using RMS.Application.DTOs;
+
 namespace RMS.WebApi.Filters
 {
     public class ValidationFilter : IAsyncActionFilter
@@ -9,17 +11,21 @@ namespace RMS.WebApi.Filters
         {
             if (!context.ModelState.IsValid)
             {
-                var errors = context.ModelState
+                var validationErrors = context.ModelState
                     .Where(x => x.Value.Errors.Count > 0)
-                    .ToDictionary(
-                        kvp => kvp.Key,
-                        kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                    );
+                    .SelectMany(x => x.Value.Errors.Select(e => new ValidationDetailDto
+                    {
+                        PropertyName = x.Key,
+                        ErrorMessage = e.ErrorMessage
+                    }))
+                    .ToList();
 
-                context.Result = new BadRequestObjectResult(new
+                context.Result = new BadRequestObjectResult(new ResponseDto<object>
                 {
-                    Message = "Validation errors occurred.",
-                    Errors = errors
+                    IsSuccess = false,
+                    Message = "Validation failed.",
+                    Code = "VALIDATION_ERROR",
+                    Details = validationErrors
                 });
 
                 return;

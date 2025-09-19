@@ -1,5 +1,5 @@
 ﻿using RMS.Application.DTOs.UserDTOs.OutputDTOs;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

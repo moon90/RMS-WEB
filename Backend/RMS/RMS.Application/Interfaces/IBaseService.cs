@@ -1,5 +1,5 @@
-﻿using RMS.Domain.Dtos;
-using RMS.Domain.Dtos.Dropdowns;
+﻿using RMS.Application.DTOs;
+using RMS.Application.DTOs.Dropdowns;
 using RMS.Domain.Models.BaseModels;
 using RMS.Domain.Queries;
 using RMS.Domain.Specification;
@@ -32,8 +32,6 @@ namespace RMS.Application.Interfaces
         /// <returns>The Result contain the TDto if it has been found; 
         /// Otherwise return falure with messange of error</returns>
         Task<ResponseDto<TDto>> GetByIdAsync<TDto>(object id) where TDto : class;
-
-        Task<ResponseDto<IEnumerable<DropdownDto>>> GetDropdownAsync(OrderSpecification<TEntity> spec);
 
         Task<ResponseDto<IEnumerable<DropdownDto>>> GetDropdownAsync(BaseSpecification<TEntity> spec);
 

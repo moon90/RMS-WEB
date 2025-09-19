@@ -1,6 +1,6 @@
 using RMS.Application.DTOs.CategoryDTOs.InputDTOs;
 using RMS.Application.DTOs.CategoryDTOs.OutputDTOs;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.Models.BaseModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -4,13 +4,14 @@ using Microsoft.Extensions.Logging;
 using RMS.Application.DTOs.CategoryDTOs.InputDTOs;
 using RMS.Application.DTOs.CategoryDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
 using RMS.Domain.Queries;
 using RMS.Infrastructure.IRepositories;
 using RMS.Domain.Interfaces;
 using System.Linq.Expressions;
+using RMS.Domain.Extensions;
 
 namespace RMS.Application.Implementations
 {
@@ -74,22 +75,28 @@ namespace RMS.Application.Implementations
         {
             try
             {
-                var baseQuery = _categoryRepository.GetQueryable();
+                var query = _categoryRepository.GetQueryable();
 
                 if (status.HasValue)
                 {
-                    baseQuery = baseQuery.Where(c => c.Status == status.Value);
+                    query = query.Where(c => c.Status == status.Value);
                 }
 
-                baseQuery = _categoryRepository.ApplySearch(baseQuery, searchQuery);
-
-                var query = new PagedQuery
+                if (!string.IsNullOrWhiteSpace(searchQuery))
                 {
-                    PageNumber = pageNumber,
-                    PageSize = pageSize
-                };
+                    query = query.Where(c => c.CategoryName.Contains(searchQuery));
+                }
 
-                var pagedResult = await _categoryRepository.GetPagedResultAsync(query, null, false, baseQuery);
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                }
+                else
+                {
+                    query = query.OrderBy(c => c.CategoryName);
+                }
+
+                var pagedResult = await query.ToPagedList(pageNumber, pageSize);
 
                 var categoryDtos = _mapper.Map<List<CategoryDto>>(pagedResult.Items);
                 return new PagedResult<CategoryDto>(categoryDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
@@ -162,8 +169,8 @@ namespace RMS.Application.Implementations
                 };
             }
 
-            var existingCategoryResult = await _categoryRepository.GetByIdAsync(updateDto.CategoryID);
-            if (!existingCategoryResult.Succeeded || existingCategoryResult.Data == null)
+            var existingCategory = await _categoryRepository.GetByIdAsync(updateDto.CategoryID);
+            if (existingCategory == null)
             {
                 return new ResponseDto<CategoryDto>
                 {
@@ -172,7 +179,6 @@ namespace RMS.Application.Implementations
                     Code = "404"
                 };
             }
-            var existingCategory = existingCategoryResult.Data;
 
             if (await _categoryRepository.GetCategoryByNameAsync(updateDto.CategoryName) != null && existingCategory.CategoryName != updateDto.CategoryName)
             {
@@ -185,18 +191,8 @@ namespace RMS.Application.Implementations
             }
 
             _mapper.Map(updateDto, existingCategory);
-            var updateResult = await _categoryRepository.UpdateAsync(existingCategory);
+            await _categoryRepository.UpdateAsync(existingCategory);
             await _unitOfWork.SaveChangesAsync();
-
-            if (!updateResult.Succeeded)
-            {
-                return new ResponseDto<CategoryDto>
-                {
-                    IsSuccess = false,
-                    Message = updateResult.Error,
-                    Code = "500"
-                };
-            }
 
             var categoryDto = _mapper.Map<CategoryDto>(existingCategory);
 
@@ -219,8 +215,8 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<string>> DeleteAsync(int id)
         {
-            var categoryResult = await _categoryRepository.GetByIdAsync(id);
-            if (!categoryResult.Succeeded || categoryResult.Data == null)
+            var category = await _categoryRepository.GetByIdAsync(id);
+            if (category == null)
             {
                 return new ResponseDto<string>
                 {
@@ -229,20 +225,9 @@ namespace RMS.Application.Implementations
                     Code = "404"
                 };
             }
-            var category = categoryResult.Data;
 
-            var deleteResult = await _categoryRepository.DeleteByIdAsync(id);
+            await _categoryRepository.DeleteAsync(category);
             await _unitOfWork.SaveChangesAsync();
-
-            if (!deleteResult.Succeeded)
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = deleteResult.Error,
-                    Code = "500"
-                };
-            }
 
             await _auditLogService.LogAsync(
                 action: "DeleteCategory",
@@ -263,8 +248,8 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<string>> UpdateStatusAsync(int id, bool status)
         {
-            var categoryResult = await _categoryRepository.GetByIdAsync(id);
-            if (!categoryResult.Succeeded || categoryResult.Data == null)
+            var category = await _categoryRepository.GetByIdAsync(id);
+            if (category == null)
             {
                 return new ResponseDto<string>
                 {
@@ -274,21 +259,9 @@ namespace RMS.Application.Implementations
                 };
             }
 
-            var category = categoryResult.Data;
             category.Status = status;
-
-            var updateResult = await _categoryRepository.UpdateAsync(category);
+            await _categoryRepository.UpdateAsync(category);
             await _unitOfWork.SaveChangesAsync();
-
-            if (!updateResult.Succeeded)
-            {
-                return new ResponseDto<string>
-                {
-                    IsSuccess = false,
-                    Message = updateResult.Error,
-                    Code = "500"
-                };
-            }
 
             await _auditLogService.LogAsync(
                 action: "UpdateCategoryStatus",
@@ -311,8 +284,8 @@ namespace RMS.Application.Implementations
         {
             try
             {
-                var categoryResult = await _categoryRepository.GetByIdAsync(id);
-                if (!categoryResult.Succeeded || categoryResult.Data == null)
+                var category = await _categoryRepository.GetByIdAsync(id);
+                if (category == null)
                 {
                     return new ResponseDto<CategoryDto>
                     {
@@ -321,7 +294,7 @@ namespace RMS.Application.Implementations
                         Code = "404"
                     };
                 }
-                var categoryDto = _mapper.Map<CategoryDto>(categoryResult.Data);
+                var categoryDto = _mapper.Map<CategoryDto>(category);
                 return new ResponseDto<CategoryDto>
                 {
                     IsSuccess = true,

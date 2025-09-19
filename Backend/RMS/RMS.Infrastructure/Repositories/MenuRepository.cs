@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RMS.Domain.Extensions;
 
 namespace RMS.Infrastructure.Repositories
 {
@@ -79,33 +80,7 @@ namespace RMS.Infrastructure.Repositories
                 // Apply sorting
                 if (!string.IsNullOrWhiteSpace(sortColumn))
                 {
-                    switch (sortColumn.ToLower())
-                    {
-                        case "menuname":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.MenuName) : query.OrderBy(m => m.MenuName);
-                            break;
-                        case "menupath":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.MenuPath) : query.OrderBy(m => m.MenuPath);
-                            break;
-                        case "menuicon":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.MenuIcon) : query.OrderBy(m => m.MenuIcon);
-                            break;
-                        case "controllername":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.ControllerName) : query.OrderBy(m => m.ControllerName);
-                            break;
-                        case "actionname":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.ActionName) : query.OrderBy(m => m.ActionName);
-                            break;
-                        case "modulename":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.ModuleName) : query.OrderBy(m => m.ModuleName);
-                            break;
-                        case "displayorder":
-                            query = sortDirection?.ToLower() == "desc" ? query.OrderByDescending(m => m.DisplayOrder) : query.OrderBy(m => m.DisplayOrder);
-                            break;
-                        default:
-                            query = query.OrderBy(m => m.Id); // Default sort
-                            break;
-                    }
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
                 }
                 else
                 {

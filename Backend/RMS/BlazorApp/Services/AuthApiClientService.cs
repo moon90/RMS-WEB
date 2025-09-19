@@ -1,8 +1,8 @@
 using System.Net.Http.Json;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs;
 using RMS.Domain.Dtos.UserDTOs.InputDTOs;
 using System.Text.Json;
-using RMS.Domain.DTOs;
+using RMS.Application.DTOs;
 using RMS.Domain.DTOs.UserDTOs.InputDTOs;
 
 namespace BlazorApp.Services

@@ -8,16 +8,21 @@ using RMS.Application.Interfaces;
 using RMS.Infrastructure.Persistences;
 using RMS.WebApi.Filters;
 using System.Text;
+using System.Text.Json.Serialization;
 using RMS.WebApi.Services;
 using RMS.WebApi.Configurations; // Added
 using Microsoft.Extensions.Configuration; // Added
 using Microsoft.Extensions.DependencyInjection; // Added
+using RMS.WebApi.Hubs; // Added for SignalR Hub
+using RMS.Application.Interfaces; // Added for INotificationService
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddApplicationAndInfrastructureServices(builder.Configuration);
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddSignalR();
+builder.Services.AddScoped<INotificationService, SignalRNotificationService>(); // Register SignalRNotificationService
 
 // Configure ImageSettings
 builder.Services.Configure<ImageSettings>(builder.Configuration.GetSection("ImageSettings")); // Added
@@ -110,6 +115,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("USER_VIEW", policy => policy.RequireClaim("Permission", "USER_VIEW"));
     options.AddPolicy("USER_CREATE", policy => policy.RequireClaim("Permission", "USER_CREATE"));
     options.AddPolicy("USER_UPDATE", policy => policy.RequireClaim("Permission", "USER_UPDATE"));
+    options.AddPolicy("USER_TOGGLE_STATUS", policy => policy.RequireClaim("Permission", "USER_TOGGLE_STATUS"));
     options.AddPolicy("USER_DELETE", policy => policy.RequireClaim("Permission", "USER_DELETE"));
     options.AddPolicy("USER_ASSIGN_ROLE", policy => policy.RequireClaim("Permission", "USER_ASSIGN_ROLE"));
     options.AddPolicy("USER_UNASSIGN_ROLE", policy => policy.RequireClaim("Permission", "USER_UNASSIGN_ROLE"));
@@ -135,10 +141,12 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ROLE_ASSIGN_PERMISSION", policy => policy.RequireClaim("Permission", "ROLE_ASSIGN_PERMISSION"));
     options.AddPolicy("ROLE_UNASSIGN_PERMISSION", policy => policy.RequireClaim("Permission", "ROLE_UNASSIGN_PERMISSION"));
     options.AddPolicy("ROLE_VIEW_MENUS", policy => policy.RequireClaim("Permission", "ROLE_VIEW_MENUS")); // Added
+    options.AddPolicy("ROLE_TOGGLE_STATUS", policy => policy.RequireClaim("Permission", "ROLE_TOGGLE_STATUS"));
     options.AddPolicy("CATEGORY_VIEW", policy => policy.RequireClaim("Permission", "CATEGORY_VIEW"));
     options.AddPolicy("CATEGORY_CREATE", policy => policy.RequireClaim("Permission", "CATEGORY_CREATE"));
     options.AddPolicy("CATEGORY_UPDATE", policy => policy.RequireClaim("Permission", "CATEGORY_UPDATE"));
     options.AddPolicy("CATEGORY_DELETE", policy => policy.RequireClaim("Permission", "CATEGORY_DELETE"));
+    options.AddPolicy("CATEGORY_TOGGLE_STATUS", policy => policy.RequireClaim("Permission", "CATEGORY_TOGGLE_STATUS"));
     options.AddPolicy("UNIT_VIEW", policy => policy.RequireClaim("Permission", "UNIT_VIEW"));
     options.AddPolicy("UNIT_CREATE", policy => policy.RequireClaim("Permission", "UNIT_CREATE"));
     options.AddPolicy("UNIT_UPDATE", policy => policy.RequireClaim("Permission", "UNIT_UPDATE"));
@@ -155,6 +163,58 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("PRODUCT_CREATE", policy => policy.RequireClaim("Permission", "PRODUCT_CREATE"));
     options.AddPolicy("PRODUCT_UPDATE", policy => policy.RequireClaim("Permission", "PRODUCT_UPDATE"));
     options.AddPolicy("PRODUCT_DELETE", policy => policy.RequireClaim("Permission", "PRODUCT_DELETE"));
+    options.AddPolicy("CUSTOMER_VIEW", policy => policy.RequireClaim("Permission", "CUSTOMER_VIEW"));
+    options.AddPolicy("CUSTOMER_CREATE", policy => policy.RequireClaim("Permission", "CUSTOMER_CREATE"));
+    options.AddPolicy("CUSTOMER_UPDATE", policy => policy.RequireClaim("Permission", "CUSTOMER_UPDATE"));
+    options.AddPolicy("CUSTOMER_DELETE", policy => policy.RequireClaim("Permission", "CUSTOMER_DELETE"));
+    options.AddPolicy("STAFF_VIEW", policy => policy.RequireClaim("Permission", "STAFF_VIEW"));
+    options.AddPolicy("STAFF_CREATE", policy => policy.RequireClaim("Permission", "STAFF_CREATE"));
+    options.AddPolicy("STAFF_UPDATE", policy => policy.RequireClaim("Permission", "STAFF_UPDATE"));
+    options.AddPolicy("STAFF_DELETE", policy => policy.RequireClaim("Permission", "STAFF_DELETE"));
+    options.AddPolicy("INVENTORY_VIEW", policy => policy.RequireClaim("Permission", "INVENTORY_VIEW"));
+    options.AddPolicy("INVENTORY_CREATE", policy => policy.RequireClaim("Permission", "INVENTORY_CREATE"));
+    options.AddPolicy("INVENTORY_UPDATE", policy => policy.RequireClaim("Permission", "INVENTORY_UPDATE"));
+    options.AddPolicy("INVENTORY_DELETE", policy => policy.RequireClaim("Permission", "INVENTORY_DELETE"));
+    options.AddPolicy("INVENTORY_LOW_STOCK_VIEW", policy => policy.RequireClaim("Permission", "INVENTORY_LOW_STOCK_VIEW"));
+    options.AddPolicy("ALERT_VIEW", policy => policy.RequireClaim("Permission", "ALERT_VIEW"));
+    options.AddPolicy("ALERT_ACKNOWLEDGE", policy => policy.RequireClaim("Permission", "ALERT_ACKNOWLEDGE"));
+    options.AddPolicy("STOCK_TRANSACTION_VIEW", policy => policy.RequireClaim("Permission", "STOCK_TRANSACTION_VIEW"));
+    options.AddPolicy("STOCK_TRANSACTION_CREATE", policy => policy.RequireClaim("Permission", "STOCK_TRANSACTION_CREATE"));
+    options.AddPolicy("STOCK_TRANSACTION_UPDATE", policy => policy.RequireClaim("Permission", "STOCK_TRANSACTION_UPDATE"));
+    options.AddPolicy("STOCK_TRANSACTION_DELETE", policy => policy.RequireClaim("Permission", "STOCK_TRANSACTION_DELETE"));
+    options.AddPolicy("INGREDIENT_VIEW", policy => policy.RequireClaim("Permission", "INGREDIENT_VIEW"));
+    options.AddPolicy("INGREDIENT_CREATE", policy => policy.RequireClaim("Permission", "INGREDIENT_CREATE"));
+    options.AddPolicy("INGREDIENT_UPDATE", policy => policy.RequireClaim("Permission", "INGREDIENT_UPDATE"));
+    options.AddPolicy("INGREDIENT_DELETE", policy => policy.RequireClaim("Permission", "INGREDIENT_DELETE"));
+    options.AddPolicy("PRODUCT_INGREDIENT_VIEW", policy => policy.RequireClaim("Permission", "PRODUCT_INGREDIENT_VIEW"));
+    options.AddPolicy("PRODUCT_INGREDIENT_CREATE", policy => policy.RequireClaim("Permission", "PRODUCT_INGREDIENT_CREATE"));
+    options.AddPolicy("PRODUCT_INGREDIENT_UPDATE", policy => policy.RequireClaim("Permission", "PRODUCT_INGREDIENT_UPDATE"));
+    options.AddPolicy("PRODUCT_INGREDIENT_DELETE", policy => policy.RequireClaim("Permission", "PRODUCT_INGREDIENT_DELETE"));
+    options.AddPolicy("ORDER_VIEW", policy => policy.RequireClaim("Permission", "ORDER_VIEW"));
+    options.AddPolicy("ORDER_CREATE", policy => policy.RequireClaim("Permission", "ORDER_CREATE"));
+    options.AddPolicy("ORDER_UPDATE", policy => policy.RequireClaim("Permission", "ORDER_UPDATE"));
+    options.AddPolicy("ORDER_DELETE", policy => policy.RequireClaim("Permission", "ORDER_DELETE"));
+    options.AddPolicy("ORDER_VIEW_OR_UPDATE", policy =>
+        policy.RequireAssertion(context =>
+            context.User.HasClaim(c =>
+                (c.Type == "Permission" && c.Value == "ORDER_VIEW") ||
+                (c.Type == "Permission" && c.Value == "ORDER_UPDATE"))));
+    options.AddPolicy("DINING_TABLE_VIEW", policy => policy.RequireClaim("Permission", "DINING_TABLE_VIEW"));
+    options.AddPolicy("DINING_TABLE_CREATE", policy => policy.RequireClaim("Permission", "DINING_TABLE_CREATE"));
+    options.AddPolicy("DINING_TABLE_UPDATE", policy => policy.RequireClaim("Permission", "DINING_TABLE_UPDATE"));
+    options.AddPolicy("DINING_TABLE_DELETE", policy => policy.RequireClaim("Permission", "DINING_TABLE_DELETE"));
+    options.AddPolicy("PROMOTION_VIEW", policy => policy.RequireClaim("Permission", "PROMOTION_VIEW"));
+    options.AddPolicy("PROMOTION_CREATE", policy => policy.RequireClaim("Permission", "PROMOTION_CREATE"));
+    options.AddPolicy("PROMOTION_UPDATE", policy => policy.RequireClaim("Permission", "PROMOTION_UPDATE"));
+    options.AddPolicy("PROMOTION_DELETE", policy => policy.RequireClaim("Permission", "PROMOTION_DELETE"));
+    options.AddPolicy("PURCHASE_VIEW", policy => policy.RequireClaim("Permission", "PURCHASE_VIEW"));
+    options.AddPolicy("PURCHASE_CREATE", policy => policy.RequireClaim("Permission", "PURCHASE_CREATE"));
+    options.AddPolicy("PURCHASE_UPDATE", policy => policy.RequireClaim("Permission", "PURCHASE_UPDATE"));
+    options.AddPolicy("PURCHASE_DELETE", policy => policy.RequireClaim("Permission", "PURCHASE_DELETE"));
+    options.AddPolicy("SALE_VIEW", policy => policy.RequireClaim("Permission", "SALE_VIEW"));
+    options.AddPolicy("SALE_CREATE", policy => policy.RequireClaim("Permission", "SALE_CREATE"));
+    options.AddPolicy("SALE_UPDATE", policy => policy.RequireClaim("Permission", "SALE_UPDATE"));
+    options.AddPolicy("SALE_DELETE", policy => policy.RequireClaim("Permission", "SALE_DELETE"));
 });
 
 builder.Services.AddControllers(options =>
@@ -163,6 +223,7 @@ builder.Services.AddControllers(options =>
 }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -243,7 +304,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Optional: public ping route
-//app.MapGet("/", () => Results.Ok("RMS API is running.")).AllowAnonymous();
+app.MapHub<RMSHub>("/rmshub");
 
 app.Run();

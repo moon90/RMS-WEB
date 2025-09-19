@@ -1,17 +1,7 @@
-using Microsoft.AspNetCore.Http;
 using RMS.Application.DTOs;
-using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
+using RMS.Application.DTOs.UserDTOs.InputDTOs;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
-using RMS.Domain.Dtos;
-using RMS.Domain.DTOs;
-using RMS.Domain.DTOs.RoleDTOs.OutputDTOs;
-using RMS.Domain.DTOs.UserDTOs.InputDTOs;
 using RMS.Domain.Models.BaseModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RMS.Application.Interfaces
 {
@@ -30,6 +20,7 @@ namespace RMS.Application.Interfaces
         Task<ResponseDto<UserDto>> CreateUserAsync(UserCreateDto userCreateDto);
         Task<ResponseDto<UserDto>> UpdateUserAsync(UserUpdateDto userUpdateDto);
         Task<ResponseDto<string>> DeleteUserAsync(int userId);
+        Task<ResponseDto<string>> UpdateUserStatusAsync(int userId, bool isActive);
 
         // User listing
         Task<ResponseDto<IEnumerable<UserDto>>> GetAllUsersAsync();
@@ -51,6 +42,6 @@ namespace RMS.Application.Interfaces
         Task<ResponseDto<string>> UpdateRefreshTokenAsync(int userId, string refreshToken, DateTime? refreshTokenExpiry);
 
         // Profile picture
-        Task<ResponseDto<string>> UploadProfilePictureAsync(int userId, string imageUrl); // Modified
+        Task<ResponseDto<string>> UploadProfilePictureAsync(int userId, byte[] profilePicture);
     }
 }

@@ -47,6 +47,7 @@ namespace RMS.Infrastructure.Configurations
                 new RoleMenu { Id = 17, RoleID = 1, MenuID = 17, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow },
                 new RoleMenu { Id = 18, RoleID = 1, MenuID = 18, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow },
                 new RoleMenu { Id = 19, RoleID = 1, MenuID = 19, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow },
+                new RoleMenu { Id = 57, RoleID = 1, MenuID = 43, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Alerts
 
                 // Manager Role (ID 2) menu permissions
                 new RoleMenu { Id = 20, RoleID = 2, MenuID = 1, CanView = true, CanAdd = false, CanEdit = false, CanDelete = false, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Dashboard
@@ -86,7 +87,46 @@ namespace RMS.Infrastructure.Configurations
                 // Admin Role (ID 1) gets Product menus
                 new RoleMenu { Id = 48, RoleID = 1, MenuID = 32, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Product Management
                 new RoleMenu { Id = 49, RoleID = 1, MenuID = 33, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Product List
-                new RoleMenu { Id = 50, RoleID = 1, MenuID = 34, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }  // Product Add
+                new RoleMenu { Id = 50, RoleID = 1, MenuID = 34, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // Product Add
+
+                // Admin Role (ID 1) gets Customer menus
+                new RoleMenu { Id = 51, RoleID = 1, MenuID = 35, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Customer Management
+                new RoleMenu { Id = 52, RoleID = 1, MenuID = 36, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Customer List
+                new RoleMenu { Id = 53, RoleID = 1, MenuID = 37, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // Customer Add
+
+                // Admin Role (ID 1) gets Staff menus
+                new RoleMenu { Id = 54, RoleID = 1, MenuID = 38, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Staff Management
+                new RoleMenu { Id = 55, RoleID = 1, MenuID = 39, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Staff List
+                new RoleMenu { Id = 56, RoleID = 1, MenuID = 40, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // Staff Add
+
+                // Admin Role (ID 1) gets Order Management menus
+                new RoleMenu { Id = 69, RoleID = 1, MenuID = 53, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Order Management
+                new RoleMenu { Id = 70, RoleID = 1, MenuID = 54, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Order List
+                new RoleMenu { Id = 71, RoleID = 1, MenuID = 55, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // Order Add
+
+                // Admin Role (ID 1) gets Dining Table Management menus
+                new RoleMenu { Id = 72, RoleID = 1, MenuID = 56, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Dining Table Management
+                new RoleMenu { Id = 73, RoleID = 1, MenuID = 57, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Dining Table List
+                new RoleMenu { Id = 74, RoleID = 1, MenuID = 58, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // Dining Table Add
+
+                // Admin Role (ID 1) gets Promotions menus
+                new RoleMenu { Id = 75, RoleID = 1, MenuID = 59, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Promotions Management
+                new RoleMenu { Id = 76, RoleID = 1, MenuID = 60, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Promotion List
+                new RoleMenu { Id = 77, RoleID = 1, MenuID = 61, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // Promotion Add
+
+                // Admin Role (ID 1) gets Purchase menus
+                new RoleMenu { Id = 78, RoleID = 1, MenuID = 62, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Purchase Management
+                new RoleMenu { Id = 79, RoleID = 1, MenuID = 63, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Purchase List
+                new RoleMenu { Id = 80, RoleID = 1, MenuID = 64, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Purchase Add
+                new RoleMenu { Id = 81, RoleID = 1, MenuID = 65, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Purchase Edit
+                new RoleMenu { Id = 82, RoleID = 1, MenuID = 66, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Purchase Detail
+
+                // Admin Role (ID 1) gets Sales menus
+                new RoleMenu { Id = 83, RoleID = 1, MenuID = 67, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Sales Management
+                new RoleMenu { Id = 84, RoleID = 1, MenuID = 68, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Sales List
+                new RoleMenu { Id = 85, RoleID = 1, MenuID = 69, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Sales Add
+                new RoleMenu { Id = 86, RoleID = 1, MenuID = 70, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Sales Edit
+                new RoleMenu { Id = 87, RoleID = 1, MenuID = 71, CanView = true, CanAdd = true, CanEdit = true, CanDelete = true, AssignedBy = "System", AssignedAt = DateTime.UtcNow }  // Sale Detail
             );
         }
     }

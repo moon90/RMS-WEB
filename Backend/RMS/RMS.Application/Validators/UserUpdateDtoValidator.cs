@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using RMS.Domain.DTOs.UserDTOs.InputDTOs;
+using RMS.Application.DTOs.UserDTOs.InputDTOs;
 using RMS.Infrastructure.IRepositories; // Added
 using System.Threading;
 using System.Threading.Tasks;

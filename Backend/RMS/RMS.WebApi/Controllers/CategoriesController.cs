@@ -1,15 +1,14 @@
-using Microsoft.AspNetCore.Authorization;
+using RMS.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using RMS.Application.DTOs.CategoryDTOs.InputDTOs;
-using RMS.Application.DTOs.CategoryDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
+using RMS.Application.DTOs.CategoryDTOs.InputDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RMS.WebApi.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -21,12 +20,11 @@ namespace RMS.WebApi.Controllers
 
         [HttpGet]
         [Authorize(Policy = "CATEGORY_VIEW")]
-        public async Task<IActionResult> GetAllCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null)
+        public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null)
         {
             try
             {
                 var result = await _categoryService.GetAllCategoriesAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
-
                 var response = new ResponseDto<object>
                 {
                     IsSuccess = true,
@@ -56,11 +54,15 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _categoryService.GetByIdAsync(id);
-                return result.IsSuccess ? Ok(result) : NotFound(result);
+                if (!result.IsSuccess)
+                {
+                    return NotFound(result);
+                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseDto<CategoryDto>
+                return StatusCode(500, new ResponseDto<object>
                 {
                     IsSuccess = false,
                     Message = "An error occurred while retrieving the category.",
@@ -72,14 +74,15 @@ namespace RMS.WebApi.Controllers
 
         [HttpPost]
         [Authorize(Policy = "CATEGORY_CREATE")]
-        public async Task<IActionResult> Create([FromBody] CategoryCreateDto dto)
+        public async Task<IActionResult> Create(CategoryCreateDto createDto)
         {
             try
             {
-                var result = await _categoryService.CreateAsync(dto);
+                var result = await _categoryService.CreateAsync(createDto);
                 if (!result.IsSuccess)
+                {
                     return BadRequest(result);
-
+                }
                 return CreatedAtAction(nameof(GetById), new { id = result.Data.CategoryID }, result);
             }
             catch (Exception ex)
@@ -96,22 +99,21 @@ namespace RMS.WebApi.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Policy = "CATEGORY_UPDATE")]
-        public async Task<IActionResult> Update(int id, [FromBody] CategoryUpdateDto dto)
+        public async Task<IActionResult> Update(int id, CategoryUpdateDto updateDto)
         {
             try
             {
-                if (id != dto.CategoryID)
+                if (id != updateDto.CategoryID)
                 {
-                    return BadRequest(new ResponseDto<string>
-                    {
-                        IsSuccess = false,
-                        Message = "Category ID mismatch.",
-                        Code = "ID_MISMATCH"
-                    });
+                    return BadRequest("Category ID mismatch.");
                 }
-
-                var result = await _categoryService.UpdateAsync(dto);
-                return result.IsSuccess ? Ok(result) : BadRequest(result);
+                var result = await _categoryService.UpdateAsync(updateDto);
+                if (!result.IsSuccess)
+                {
+                    if (result.Code == "404") return NotFound(result);
+                    return BadRequest(result);
+                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -132,7 +134,12 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _categoryService.DeleteAsync(id);
-                return result.IsSuccess ? Ok(result) : NotFound(result);
+                if (!result.IsSuccess)
+                {
+                    if (result.Code == "404") return NotFound(result);
+                    return BadRequest(result);
+                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -147,13 +154,18 @@ namespace RMS.WebApi.Controllers
         }
 
         [HttpPut("{id}/status")]
-        [Authorize(Policy = "CATEGORY_UPDATE")]
+        [Authorize(Policy = "CATEGORY_TOGGLE_STATUS")]
         public async Task<IActionResult> UpdateStatus(int id, [FromBody] CategoryStatusUpdateDto dto)
         {
             try
             {
                 var result = await _categoryService.UpdateStatusAsync(id, dto.Status);
-                return result.IsSuccess ? Ok(result) : BadRequest(result);
+                if (!result.IsSuccess)
+                {
+                    if (result.Code == "404") return NotFound(result);
+                    return BadRequest(result);
+                }
+                return Ok(result);
             }
             catch (Exception ex)
             {

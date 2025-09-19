@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
-using RMS.Domain.Dtos.PermissionDTOs.InputDTOs;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.PermissionDTOs.InputDTOs;
 
 namespace RMS.WebApi.Controllers
 {

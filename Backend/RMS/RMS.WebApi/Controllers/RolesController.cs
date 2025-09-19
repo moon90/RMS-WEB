@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.Interfaces;
-using RMS.Domain.Dtos;
-using RMS.Domain.DTOs.RoleDTOs.InputDTOs;
-using RMS.Domain.DTOs.RolePermissionDTOs.OutputDTOs;
+using RMS.Application.DTOs;
+using RMS.Application.DTOs.RoleDTOs.InputDTOs;
+using RMS.Application.DTOs.RolePermissionDTOs.OutputDTOs;
 using RMS.Domain.Models.BaseModels;
 
 namespace RMS.WebApi.Controllers
@@ -125,6 +125,27 @@ namespace RMS.WebApi.Controllers
                 {
                     IsSuccess = false,
                     Message = "An error occurred while updating the role.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpPut("{id}/status")]
+        [Authorize(Policy = "ROLE_TOGGLE_STATUS")] // New permission
+        public async Task<IActionResult> UpdateRoleStatus(int id, [FromBody] RoleStatusUpdateDto dto)
+        {
+            try
+            {
+                var result = await _roleService.UpdateRoleStatusAsync(id, dto.Status);
+                return result.IsSuccess ? Ok(result) : BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<string>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while updating role status.",
                     Code = "INTERNAL_SERVER_ERROR",
                     Details = ex.Message
                 });
