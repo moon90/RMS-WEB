@@ -107,7 +107,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         builder => builder.WithOrigins("http://localhost:4200", "http://localhost:5173", "http://localhost:5229/", "https://localhost:7237/", "http://localhost:3000")
                           .AllowAnyHeader()
-                          .AllowAnyMethod());
+                          .AllowAnyMethod()
+                          .AllowCredentials()
+                          .SetIsOriginAllowedToAllowWildcardSubdomains());
 });
 
 builder.Services.AddAuthorization(options =>
