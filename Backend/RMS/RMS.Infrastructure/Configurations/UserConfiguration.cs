@@ -25,7 +25,7 @@ namespace RMS.Infrastructure.Configurations
             // Seed initial users
             builder.HasData(
 
-                new User { Id = 1, UserName = "admin", FullName = "System Administrator", Email = "admin@example.com", Phone = "0000000000", PasswordHash = "c4vD3op8WBxFFjk_XPZoHA", PasswordSalt = "qtixrauL4wM-8gdAhr6rAA", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
+                new User { Id = 1, UserName = "admin", FullName = "System Administrator", Email = "admin@example.com", Phone = "0000000000", PasswordHash = "Yy8eXlyYGaz5Mg6Zvd1nPQ", PasswordSalt = "7xe7O82HP8rVPMyNod2zpg", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
                     new User { Id = 2, UserName = "manager", FullName = "Manager User", Email = "manager@example.com", Phone = "0987654321", PasswordHash = "d4QTV4pwUJ-pwL2B2Y4V_w", PasswordSalt = "cZ7UtVxlTYIEb97pOqfoBQ", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
                     new User { Id = 3, UserName = "user", FullName = "Standard User", Email = "user@example.com", Phone = "0987654321", PasswordHash = "6Fn94S0iWXBrFbYv5v4Yxg", PasswordSalt = "6Fn94S0iWXBrFbYv5v4Yxg", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false }
 

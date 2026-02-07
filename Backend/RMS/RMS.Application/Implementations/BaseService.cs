@@ -505,7 +505,7 @@ namespace RMS.Application.Implementations
             }
         }
 
-        public virtual async Task<ResponseDto<TDto>> GetFisrtOrDefaultBySpecAsync<TDto>(BaseSpecification<TEntity> specs) where TDto : class
+        public virtual async Task<ResponseDto<TDto>> GetFirstOrDefaultBySpecAsync<TDto>(BaseSpecification<TEntity> specs) where TDto : class
         {
             try
             {
@@ -554,7 +554,7 @@ namespace RMS.Application.Implementations
             }
         }
 
-        public virtual async Task<ResponseDto<TEntity>> GetFisrtOrDefaultBySpecAsync(BaseSpecification<TEntity> specs)
+        public virtual async Task<ResponseDto<TEntity>> GetFirstOrDefaultBySpecAsync(BaseSpecification<TEntity> specs)
         {
             try
             {

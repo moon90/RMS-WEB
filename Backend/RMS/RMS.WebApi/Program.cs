@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using RMS.Application;
 using RMS.Application.Implementations;
 using RMS.Application.Interfaces;
+using RMS.Infrastructure;
 using RMS.Infrastructure.Persistences;
 using RMS.WebApi.Filters;
 using System.Text;
@@ -19,7 +20,8 @@ using RMS.Application.Interfaces; // Added for INotificationService
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddApplicationAndInfrastructureServices(builder.Configuration);
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<INotificationService, SignalRNotificationService>(); // Register SignalRNotificationService
@@ -148,6 +150,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("CATEGORY_CREATE", policy => policy.RequireClaim("Permission", "CATEGORY_CREATE"));
     options.AddPolicy("CATEGORY_UPDATE", policy => policy.RequireClaim("Permission", "CATEGORY_UPDATE"));
     options.AddPolicy("CATEGORY_DELETE", policy => policy.RequireClaim("Permission", "CATEGORY_DELETE"));
+    options.AddPolicy("CATEGORY_EXPORT", policy => policy.RequireClaim("Permission", "CATEGORY_VIEW"));
+    options.AddPolicy("CATEGORY_IMPORT", policy => policy.RequireClaim("Permission", "CATEGORY_CREATE"));
     options.AddPolicy("CATEGORY_TOGGLE_STATUS", policy => policy.RequireClaim("Permission", "CATEGORY_TOGGLE_STATUS"));
     options.AddPolicy("UNIT_VIEW", policy => policy.RequireClaim("Permission", "UNIT_VIEW"));
     options.AddPolicy("UNIT_CREATE", policy => policy.RequireClaim("Permission", "UNIT_CREATE"));
@@ -179,6 +183,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("INVENTORY_DELETE", policy => policy.RequireClaim("Permission", "INVENTORY_DELETE"));
     options.AddPolicy("INVENTORY_LOW_STOCK_VIEW", policy => policy.RequireClaim("Permission", "INVENTORY_LOW_STOCK_VIEW"));
     options.AddPolicy("ALERT_VIEW", policy => policy.RequireClaim("Permission", "ALERT_VIEW"));
+    options.AddPolicy("LOW_STOCK_ALERT_VIEW", policy => policy.RequireClaim("Permission", "LOW_STOCK_ALERT_VIEW"));
     options.AddPolicy("ALERT_ACKNOWLEDGE", policy => policy.RequireClaim("Permission", "ALERT_ACKNOWLEDGE"));
     options.AddPolicy("STOCK_TRANSACTION_VIEW", policy => policy.RequireClaim("Permission", "STOCK_TRANSACTION_VIEW"));
     options.AddPolicy("STOCK_TRANSACTION_CREATE", policy => policy.RequireClaim("Permission", "STOCK_TRANSACTION_CREATE"));
@@ -232,6 +237,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "RMS WEB API", Version = "v1" });
+    options.OperationFilter<FileUploadOperationFilter>();
 
     // Add JWT support
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -263,7 +269,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<RestaurantDbContext>();
-    
+    dbContext.Database.EnsureCreated();
 }
 
 app.UseStaticFiles();
@@ -282,24 +288,16 @@ app.Use(async (context, next) =>
 
 app.UseCors("AllowFrontend");
 
-app.UseHttpsRedirection();
-
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "RMS.API v1");
-    });
-}
-
+// Always use Swagger and SwaggerUI
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "RMS.API v1");
     c.RoutePrefix = "swagger"; // default, but explicitly safe
 });
+
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

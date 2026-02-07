@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Http;
+using RMS.Application.DTOs;
 using RMS.Application.DTOs.CategoryDTOs.InputDTOs;
 using RMS.Application.DTOs.CategoryDTOs.OutputDTOs;
-using RMS.Application.DTOs;
 using RMS.Domain.Models.BaseModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace RMS.Application.Interfaces
         Task<ResponseDto<CategoryDto>> GetByIdAsync(int id);
         Task<ResponseDto<IEnumerable<CategoryDto>>> GetAllCategoriesAsync();
         Task<PagedResult<CategoryDto>> GetAllCategoriesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
+        Task<FileExportDto> ExportCategoriesAsync();
+        Task<ImportResultDto> ImportCategoriesAsync(IFormFile file);
         Task<ResponseDto<CategoryDto>> CreateAsync(CategoryCreateDto createDto);
         Task<ResponseDto<CategoryDto>> UpdateAsync(CategoryUpdateDto updateDto);
         Task<ResponseDto<string>> DeleteAsync(int id);

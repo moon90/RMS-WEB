@@ -54,8 +54,8 @@ namespace RMS.Application.Interfaces
 
 
         // TODO: implement when using
-        Task<ResponseDto<TDto>> GetFisrtOrDefaultBySpecAsync<TDto>(BaseSpecification<TEntity> specs) where TDto : class;
-        Task<ResponseDto<TEntity>> GetFisrtOrDefaultBySpecAsync(BaseSpecification<TEntity> specs);
+        Task<ResponseDto<TDto>> GetFirstOrDefaultBySpecAsync<TDto>(BaseSpecification<TEntity> specs) where TDto : class;
+        Task<ResponseDto<TEntity>> GetFirstOrDefaultBySpecAsync(BaseSpecification<TEntity> specs);
         Task<ResponseDto<IEnumerable<TDto>>> GetBySpecAsync<TDto>(BaseSpecification<TEntity> specs);
         Task<ResponseDto<IQueryable<TEntity>>> GetBySpecAsync(BaseSpecification<TEntity> specs);
         Task<ResponseDto<object>> AddRangeAsync<TDto>(IEnumerable<TDto> dtos);

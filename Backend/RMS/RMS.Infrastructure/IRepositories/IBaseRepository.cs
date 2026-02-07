@@ -17,6 +17,7 @@ namespace RMS.Infrastructure.IRepositories
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
+        Task AddRangeAsync(IEnumerable<T> entities);
         Task<PagedResult<T>> GetPagedResultAsync(PagedQuery param, Expression<Func<T, object>>? orderByExpression = null, bool isDescending = false, IQueryable<T>? queryableInput = null);
         Task<IEnumerable<T>> GetOrderedAsync(BaseSpecification<T> specs);
         IQueryable<T> GetQueryable();

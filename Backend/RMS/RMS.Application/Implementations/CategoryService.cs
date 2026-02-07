@@ -1,17 +1,20 @@
 using AutoMapper;
+using CsvHelper;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using RMS.Application.DTOs;
 using RMS.Application.DTOs.CategoryDTOs.InputDTOs;
 using RMS.Application.DTOs.CategoryDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
-using RMS.Application.DTOs;
 using RMS.Domain.Entities;
-using RMS.Domain.Models.BaseModels;
-using RMS.Domain.Queries;
-using RMS.Infrastructure.IRepositories;
-using RMS.Domain.Interfaces;
-using System.Linq.Expressions;
 using RMS.Domain.Extensions;
+using RMS.Domain.Interfaces;
+using RMS.Domain.Models.BaseModels;
+using RMS.Infrastructure.IRepositories;
+using System.Globalization;
+using System.IO;
+using System.Linq.Expressions;
 
 namespace RMS.Application.Implementations
 {
@@ -32,7 +35,7 @@ namespace RMS.Application.Implementations
             IValidator<CategoryUpdateDto> updateValidator,
             IAuditLogService auditLogService,
             IUnitOfWork unitOfWork,
-            ILogger<Category> logger) 
+            ILogger<Category> logger)
             : base(mapper, categoryRepository, unitOfWork, logger)
         {
             _categoryRepository = categoryRepository;
@@ -42,6 +45,109 @@ namespace RMS.Application.Implementations
             _auditLogService = auditLogService;
             _unitOfWork = unitOfWork;
             _logger = logger;
+        }
+
+        public async Task<ImportResultDto> ImportCategoriesAsync(IFormFile file)
+        {
+            var result = new ImportResultDto();
+            if (file == null || file.Length == 0)
+            {
+                result.IsSuccess = false;
+                result.Message = "File is empty.";
+                return result;
+            }
+
+            if (Path.GetExtension(file.FileName).ToLower() != ".csv")
+            {
+                result.IsSuccess = false;
+                result.Message = "Invalid file format. Please upload a CSV file.";
+                return result;
+            }
+
+            var records = new List<CategoryCreateDto>();
+            try
+            {
+                using var reader = new StreamReader(file.OpenReadStream());
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+                records = csv.GetRecords<CategoryCreateDto>().ToList();
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Message = $"Error parsing CSV file: {ex.Message}";
+                return result;
+            }
+
+            var validationErrors = new List<ValidationErrorDto>();
+            var rowNumber = 2; // Assuming row 1 is header
+
+            // Check for duplicates within the CSV file
+            var duplicateNames = records.GroupBy(r => r.CategoryName.ToLower())
+                                      .Where(g => g.Count() > 1)
+                                      .Select(g => g.Key);
+
+            if (duplicateNames.Any())
+            {
+                foreach (var name in duplicateNames)
+                {
+                    validationErrors.Add(new ValidationErrorDto
+                    {
+                        RowNumber = 0, // General error
+                        PropertyName = "CategoryName",
+                        ErrorMessage = $"Duplicate category name '{name}' found within the CSV file."
+                    });
+                }
+            }
+
+
+            foreach (var record in records)
+            {
+                var validationResult = await _createValidator.ValidateAsync(record);
+                if (!validationResult.IsValid)
+                {
+                    foreach (var error in validationResult.Errors)
+                    {
+                        validationErrors.Add(new ValidationErrorDto
+                        {
+                            RowNumber = rowNumber,
+                            PropertyName = error.PropertyName,
+                            ErrorMessage = error.ErrorMessage
+                        });
+                    }
+                }
+                rowNumber++;
+            }
+
+            if (validationErrors.Count > 0)
+            {
+                result.IsSuccess = false;
+                result.Message = "Validation failed for one or more records.";
+                result.ValidationErrors = validationErrors;
+                return result;
+            }
+
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var categoriesToAdd = _mapper.Map<List<Category>>(records);
+                await _categoryRepository.AddRangeAsync(categoriesToAdd);
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitTransactionAsync();
+
+                result.IsSuccess = true;
+                result.Message = $"{records.Count} categories imported successfully.";
+                result.ImportedCount = records.Count;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Error during bulk category import.");
+                result.IsSuccess = false;
+                result.Message = "An unexpected error occurred during the import process. The operation has been rolled back.";
+                return result;
+            }
+
+            return result;
         }
 
         public async Task<ResponseDto<IEnumerable<CategoryDto>>> GetAllCategoriesAsync()
@@ -104,8 +210,30 @@ namespace RMS.Application.Implementations
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in GetAllCategoriesAsync (paged).");
-                throw; 
+                throw;
             }
+        }
+
+        public async Task<FileExportDto> ExportCategoriesAsync()
+        {
+            var categories = await _categoryRepository.GetAllAsync();
+            var categoryDtos = _mapper.Map<List<CategoryDto>>(categories);
+
+            using var memoryStream = new MemoryStream();
+            using (var writer = new StreamWriter(memoryStream, leaveOpen: true))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(categoryDtos);
+            }
+
+            memoryStream.Position = 0;
+
+            return new FileExportDto
+            {
+                Content = memoryStream.ToArray(),
+                ContentType = "text/csv",
+                FileName = $"categories_{DateTime.UtcNow:yyyyMMdd_HHmmss}.csv"
+            };
         }
 
         public async Task<ResponseDto<CategoryDto>> CreateAsync(CategoryCreateDto createDto)
@@ -122,16 +250,6 @@ namespace RMS.Application.Implementations
                 };
             }
 
-            if (await _categoryRepository.GetCategoryByNameAsync(createDto.CategoryName) != null)
-            {
-                return new ResponseDto<CategoryDto>
-                {
-                    IsSuccess = false,
-                    Message = "Category name already exists.",
-                    Code = "409"
-                };
-            }
-
             var category = _mapper.Map<Category>(createDto);
             await _categoryRepository.AddAsync(category);
             await _unitOfWork.SaveChangesAsync();
@@ -142,7 +260,7 @@ namespace RMS.Application.Implementations
                 action: "CreateCategory",
                 entityType: "Category",
                 entityId: $"CategoryId:{category.CategoryID}",
-                performedBy: "System", // Replace with actual user if available
+                performedBy: "System",
                 details: $"Category '{category.CategoryName}' created."
             );
 
@@ -180,16 +298,6 @@ namespace RMS.Application.Implementations
                 };
             }
 
-            if (await _categoryRepository.GetCategoryByNameAsync(updateDto.CategoryName) != null && existingCategory.CategoryName != updateDto.CategoryName)
-            {
-                return new ResponseDto<CategoryDto>
-                {
-                    IsSuccess = false,
-                    Message = "Category name already exists.",
-                    Code = "409"
-                };
-            }
-
             _mapper.Map(updateDto, existingCategory);
             await _categoryRepository.UpdateAsync(existingCategory);
             await _unitOfWork.SaveChangesAsync();
@@ -200,7 +308,7 @@ namespace RMS.Application.Implementations
                 action: "UpdateCategory",
                 entityType: "Category",
                 entityId: $"CategoryId:{existingCategory.CategoryID}",
-                performedBy: "System", // Replace with actual user if available
+                performedBy: "System",
                 details: $"Category '{existingCategory.CategoryName}' updated."
             );
 
@@ -233,7 +341,7 @@ namespace RMS.Application.Implementations
                 action: "DeleteCategory",
                 entityType: "Category",
                 entityId: $"CategoryId:{id}",
-                performedBy: "System", // Replace with actual user if available
+                performedBy: "System",
                 details: $"Category '{category.CategoryName}' deleted."
             );
 
@@ -267,7 +375,7 @@ namespace RMS.Application.Implementations
                 action: "UpdateCategoryStatus",
                 entityType: "Category",
                 entityId: $"CategoryId:{id}",
-                performedBy: "System", // Replace with actual user if available
+                performedBy: "System",
                 details: $"Category '{category.CategoryName}' status updated to {(status ? "Active" : "Inactive")}."
             );
 

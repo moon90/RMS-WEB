@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Report: RMS-WEB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3, h4 {
+            color: #0056b3;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        h1 { font-size: 2.2em; }
+        h2 { font-size: 1.8em; }
+        h3 { font-size: 1.4em; }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Technical Report: RMS-WEB (Restaurant Management System)</h1>
+
+    <div class="section">
+        <h2>1. Project Overview</h2>
+        <p><strong>Project:</strong> <code>RMS-WEB</code></p>
+        <p><strong>Description:</strong> A comprehensive, full-stack Restaurant Management System designed to handle various aspects of restaurant operations. The system includes a .NET-based backend API and a modern React-based frontend.</p>
+        <p><strong>Core Functionalities:</strong> The application appears to support user management, inventory and stock control, order processing, sales and purchase tracking, customer and supplier management, and real-time updates.</p>
+    </div>
+
+    <div class="section">
+        <h2>2. Backend Architecture</h2>
+        <p>The backend follows a clean, multi-layered architecture, promoting separation of concerns, maintainability, and scalability.</p>
+
+        <h3>Technology Stack:</h3>
+        <ul>
+            <li><strong>Framework:</strong> .NET 8</li>
+            <li><strong>Language:</strong> C#</li>
+            <li><strong>API Type:</strong> RESTful API with real-time capabilities.</li>
+            <li><strong>Database:</strong> SQL Server (inferred from schema files and common .NET practices).</li>
+        </ul>
+
+        <h3>Project Structure (<code>Backend/RMS/</code>):</h3>
+        <ul>
+            <li><code>RMS.Domain</code>: The core of the application, containing business entities, enums, and domain-specific logic. It has no dependencies on other layers.</li>
+            <li><code>RMS.Application</code>: Contains the application's business logic, services, DTOs (Data Transfer Objects), and feature implementations (e.g., <code>OrderService</code>, <code>InventoryService</code>). It orchestrates the domain logic and mediates between the API and the data layer.</li>
+            <li><code>RMS.Infrastructure</code>: Implements data persistence and other external concerns. It contains the Entity Framework Core <code>DbContext</code>, repository implementations, and data migrations.
+                <ul>
+                    <li><strong>File:</strong> <code>Backend/RMS/RMS.Infrastructure/Persistences/RestaurantDbContext.cs</code></li>
+                </ul>
+            </li>
+            <li><code>RMS.WebApi</code>: The entry point for the application. It exposes the RESTful API endpoints, handles requests, and manages cross-cutting concerns like authentication, authorization, and logging.
+                <ul>
+                    <li><strong>File:</strong> <code>Backend/RMS/RMS.WebApi/Program.cs</code></li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Data Access Layer:</h3>
+        <ul>
+            <li><strong>ORM:</strong> Entity Framework Core is used for data access.</li>
+            <li><strong>Patterns:</strong> The architecture employs the <strong>Repository and Unit of Work patterns</strong>. A generic <code>BaseRepository&lt;T&gt;</code> (<code>Backend/RMS/RMS.Infrastructure/Repositories/BaseRepository.cs</code>) provides common data access methods, ensuring that data-access logic is abstracted away from the application layer.</li>
+        </ul>
+
+        <h3>Authentication &amp; Authorization:</h3>
+        <ul>
+            <li><strong>Method:</strong> The system uses <strong>JSON Web Tokens (JWT)</strong> for securing API endpoints, as configured in <code>Program.cs</code>.</li>
+            <li><strong>Authorization:</strong> A granular, policy-based authorization system is in place. Access to specific endpoints is controlled by custom permission claims (e.g., <code>PRODUCT_CREATE</code>, <code>ORDER_VIEW</code>). This is a robust approach that allows for fine-grained control over user actions.</li>
+        </ul>
+
+        <h3>Database Schema:</h3>
+        <ul>
+            <li><strong>Source:</strong> <code>RM_Clean_Normalized_Schema.sql</code></li>
+            <li><strong>Design:</strong> The schema is well-designed and normalized. It includes tables for key entities such as <code>Users</code>, <code>Roles</code>, <code>Permissions</code>, <code>Products</code>, <code>Categories</code>, <code>Ingredients</code>, <code>Orders</code>, <code>Customers</code>, <code>Suppliers</code>, and <code>Inventory</code>, along with linking tables to manage relationships. An <code>AuditLog</code> table is also present to track system events.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>3. Frontend Architecture</h2>
+        <p>The frontend is a modern single-page application (SPA) built to provide a reactive and dynamic user interface.</p>
+
+        <h3>Technology Stack:</h3>
+        <ul>
+            <li><strong>Framework:</strong> React</li>
+            <li><strong>Build Tool:</strong> Vite</li>
+            <li><strong>Language:</strong> JavaScript (JSX)</li>
+            <li><strong>Styling:</strong> A hybrid approach using both <strong>Tailwind CSS</strong> for utility-first styling and <strong>Material-UI</strong> for pre-built components.</li>
+        </ul>
+
+        <h3>Key Libraries (<code>Frontend/rms-react-frontend/package.json</code>):</h3>
+        <ul>
+            <li><code>axios</code>: For making HTTP requests to the backend API.</li>
+            <li><code>react-router-dom</code>: For client-side routing and navigation.</li>
+            <li><code>@microsoft/signalr</code>: The client library for real-time communication.</li>
+            <li><code>recharts</code>: For data visualization and charts.</li>
+            <li><code>react-hot-toast</code>: For displaying notifications.</li>
+            <li><code>eslint</code>: For code linting and maintaining code quality.</li>
+        </ul>
+
+        <h3>Project Structure (<code>Frontend/rms-react-frontend/src/</code>):</h3>
+        <ul>
+            <li><code>components/</code>: Contains reusable UI components.</li>
+            <li><code>pages/</code>: Represents the different views or pages of the application.</li>
+            <li><code>context/</code>: Suggests the use of React's Context API for state management.</li>
+            <li><code>services/</code>: Likely contains modules for interacting with the backend API (e.g., API service wrappers using <code>axios</code>).</li>
+            <li><code>routes/</code>: For defining the application's routing structure.</li>
+            <li><code>useSignalR.js</code>: A custom React hook to manage the real-time connection with the backend, simplifying its usage across components.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>4. Real-time Communication</h2>
+        <p>The application uses <strong>SignalR</strong> for real-time features, enabling the server to push updates to connected clients instantly.</p>
+
+        <ul>
+            <li><strong>Backend:</strong> A SignalR hub named <code>RMSHub</code> is defined in the <code>RMS.WebApi</code> project (<code>Backend/RMS/RMS.WebApi/Hubs/RMSHub.cs</code>, inferred from setup).</li>
+            <li><strong>Frontend:</strong> The frontend utilizes the <code>@microsoft/signalr</code> client and a custom <code>useSignalR.js</code> hook to connect to the hub, listen for events, and update the UI in real-time without needing to poll the server. This is ideal for features like live order tracking, inventory alerts, or notifications.</li>
+        </ul>
+    </div>
+
+    <p>This report provides a solid technical foundation for understanding the project's design and architecture.</p>
+</body>
+</html>

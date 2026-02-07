@@ -47,6 +47,27 @@ namespace RMS.WebApi.Controllers
             }
         }
 
+        [HttpGet("export")]
+        [Authorize(Policy = "CATEGORY_EXPORT")]
+        public async Task<IActionResult> Export()
+        {
+            try
+            {
+                var fileDto = await _categoryService.ExportCategoriesAsync();
+                return File(fileDto.Content, fileDto.ContentType, fileDto.FileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while exporting categories.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
+            }
+        }
+
         [HttpGet("{id}")]
         [Authorize(Policy = "CATEGORY_VIEW")]
         public async Task<IActionResult> GetById(int id)
@@ -93,6 +114,30 @@ namespace RMS.WebApi.Controllers
                     Message = "An error occurred while creating the category.",
                     Code = "INTERNAL_SERVER_ERROR",
                     Details = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("import")]
+        [Authorize(Policy = "CATEGORY_IMPORT")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Import(IFormFile file)
+        {
+            try
+            {
+                var result = await _categoryService.ImportCategoriesAsync(file);
+                if (!result.IsSuccess)
+                {
+                    return BadRequest(result);
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ImportResultDto
+                {
+                    IsSuccess = false,
+                    Message = $"An unexpected error occurred: {ex.Message}"
                 });
             }
         }

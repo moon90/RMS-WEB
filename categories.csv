@@ -1,0 +1,7 @@
+CategoryID,CategoryName,Status
+1,Appetizers,True
+2,Main Courses,True
+3,Desserts,True
+4,Drinks,True
+1001,Combo Pack 1,True
+1002,Combo Pack 2,True
