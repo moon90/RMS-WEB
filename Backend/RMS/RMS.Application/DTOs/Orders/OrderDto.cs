@@ -21,6 +21,10 @@ namespace RMS.Application.DTOs.Orders
         public decimal ChangeAmount { get; set; }
         public int? DriverID { get; set; }
         public int? CustomerID { get; set; }
+        
+        // New Additions
+        public string? TokenNumber { get; set; }
+        public decimal TipAmount { get; set; }
 
         public CustomerDto Customer { get; set; } // Navigation property for Customer
         public ICollection<OrderDetailDto> OrderDetails { get; set; }

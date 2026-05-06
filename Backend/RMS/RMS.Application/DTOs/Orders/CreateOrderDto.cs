@@ -20,6 +20,9 @@ namespace RMS.Application.DTOs.Orders
         public decimal ChangeAmount { get; set; } = 0m;
         public int? DriverID { get; set; }
         public int? CustomerID { get; set; }
+        
+        // New Addition
+        public decimal TipAmount { get; set; } = 0m;
 
         public List<CreateOrderDetailDto> OrderDetails { get; set; }
     }

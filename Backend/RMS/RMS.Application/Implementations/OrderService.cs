@@ -122,6 +122,9 @@ namespace RMS.Application.Implementations
             try
             {
                 var order = _mapper.Map<Order>(orderDto);
+                // Generate Token Number for the Queue system
+                order.TokenNumber = $"#{new Random().Next(100, 999)}";
+                
                 var createdOrder = await _orderRepository.AddAsync(order);
 
                 decimal totalCostOfGoodsSold = 0;
@@ -156,6 +159,8 @@ namespace RMS.Application.Implementations
                     DiscountAmount = createdOrder.DiscountAmount,
                     FinalAmount = createdOrder.Total - createdOrder.DiscountAmount,
                     PaymentMethod = createdOrder.PaymentMethod,
+                    TokenNumber = createdOrder.TokenNumber, // Pass token to Sale
+                    TipAmount = createdOrder.TipAmount,     // Pass tip to Sale
                     SaleDetails = createdOrder.OrderDetails.Select(od => new SaleDetail
                     {
                         ProductID = od.ProductID,

@@ -15,6 +15,10 @@ namespace RMS.Domain.Entities
         public string PaymentMethod { get; set; }
         public DateTime CreatedOn { get; set; }
         public int CategoryId { get; set; }
+        
+        // New Additions
+        public string? TokenNumber { get; set; } // Token for Queue System
+        public decimal TipAmount { get; set; }   // Track gratuity/tips
 
         public virtual Category Category { get; set; }
         public virtual Customer Customer { get; set; }

@@ -23,6 +23,10 @@ namespace RMS.Domain.Entities
         public string? PaymentStatus { get; set; }
         public string? PaymentMethod { get; set; }
         public decimal AmountPaid { get; set; }
+        
+        // New Additions
+        public string? TokenNumber { get; set; } // Token for Queue System
+        public decimal TipAmount { get; set; }   // Track gratuity/tips
 
         // Navigation property for OrderDetails
         public ICollection<OrderDetail> OrderDetails { get; set; }

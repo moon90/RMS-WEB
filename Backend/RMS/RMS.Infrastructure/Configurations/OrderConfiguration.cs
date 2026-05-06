@@ -52,6 +52,14 @@ namespace RMS.Infrastructure.Configurations
 
             builder.Property(o => o.AmountPaid)
                 .HasColumnType("DECIMAL(18,2)");
+                
+            builder.Property(o => o.TokenNumber)
+                .HasColumnType("VARCHAR(10)")
+                .IsRequired(false);
+
+            builder.Property(o => o.TipAmount)
+                .HasColumnType("DECIMAL(18,2)")
+                .HasDefaultValue(0m);
 
             // Relationships
             builder.HasMany(o => o.OrderDetails)

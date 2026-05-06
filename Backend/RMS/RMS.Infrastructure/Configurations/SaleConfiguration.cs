@@ -27,6 +27,14 @@ namespace RMS.Infrastructure.Configurations
 
             builder.Property(s => s.PaymentMethod)
                 .HasMaxLength(50);
+                
+            builder.Property(s => s.TokenNumber)
+                .HasColumnType("VARCHAR(10)")
+                .IsRequired(false);
+
+            builder.Property(s => s.TipAmount)
+                .HasColumnType("DECIMAL(18,2)")
+                .HasDefaultValue(0m);
 
             builder.HasOne(s => s.Customer)
                 .WithMany()
