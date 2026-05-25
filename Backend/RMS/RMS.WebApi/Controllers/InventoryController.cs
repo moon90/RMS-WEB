@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs.InventoryDTOs.InputDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs;
 using System;
 using System.Threading.Tasks;
@@ -43,21 +44,12 @@ namespace RMS.WebApi.Controllers
 
         [HttpGet]
         [Authorize(Policy = "INVENTORY_VIEW")]
-        public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null)
+        public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null, [FromQuery] int? categoryId = null)
         {
             try
             {
-                var result = await _inventoryService.GetAllAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
-
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Inventory retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                var result = await _inventoryService.GetAllAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, categoryId);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -156,7 +148,7 @@ namespace RMS.WebApi.Controllers
 
         [HttpPut("{id}/status")]
         [Authorize(Policy = "INVENTORY_UPDATE")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateInventoryDto dto)
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] InventoryStatusUpdateDto dto)
         {
             try
             {
@@ -177,20 +169,19 @@ namespace RMS.WebApi.Controllers
 
         [HttpGet("LowStock")]
         [Authorize(Policy = "INVENTORY_LOW_STOCK_VIEW")]
-        public async Task<IActionResult> GetLowStockProducts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetLowStockProducts(
+            [FromQuery] int pageNumber = 1, 
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? searchQuery = null,
+            [FromQuery] string? sortColumn = null,
+            [FromQuery] string? sortDirection = null,
+            [FromQuery] bool? status = null,
+            [FromQuery] int? categoryId = null)
         {
             try
             {
-                var result = await _inventoryService.GetLowStockProductsAsync(pageNumber, pageSize);
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Low stock retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                var result = await _inventoryService.GetLowStockProductsAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, categoryId);
+                return Ok(result);
             }
             catch (Exception ex)
             {

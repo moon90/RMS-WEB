@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentValidation;
 using RMS.Application.Interfaces;
 using RMS.Application.DTOs;
@@ -6,7 +6,7 @@ using RMS.Application.DTOs.PermissionDTOs.InputDTOs;
 using RMS.Application.DTOs.PermissionDTOs.OutputDTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
-using RMS.Infrastructure.Interfaces;
+using RMS.Infrastructure.IRepositories;
 
 namespace RMS.Application.Implementations
 {
@@ -25,7 +25,7 @@ namespace RMS.Application.Implementations
             _permissionUpdateValidator = permissionUpdateValidator;
         }
 
-        public async Task<PagedResult<PermissionDto>> GetAllPermissionsAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<PermissionDto>>> GetAllPermissionsAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
             try
             {
@@ -34,12 +34,24 @@ namespace RMS.Application.Implementations
                 var permissionDtos = _mapper.Map<List<PermissionDto>>(permissions);
 
                 var pagedResult = new PagedResult<PermissionDto>(permissionDtos, pageNumber, pageSize, totalCount);
-                return pagedResult;
+                return new ResponseDto<PagedResult<PermissionDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Permissions retrieved successfully.",
+                    Code = "200",
+                    Data = pagedResult
+                };
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in GetAllPermissionsAsync (paged): {ex.Message}");
-                throw; // Re-throw or handle as appropriate for your application's error handling strategy
+                return new ResponseDto<PagedResult<PermissionDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving permissions.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 

@@ -1,3 +1,5 @@
+using RMS.Application.Interfaces;
+
 namespace RMS.Application.DTOs.CustomerDTOs.OutputDTOs
 {
     public class CustomerDto

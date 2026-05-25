@@ -1,6 +1,7 @@
 
 using FluentValidation;
 using RMS.Application.DTOs;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.Validators.PurchaseValidators
 {

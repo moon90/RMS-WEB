@@ -29,10 +29,10 @@ namespace RMS.Infrastructure.Configurations
 
             // Seed Categories
             builder.HasData(
-                new Category { CategoryID = 1, CategoryName = "Appetizers", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
-                new Category { CategoryID = 2, CategoryName = "Main Courses", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
-                new Category { CategoryID = 3, CategoryName = "Desserts", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
-                new Category { CategoryID = 4, CategoryName = "Drinks", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false }
+                new Category { CategoryID = 1, CategoryName = "Artisan Burgers", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
+                new Category { CategoryID = 2, CategoryName = "Signature Steaks", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
+                new Category { CategoryID = 3, CategoryName = "Fine Pastas", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false },
+                new Category { CategoryID = 4, CategoryName = "Craft Cocktails", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow, IsDeleted = false }
             );
         }
     }

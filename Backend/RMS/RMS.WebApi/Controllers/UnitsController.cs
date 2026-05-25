@@ -1,10 +1,11 @@
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs.UnitDTOs.InputDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs;
 using System.Threading.Tasks;
+using System;
 
 namespace RMS.WebApi.Controllers
 {
@@ -48,16 +49,7 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _unitService.GetAllAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
-
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Units retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                return Ok(result);
             }
             catch (Exception ex)
             {

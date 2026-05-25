@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +7,7 @@ using RMS.Application.DTOs.UserDTOs.InputDTOs;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Application.Helpers;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 
 namespace RMS.WebApi.Controllers
 {
@@ -31,6 +32,7 @@ namespace RMS.WebApi.Controllers
         }
 
         [HttpPost("login")]
+        [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("LoginPolicy")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
             try

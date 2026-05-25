@@ -2,7 +2,7 @@ using Microsoft.IdentityModel.Tokens;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
 using RMS.Application.DTOs;
-using RMS.Infrastructure.Interfaces;
+using RMS.Infrastructure.IRepositories;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -35,6 +35,7 @@ namespace RMS.Application.Implementations
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim("BranchID", user.BranchID?.ToString() ?? ""),
                 };
 
                 foreach (var role in user.Roles)

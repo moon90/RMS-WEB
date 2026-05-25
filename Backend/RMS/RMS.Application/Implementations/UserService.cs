@@ -7,7 +7,7 @@ using RMS.Application.Helpers;
 using RMS.Application.Interfaces;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
-using RMS.Infrastructure.Interfaces;
+using RMS.Infrastructure.IRepositories;
 
 namespace RMS.Application.Implementations
 {
@@ -243,7 +243,7 @@ namespace RMS.Application.Implementations
             }
         }
 
-        public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, string? role)
+        public async Task<ResponseDto<PagedResult<UserDto>>> GetAllUsersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, string? role)
         {
             try
             {
@@ -252,13 +252,23 @@ namespace RMS.Application.Implementations
                 var userDtos = _mapper.Map<List<UserDto>>(users);
 
                 var pagedResult = new PagedResult<UserDto>(userDtos, pageNumber, pageSize, totalCount);
-                return pagedResult;
+                return new ResponseDto<PagedResult<UserDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Users retrieved successfully.",
+                    Code = "200",
+                    Data = pagedResult
+                };
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it as appropriate for your application's error handling strategy
-                // For now, returning an empty PagedResult on error.
-                return new PagedResult<UserDto>(new List<UserDto>(), pageNumber, pageSize, 0);
+                return new ResponseDto<PagedResult<UserDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving users.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 

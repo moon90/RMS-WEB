@@ -1,6 +1,7 @@
 using RMS.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs.CategoryDTOs.InputDTOs;
 using Microsoft.AspNetCore.Authorization;
 
@@ -25,15 +26,7 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _categoryService.GetAllCategoriesAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Categories retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                return Ok(result);
             }
             catch (Exception ex)
             {

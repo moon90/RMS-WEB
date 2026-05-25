@@ -45,8 +45,8 @@ namespace RMS.Infrastructure.Configurations
 
             // Relationships
             builder.HasOne(i => i.Product)
-                .WithMany()
-                .HasForeignKey(i => i.ProductID)
+                .WithOne(p => p.Inventory)
+                .HasForeignKey<Inventory>(i => i.ProductID)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent deletion of Product if Inventory exists
 
             // Seed Data

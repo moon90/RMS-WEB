@@ -1,21 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+using RMS.Domain.Interfaces;
+using RMS.Infrastructure.IRepositories;
 using RMS.Domain.Entities;
-using RMS.Infrastructure.Interfaces;
 using RMS.Infrastructure.Persistences;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RMS.Domain.Extensions;
 using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace RMS.Infrastructure.Repositories
 {
-    public class PermissionRepository : IPermissionRepository
+    public class PermissionRepository : BaseRepository<Permission>, IPermissionRepository
     {
-        private readonly RestaurantDbContext _context;
-
-        public PermissionRepository(RestaurantDbContext context)
+        public PermissionRepository(RestaurantDbContext context, ITenantService tenantService) : base(context, tenantService)
         {
-            _context = context;
         }
 
         public async Task<Permission?> GetPermissionByIdAsync(int permissionId)

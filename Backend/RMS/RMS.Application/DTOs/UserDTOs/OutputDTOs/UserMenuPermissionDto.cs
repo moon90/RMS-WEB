@@ -1,4 +1,5 @@
 using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs.UserDTOs.OutputDTOs
 {

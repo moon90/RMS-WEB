@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs;
 using RMS.Application.DTOs.PermissionDTOs.InputDTOs;
 
@@ -27,16 +28,7 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _permissionService.GetAllPermissionsAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
-
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Permissions retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                return result.IsSuccess ? Ok(result) : StatusCode(500, result);
             }
             catch (Exception ex)
             {

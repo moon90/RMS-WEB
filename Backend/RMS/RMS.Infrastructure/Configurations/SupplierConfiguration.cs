@@ -31,9 +31,9 @@ namespace RMS.Infrastructure.Configurations
 
             // Seed
             builder.HasData(
-                new Supplier { Id = 1, SupplierName = "Supplier A", ContactPerson = "Person A", Phone = "1234567890", Email = "supplier.a@example.com", Address = "Address A", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
-                new Supplier { Id = 2, SupplierName = "Supplier B", ContactPerson = "Person B", Phone = "0987654321", Email = "supplier.b@example.com", Address = "Address B", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
-                new Supplier { Id = 3, SupplierName = "Supplier C", ContactPerson = "Person C", Phone = "1122334455", Email = "supplier.c@example.com", Address = "Address C", Status = false, CreatedBy = "system", CreatedDate = DateTime.UtcNow }
+                new Supplier { Id = 1, SupplierName = "Global Wagyu Select", ContactPerson = "James Tanaka", Phone = "+81-3-1234-5678", Email = "orders@wagyu-select.jp", Address = "4-12-1 Ginza, Chuo-ku, Tokyo", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new Supplier { Id = 2, SupplierName = "Mediterranean Fine Oils", ContactPerson = "Sofia Rossi", Phone = "+39-06-9876-5432", Email = "exports@rossi-oils.it", Address = "Via dei Condotti, 12, Rome", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new Supplier { Id = 3, SupplierName = "Express Coffee Roasters", ContactPerson = "Mark Brew", Phone = "+1-212-555-0199", Email = "wholesale@express-roasts.com", Address = "789 Roaster Row, Brooklyn, NY", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow }
             );
         }
     }

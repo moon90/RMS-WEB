@@ -1,4 +1,4 @@
-﻿using RMS.Domain.Models.BaseModels;
+using RMS.Domain.Models.BaseModels;
 using RMS.Domain.Queries;
 using RMS.Domain.Specification;
 using System;
@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMS.Infrastructure.IRepositories
+namespace RMS.Domain.Interfaces
 {
     public interface IBaseRepository<T> where T : class
     {
@@ -21,6 +21,7 @@ namespace RMS.Infrastructure.IRepositories
         Task<PagedResult<T>> GetPagedResultAsync(PagedQuery param, Expression<Func<T, object>>? orderByExpression = null, bool isDescending = false, IQueryable<T>? queryableInput = null);
         Task<IEnumerable<T>> GetOrderedAsync(BaseSpecification<T> specs);
         IQueryable<T> GetQueryable();
+        IQueryable<T> GetQueryableIgnoreTenantFilters();
         Task<IEnumerable<T>> GetBySpecAsync(BaseSpecification<T> specs);
         Task<bool> ExistsAsync(BaseSpecification<T> spec);
         Task<bool> ExistsAsync(Expression<Func<T, bool>> expression);

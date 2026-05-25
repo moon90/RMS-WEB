@@ -38,7 +38,13 @@ namespace RMS.Infrastructure.Configurations
 
             builder.HasOne(s => s.Customer)
                 .WithMany()
-                .HasForeignKey(s => s.CustomerID);
+                .HasForeignKey(s => s.CustomerID)
+                .IsRequired(false);
+
+            builder.HasOne(s => s.Branch)
+                .WithMany(b => b.Sales)
+                .HasForeignKey(s => s.BranchID)
+                .IsRequired(false);
 
             builder.HasMany(s => s.SaleDetails)
                 .WithOne(sd => sd.Sale)

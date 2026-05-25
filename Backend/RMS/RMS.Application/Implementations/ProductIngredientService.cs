@@ -62,50 +62,72 @@ namespace RMS.Application.Implementations
             return new ResponseDto<ProductIngredientDto> { IsSuccess = true, Data = productIngredientDto, Code = "200" };
         }
 
-        public async Task<PagedResult<ProductIngredientDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<ProductIngredientDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
-            var query = _productIngredientRepository.GetQueryable();
-
-            query = query.Include(pi => pi.Product)
-                         .Include(pi => pi.Ingredient)
-                         .Include(pi => pi.Unit);
-
-            if (status.HasValue)
+            try
             {
-                query = query.Where(pi => pi.Status == status.Value);
-            }
+                var query = _productIngredientRepository.GetQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(pi => pi.Product != null && pi.Product.ProductName.Contains(searchQuery) || pi.Ingredient != null && pi.Ingredient.Name.Contains(searchQuery));
-            }
+                query = query.Include(pi => pi.Product)
+                             .Include(pi => pi.Ingredient)
+                             .Include(pi => pi.Unit);
 
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                if (sortColumn.Equals("productName", StringComparison.OrdinalIgnoreCase))
+                if (status.HasValue)
                 {
-                    if (sortDirection?.ToLower() == "desc")
+                    query = query.Where(pi => pi.Status == status.Value);
+                }
+
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(pi => pi.Product != null && pi.Product.ProductName.Contains(searchQuery) || pi.Ingredient != null && pi.Ingredient.Name.Contains(searchQuery));
+                }
+
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    if (sortColumn.Equals("productName", StringComparison.OrdinalIgnoreCase))
                     {
-                        query = query.OrderByDescending(pi => pi.Product.ProductName);
+                        if (sortDirection?.ToLower() == "desc")
+                        {
+                            query = query.OrderByDescending(pi => pi.Product.ProductName);
+                        }
+                        else
+                        {
+                            query = query.OrderBy(pi => pi.Product.ProductName);
+                        }
                     }
                     else
                     {
-                        query = query.OrderBy(pi => pi.Product.ProductName);
+                        query = query.ApplySort(sortColumn, sortDirection ?? "asc");
                     }
                 }
                 else
                 {
-                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                    query = query.OrderBy(pi => pi.Product.ProductName); // Default sort
                 }
-            }
-            else
-            {
-                query = query.OrderBy(pi => pi.Product.ProductName); // Default sort
-            }
 
-            var pagedResult = await _productIngredientRepository.GetPagedResultAsync(new PagedQuery { PageNumber = pageNumber, PageSize = pageSize }, null, false, query);
-            var productIngredientDtos = _mapper.Map<List<ProductIngredientDto>>(pagedResult.Items);
-            return new PagedResult<ProductIngredientDto>(productIngredientDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                var pagedResult = await _productIngredientRepository.GetPagedResultAsync(new PagedQuery { PageNumber = pageNumber, PageSize = pageSize }, null, false, query);
+                var productIngredientDtos = _mapper.Map<List<ProductIngredientDto>>(pagedResult.Items);
+                var result = new PagedResult<ProductIngredientDto>(productIngredientDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+
+                return new ResponseDto<PagedResult<ProductIngredientDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Product ingredients retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in GetAllAsync (product ingredients).");
+                return new ResponseDto<PagedResult<ProductIngredientDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving product ingredients.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
         public async Task<ResponseDto<ProductIngredientDto>> CreateAsync(CreateProductIngredientDto createDto)

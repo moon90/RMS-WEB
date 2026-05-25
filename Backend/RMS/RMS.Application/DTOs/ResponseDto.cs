@@ -1,4 +1,5 @@
 using RMS.Core.Enum;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs
 {

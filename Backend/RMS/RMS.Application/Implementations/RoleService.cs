@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentValidation;
 using RMS.Application.DTOs;
 using RMS.Application.DTOs.RoleDTOs.InputDTOs;
@@ -8,7 +8,7 @@ using RMS.Application.DTOs.RolePermissionDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
-using RMS.Infrastructure.Interfaces;
+using RMS.Infrastructure.IRepositories;
 
 namespace RMS.Application.Implementations
 {
@@ -75,7 +75,7 @@ namespace RMS.Application.Implementations
             }
         }
 
-        public async Task<PagedResult<RoleDto>> GetAllRolesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection)
+        public async Task<ResponseDto<PagedResult<RoleDto>>> GetAllRolesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection)
         {
             try
             {
@@ -83,13 +83,24 @@ namespace RMS.Application.Implementations
                 var roleDtos = _mapper.Map<List<RoleDto>>(roles);
 
                 var pagedResult = new PagedResult<RoleDto>(roleDtos, pageNumber, pageSize, totalCount);
-                return pagedResult;
+                return new ResponseDto<PagedResult<RoleDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Roles retrieved successfully.",
+                    Code = "200",
+                    Data = pagedResult
+                };
             }
             catch (Exception ex)
             {
-                // Log the exception
                 Console.WriteLine($"Error in GetAllRolesAsync (paged): {ex.Message}");
-                throw; // Re-throw or handle as appropriate for your application's error handling strategy
+                return new ResponseDto<PagedResult<RoleDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving roles.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
@@ -384,22 +395,12 @@ namespace RMS.Application.Implementations
             {
                 var rolePermissions = await _rolePermissionRepository.GetRolePermissionsByRoleIdAsync(roleId);
 
-                if (rolePermissions == null || !rolePermissions.Any())
-                {
-                    return new ResponseDto<IEnumerable<RolePermissionDto>>
-                    {
-                        IsSuccess = false,
-                        Message = "No permissions found for this role.",
-                        Code = "204"
-                    };
-                }
-
-                var rolePermissionDtos = _mapper.Map<IEnumerable<RolePermissionDto>>(rolePermissions);
+                var rolePermissionDtos = _mapper.Map<IEnumerable<RolePermissionDto>>(rolePermissions ?? Enumerable.Empty<object>());
 
                 return new ResponseDto<IEnumerable<RolePermissionDto>>
                 {
                     IsSuccess = true,
-                    Message = "Permissions retrieved successfully for the role.",
+                    Message = rolePermissionDtos.Any() ? "Permissions retrieved successfully for the role." : "No permissions assigned to this role.",
                     Code = "200",
                     Data = rolePermissionDtos
                 };

@@ -45,9 +45,11 @@ namespace RMS.Infrastructure.Configurations
                 new Staff
                 {
                     StaffID = 1,
-                    StaffName = "Alice Johnson",
-                    StaffPhone = "111-222-3333",
-                    StaffRole = "Manager",
+                    StaffName = "Chef Marco Pierre",
+                    StaffPhone = "555-1001",
+                    StaffRole = "Executive Chef",
+                    HourlyRate = 45.00m,
+                    BranchID = 1,
                     Status = true,
                     CreatedBy = "system",
                     CreatedDate = DateTime.UtcNow,
@@ -56,9 +58,24 @@ namespace RMS.Infrastructure.Configurations
                 new Staff
                 {
                     StaffID = 2,
-                    StaffName = "Bob Williams",
-                    StaffPhone = "444-555-6666",
-                    StaffRole = "Chef",
+                    StaffName = "Elena Rodriguez",
+                    StaffPhone = "555-1002",
+                    StaffRole = "Floor Manager",
+                    HourlyRate = 35.00m,
+                    BranchID = 1,
+                    Status = true,
+                    CreatedBy = "system",
+                    CreatedDate = DateTime.UtcNow,
+                    IsDeleted = false
+                },
+                new Staff
+                {
+                    StaffID = 3,
+                    StaffName = "James Wilson",
+                    StaffPhone = "555-2001",
+                    StaffRole = "Head Waiter",
+                    HourlyRate = 22.00m,
+                    BranchID = 2,
                     Status = true,
                     CreatedBy = "system",
                     CreatedDate = DateTime.UtcNow,

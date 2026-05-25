@@ -3,6 +3,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
 using System.Threading.Tasks;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.Services.Processing
 {

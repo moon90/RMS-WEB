@@ -1,3 +1,5 @@
+using RMS.Application.Interfaces;
+
 namespace RMS.Application.DTOs.MenuDTOs.InputDTOs
 {
     public class MenuCreateDto

@@ -1,3 +1,5 @@
+using RMS.Application.Interfaces;
+
 namespace RMS.Application.DTOs.SplitPaymentDTOs
 {
     public class CreateSplitPaymentDto

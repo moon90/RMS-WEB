@@ -58,32 +58,54 @@ namespace RMS.Application.Implementations
             return new ResponseDto<UnitDto> { IsSuccess = true, Data = unitDto, Code = "200" };
         }
 
-        public async Task<PagedResult<UnitDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<UnitDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
-            var query = _unitRepository.GetQueryable();
-
-            if (status.HasValue)
+            try
             {
-                query = query.Where(u => u.Status == status.Value);
-            }
+                var query = _unitRepository.GetQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(u => u.Name.Contains(searchQuery) || u.ShortCode.Contains(searchQuery));
-            }
+                if (status.HasValue)
+                {
+                    query = query.Where(u => u.Status == status.Value);
+                }
 
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
-            }
-            else
-            {
-                query = query.OrderBy(u => u.Name);
-            }
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(u => u.Name.Contains(searchQuery) || u.ShortCode.Contains(searchQuery));
+                }
 
-            var pagedResult = await _unitRepository.GetPagedResultAsync(new PagedQuery { PageNumber = pageNumber, PageSize = pageSize }, null, false, query);
-            var unitDtos = _mapper.Map<List<UnitDto>>(pagedResult.Items);
-            return new PagedResult<UnitDto>(unitDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                }
+                else
+                {
+                    query = query.OrderBy(u => u.Name);
+                }
+
+                var pagedResult = await _unitRepository.GetPagedResultAsync(new PagedQuery { PageNumber = pageNumber, PageSize = pageSize }, null, false, query);
+                var unitDtos = _mapper.Map<List<UnitDto>>(pagedResult.Items);
+                var result = new PagedResult<UnitDto>(unitDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+
+                return new ResponseDto<PagedResult<UnitDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Units retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving units.");
+                return new ResponseDto<PagedResult<UnitDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving units.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
         public async Task<ResponseDto<UnitDto>> CreateAsync(CreateUnitDto createDto)

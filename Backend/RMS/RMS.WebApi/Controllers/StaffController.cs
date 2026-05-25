@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs.StaffDTOs.InputDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs;
 using System;
 using System.Threading.Tasks;
@@ -48,16 +49,7 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _staffService.GetAllAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
-
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Staff retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                return Ok(result);
             }
             catch (Exception ex)
             {

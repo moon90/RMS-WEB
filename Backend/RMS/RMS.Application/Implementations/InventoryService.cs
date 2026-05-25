@@ -21,6 +21,7 @@ namespace RMS.Application.Implementations
     public class InventoryService : IInventoryService
     {
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<CreateInventoryDto> _createValidator;
         private readonly IValidator<UpdateInventoryDto> _updateValidator;
@@ -30,6 +31,7 @@ namespace RMS.Application.Implementations
 
         public InventoryService(
             IInventoryRepository inventoryRepository,
+            IProductRepository productRepository,
             IMapper mapper,
             IValidator<CreateInventoryDto> createValidator,
             IValidator<UpdateInventoryDto> updateValidator,
@@ -38,6 +40,7 @@ namespace RMS.Application.Implementations
             ILogger<InventoryService> logger)
         {
             _inventoryRepository = inventoryRepository;
+            _productRepository = productRepository;
             _mapper = mapper;
             _createValidator = createValidator;
             _updateValidator = updateValidator;
@@ -60,48 +63,102 @@ namespace RMS.Application.Implementations
             return new ResponseDto<InventoryDto> { IsSuccess = true, Data = inventoryDto, Code = "200" };
         }
 
-        public async Task<PagedResult<InventoryDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<InventoryDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, int? categoryId = null)
         {
-            var query = _inventoryRepository.GetQueryable();
-
-            query = query.Include(i => i.Product);
-
-            if (status.HasValue)
+            try
             {
-                query = query.Where(i => i.Status == status.Value);
-            }
+                // REPAIR PROTOCOL: Auto-detect products missing inventory entries
+                // We fetch products that do not have a matching record in the Inventory table
+                var productsWithoutInventory = await _productRepository.GetQueryable()
+                    .Where(p => !_inventoryRepository.GetQueryableIgnoreTenantFilters().Any(i => i.ProductID == p.Id))
+                    .ToListAsync();
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(i => i.Product != null && i.Product.ProductName.Contains(searchQuery));
-            }
-
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                if (sortColumn.Equals("productName", StringComparison.OrdinalIgnoreCase))
+                if (productsWithoutInventory.Any())
                 {
-                    if (sortDirection?.ToLower() == "desc")
+                    _logger.LogInformation("Repair Protocol: Identified {Count} products missing inventory nodes.", productsWithoutInventory.Count);
+                    foreach (var product in productsWithoutInventory)
                     {
-                        query = query.OrderByDescending(i => i.Product.ProductName);
+                        var repairInventory = new Inventory
+                        {
+                            ProductID = product.Id,
+                            InitialStock = 0,
+                            CurrentStock = 0,
+                            MinStockLevel = 5,
+                            LastUpdated = DateTime.UtcNow,
+                            Status = true,
+                            BranchID = product.BranchID ?? 1 // Sync with product branch
+                        };
+                        await _inventoryRepository.AddAsync(repairInventory);
+                    }
+                    await _unitOfWork.SaveChangesAsync();
+                    _logger.LogInformation("Repair Protocol: Inventory registry synchronized with {Count} new nodes.", productsWithoutInventory.Count);
+                }
+
+                var query = _inventoryRepository.GetQueryable();
+
+                query = query.Include(i => i.Product);
+
+                if (status.HasValue)
+                {
+                    query = query.Where(u => u.Status == status.Value);
+                }
+
+                if (categoryId.HasValue)
+                {
+                    query = query.Where(i => i.Product != null && i.Product.CategoryID == categoryId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(i => i.Product != null && i.Product.ProductName.Contains(searchQuery));
+                }
+
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    if (sortColumn.Equals("productName", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (sortDirection?.ToLower() == "desc")
+                        {
+                            query = query.OrderByDescending(i => i.Product.ProductName);
+                        }
+                        else
+                        {
+                            query = query.OrderBy(i => i.Product.ProductName);
+                        }
                     }
                     else
                     {
-                        query = query.OrderBy(i => i.Product.ProductName);
+                        query = query.ApplySort(sortColumn, sortDirection ?? "asc");
                     }
                 }
                 else
                 {
-                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                    query = query.OrderBy(i => i.Product.ProductName);
                 }
-            }
-            else
-            {
-                query = query.OrderBy(i => i.Product.ProductName);
-            }
 
-            var pagedResult = await query.ToPagedList(pageNumber, pageSize);
-            var inventoryDtos = _mapper.Map<List<InventoryDto>>(pagedResult.Items);
-            return new PagedResult<InventoryDto>(inventoryDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                var pagedResult = await query.ToPagedList(pageNumber, pageSize);
+                var inventoryDtos = _mapper.Map<List<InventoryDto>>(pagedResult.Items);
+                var result = new PagedResult<InventoryDto>(inventoryDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+
+                return new ResponseDto<PagedResult<InventoryDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Inventory retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving inventory.");
+                return new ResponseDto<PagedResult<InventoryDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving inventory.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
         public async Task<ResponseDto<InventoryDto>> CreateAsync(CreateInventoryDto createDto)
@@ -114,7 +171,16 @@ namespace RMS.Application.Implementations
                 return new ResponseDto<InventoryDto> { IsSuccess = false, Message = "Validation failed.", Code = "400", Details = errorDetails };
             }
 
+            // Ensure no duplicate inventory exists for this product
+            var existingInventory = await _inventoryRepository.GetByProductIdAsync(createDto.ProductID);
+            if (existingInventory != null)
+            {
+                return new ResponseDto<InventoryDto> { IsSuccess = false, Message = "Inventory record already exists for this product.", Code = "409" };
+            }
+
             var inventory = _mapper.Map<Inventory>(createDto);
+            inventory.CurrentStock = inventory.InitialStock; // Initialize CurrentStock
+            
             await _inventoryRepository.AddAsync(inventory);
             await _unitOfWork.SaveChangesAsync();
 
@@ -181,18 +247,91 @@ namespace RMS.Application.Implementations
             return new ResponseDto<string> { IsSuccess = true, Message = "Inventory status updated successfully.", Code = "200" };
         }
 
-        public async Task<PagedResult<InventoryDto>> GetLowStockProductsAsync(int pageNumber, int pageSize)
+        public async Task<ResponseDto<LowStockResultDto>> GetLowStockProductsAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, int? categoryId = null)
         {
-            var query = _inventoryRepository.GetQueryable()
-                                                                .Include(i => i.Product)
-                                                                .Where(i => i.CurrentStock < i.MinStockLevel);
+            try
+            {
+                var query = _inventoryRepository.GetQueryable()
+                                                .Include(i => i.Product)
+                                                .Where(i => i.CurrentStock < i.MinStockLevel);
 
-            // Add sorting for low stock products
-            query = query.OrderBy(i => i.Product.ProductName); // Default sort for low stock
+                if (status.HasValue)
+                {
+                    query = query.Where(i => i.Status == status.Value);
+                }
 
-            var pagedResult = await query.ToPagedList(pageNumber, pageSize);
-            var inventoryDtos = _mapper.Map<List<InventoryDto>>(pagedResult.Items);
-            return new PagedResult<InventoryDto>(inventoryDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                if (categoryId.HasValue)
+                {
+                    query = query.Where(i => i.Product != null && i.Product.CategoryID == categoryId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(i => i.Product != null && i.Product.ProductName.Contains(searchQuery));
+                }
+
+                // Calculate Summary Stats BEFORE Paging
+                var allLowItems = await query.ToListAsync();
+                var criticalCount = allLowItems.Count(i => i.CurrentStock <= 0);
+                var warningCount = allLowItems.Count(i => i.CurrentStock > 0);
+
+                // Estimated investment = (InitialStock - CurrentStock) * CostPrice (if available)
+                // Using Product.ProductPrice as a proxy if CostPrice is not in Inventory yet
+                decimal totalInvestment = allLowItems.Sum(i => (decimal)(i.InitialStock - i.CurrentStock) * (i.Product?.ProductPrice * 0.6m ?? 0));
+
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    if (sortColumn.Equals("productName", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (sortDirection?.ToLower() == "desc")
+                        {
+                            query = query.OrderByDescending(i => i.Product.ProductName);
+                        }
+                        else
+                        {
+                            query = query.OrderBy(i => i.Product.ProductName);
+                        }
+                    }
+                    else
+                    {
+                        query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                    }
+                }
+                else
+                {
+                    query = query.OrderBy(i => i.Product.ProductName);
+                }
+
+                var pagedResult = await query.ToPagedList(pageNumber, pageSize);
+                var inventoryDtos = _mapper.Map<List<InventoryDto>>(pagedResult.Items);
+
+                var result = new LowStockResultDto
+                {
+                    PagedData = new PagedResult<InventoryDto>(inventoryDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords),
+                    CriticalItemsCount = criticalCount,
+                    WarningItemsCount = warningCount,
+                    TotalRestockInvestment = Math.Round(totalInvestment, 2)
+                };
+
+                return new ResponseDto<LowStockResultDto>
+                {
+                    IsSuccess = true,
+                    Message = "Low stock products retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving low stock products.");
+                return new ResponseDto<LowStockResultDto>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving low stock products.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
     }
 }

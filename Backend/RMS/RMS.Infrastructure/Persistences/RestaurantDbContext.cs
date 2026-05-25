@@ -1,16 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RMS.Domain.Entities;
+using RMS.Domain.Interfaces;
 using RMS.Infrastructure.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RMS.Infrastructure.Persistences
 {
-    public class RestaurantDbContext(DbContextOptions<RestaurantDbContext> options) : DbContext(options)
+    public class RestaurantDbContext : DbContext
     {
+        private readonly ITenantService _tenantService;
+
+        public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options, ITenantService tenantService) : base(options)
+        {
+            _tenantService = tenantService;
+        }
 
         // DbSet properties for each entity
         public DbSet<User> Users { get; set; }
@@ -23,6 +31,7 @@ namespace RMS.Infrastructure.Persistences
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Unit> Units { get; set; }
+        public DbSet<UnitConversion> UnitConversions { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -41,10 +50,18 @@ namespace RMS.Infrastructure.Persistences
         public DbSet<Sale> Sales { get; set; }
         public DbSet<SaleDetail> SaleDetails { get; set; }
         public DbSet<SplitPayment> SplitPayments { get; set; }
+        public DbSet<SystemSetting> SystemSettings { get; set; }
         public DbSet<Alert> Alerts { get; set; }
+        public DbSet<Branch> Branches { get; set; }
+        public DbSet<StockTransfer> StockTransfers { get; set; }
+        public DbSet<StockTransferDetail> StockTransferDetails { get; set; }
+        public DbSet<InventoryAudit> InventoryAudits { get; set; }
+        public DbSet<InventoryAuditDetail> InventoryAuditDetails { get; set; }
+        public DbSet<Payroll> Payrolls { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new BranchConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
@@ -54,6 +71,7 @@ namespace RMS.Infrastructure.Persistences
             modelBuilder.ApplyConfiguration(new RoleMenuConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new UnitConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitConversionConfiguration());
             modelBuilder.ApplyConfiguration(new SupplierConfiguration());
             modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
@@ -74,6 +92,11 @@ namespace RMS.Infrastructure.Persistences
             modelBuilder.ApplyConfiguration(new SaleDetailConfiguration());
             modelBuilder.ApplyConfiguration(new SplitPaymentConfiguration());
             modelBuilder.ApplyConfiguration(new AlertConfiguration());
+            modelBuilder.ApplyConfiguration(new StockTransferConfiguration());
+            modelBuilder.ApplyConfiguration(new StockTransferDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new InventoryAuditConfiguration());
+            modelBuilder.ApplyConfiguration(new InventoryAuditDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new PayrollConfiguration());
         }
 
     }

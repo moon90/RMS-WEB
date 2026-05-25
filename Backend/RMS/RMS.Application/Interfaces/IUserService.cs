@@ -24,7 +24,7 @@ namespace RMS.Application.Interfaces
 
         // User listing
         Task<ResponseDto<IEnumerable<UserDto>>> GetAllUsersAsync();
-        Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, string? role);
+        Task<ResponseDto<PagedResult<UserDto>>> GetAllUsersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, string? role);
 
         // Role & Permission
         Task<ResponseDto<List<string>>> GetRolePermissionsAsync(int userId);

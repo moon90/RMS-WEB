@@ -177,7 +177,7 @@ namespace RMS.Application.Implementations
             }
         }
 
-        public async Task<PagedResult<CategoryDto>> GetAllCategoriesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<CategoryDto>>> GetAllCategoriesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
             try
             {
@@ -205,12 +205,26 @@ namespace RMS.Application.Implementations
                 var pagedResult = await query.ToPagedList(pageNumber, pageSize);
 
                 var categoryDtos = _mapper.Map<List<CategoryDto>>(pagedResult.Items);
-                return new PagedResult<CategoryDto>(categoryDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                var result = new PagedResult<CategoryDto>(categoryDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                
+                return new ResponseDto<PagedResult<CategoryDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Categories retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in GetAllCategoriesAsync (paged).");
-                throw;
+                return new ResponseDto<PagedResult<CategoryDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving categories.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 

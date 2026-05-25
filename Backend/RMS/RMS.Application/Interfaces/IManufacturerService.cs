@@ -9,7 +9,7 @@ namespace RMS.Application.Interfaces
     public interface IManufacturerService
     {
         Task<ResponseDto<ManufacturerDto>> GetByIdAsync(int id);
-        Task<PagedResult<ManufacturerDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
+        Task<ResponseDto<PagedResult<ManufacturerDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
         Task<ResponseDto<ManufacturerDto>> CreateAsync(CreateManufacturerDto createDto);
         Task<ResponseDto<ManufacturerDto>> UpdateAsync(UpdateManufacturerDto updateDto);
         Task<ResponseDto<string>> DeleteAsync(int id);

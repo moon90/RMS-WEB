@@ -15,5 +15,6 @@ namespace RMS.Domain.Interfaces
         Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel);
         Task RollbackTransactionAsync();
         Task CommitTransactionAsync();
+        IBaseRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
     }
 }

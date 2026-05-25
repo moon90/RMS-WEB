@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -12,22 +13,22 @@ namespace RMS.WebApi.Controllers
     [ApiController]
     public class LowStockAlertsController : ControllerBase
     {
-        private readonly IAuditLogService _auditLogService;
+        private readonly IAlertService _alertService;
 
-        public LowStockAlertsController(IAuditLogService auditLogService)
+        public LowStockAlertsController(IAlertService alertService)
         {
-            _auditLogService = auditLogService;
+            _alertService = alertService;
         }
 
         [HttpGet]
         [Authorize(Policy = "LOW_STOCK_ALERT_VIEW")]
         public async Task<IActionResult> GetLowStockAlerts()
         {
-            var alerts = await _auditLogService.GetAuditLogsByTypeAsync("LowStockAlert");
+            var alerts = await _alertService.GetAlertsAsync();
             return Ok(new ResponseDto<object>
             {
                 IsSuccess = true,
-                Message = "Low stock alerts retrieved successfully",
+                Message = "Active alerts retrieved successfully",
                 Code = "200",
                 Data = alerts
             });

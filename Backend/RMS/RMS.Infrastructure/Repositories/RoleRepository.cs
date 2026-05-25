@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using RMS.Infrastructure.IRepositories;
 using RMS.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -6,19 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RMS.Domain.Interfaces;
-using RMS.Infrastructure.Interfaces;
 using RMS.Infrastructure.Persistences;
 using RMS.Domain.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace RMS.Infrastructure.Repositories
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository : BaseRepository<Role>, IRoleRepository
     {
-        private readonly RestaurantDbContext _context;
-
-        public RoleRepository(RestaurantDbContext context)
+        public RoleRepository(RestaurantDbContext context, ITenantService tenantService) : base(context, tenantService)
         {
-            _context = context;
         }
 
         public async Task<Role> GetRoleByNameAsync(string roleName)

@@ -1,12 +1,13 @@
 
 using System;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs.ProductDTOs.OutputDTOs
 {
     public class ProductDto
     {
         public int Id { get; set; }
-        public required string ProductName { get; set; }
+        public string? ProductName { get; set; }
         public decimal ProductPrice { get; set; }
         public decimal? CostPrice { get; set; }
         public string? ProductBarcode { get; set; }
@@ -20,5 +21,6 @@ namespace RMS.Application.DTOs.ProductDTOs.OutputDTOs
         public string? CategoryName { get; set; }
         public string? SupplierName { get; set; }
         public string? ManufacturerName { get; set; }
+        public int StockQuantity { get; set; }
     }
 }

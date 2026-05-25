@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using RMS.Infrastructure.IRepositories;
 using RMS.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -6,19 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RMS.Domain.Interfaces;
-using RMS.Infrastructure.Interfaces;
 using RMS.Infrastructure.Persistences;
 using RMS.Domain.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace RMS.Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        private readonly RestaurantDbContext _context;
-
-        public UserRepository(RestaurantDbContext context)
+        public UserRepository(RestaurantDbContext context, ITenantService tenantService) : base(context, tenantService)
         {
-            _context = context;
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
@@ -107,6 +104,7 @@ namespace RMS.Infrastructure.Repositories
             try
             {
                 var user = await _context.Users
+                .IgnoreQueryFilters()
                 .Include(u => u.UserRoles)
                     .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.UserName == username);
@@ -171,6 +169,7 @@ namespace RMS.Infrastructure.Repositories
             try
             {
                 return await _context.Users
+                    .IgnoreQueryFilters()
                     .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken && u.RefreshTokenExpiry > DateTime.UtcNow);
             }
             catch (Exception ex)
@@ -184,7 +183,9 @@ namespace RMS.Infrastructure.Repositories
         {
             try
             {
-                var user = await _context.Users.FindAsync(userId);
+                var user = await _context.Users
+                    .IgnoreQueryFilters()
+                    .FirstOrDefaultAsync(u => u.Id == userId);
                 if (user != null)
                 {
                     user.RefreshToken = refreshToken;
@@ -203,7 +204,9 @@ namespace RMS.Infrastructure.Repositories
         {
             try
             {
-                return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+                return await _context.Users
+                    .IgnoreQueryFilters()
+                    .FirstOrDefaultAsync(u => u.Email == email);
             }
             catch (Exception ex)
             {

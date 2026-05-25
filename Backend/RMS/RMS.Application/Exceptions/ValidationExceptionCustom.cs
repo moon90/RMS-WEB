@@ -2,6 +2,7 @@ using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.Exceptions
 {

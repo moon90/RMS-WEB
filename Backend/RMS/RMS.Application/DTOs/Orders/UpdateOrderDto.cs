@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RMS.Application.Interfaces;
 using RMS.Domain.Models.BaseModels; // For Result<T>
 
 namespace RMS.Application.DTOs.Orders
@@ -14,6 +15,8 @@ namespace RMS.Application.DTOs.Orders
         public string OrderStatus { get; set; }
         public string OrderType { get; set; }
         public decimal Total { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal ServiceChargeAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal DiscountPercentage { get; set; }
         public int? PromotionID { get; set; }
@@ -21,6 +24,11 @@ namespace RMS.Application.DTOs.Orders
         public decimal ChangeAmount { get; set; }
         public int? DriverID { get; set; }
         public int? CustomerID { get; set; }
+        public string? PaymentStatus { get; set; }
+        public string? PaymentMethod { get; set; }
+        
+        // Conflict Handling
+        public DateTime? LastModified { get; set; }
 
         public List<UpdateOrderDetailDto> OrderDetails { get; set; }
     }

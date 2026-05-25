@@ -1,5 +1,6 @@
 using FluentValidation;
 using RMS.Application.DTOs.StockTransactionDTOs.InputDTOs;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.Validators.StockTransactionValidators
 {
@@ -25,6 +26,16 @@ namespace RMS.Application.Validators.StockTransactionValidators
 
             RuleFor(x => x.TransactionSource)
                 .MaximumLength(50).WithMessage("Transaction Source cannot exceed 50 characters.");
+
+            RuleFor(x => x)
+                .Must(x => x.ProductID.HasValue || x.IngredientID.HasValue)
+                .WithMessage("Either Product ID or Ingredient ID must be provided.");
+
+            When(x => !string.IsNullOrEmpty(x.AdjustmentType),
+                () =>
+                {
+                    RuleFor(x => x.Reason).NotEmpty().WithMessage("Reason is required for stock adjustments.");
+                });
         }
     }
 }

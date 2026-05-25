@@ -66,9 +66,25 @@ namespace RMS.Infrastructure.Configurations
                 .WithOne(od => od.Order)
                 .HasForeignKey(od => od.OrderID);
 
-            builder.HasOne<Customer>()
+            builder.HasOne(o => o.Customer)
                 .WithMany()
-                .HasForeignKey(o => o.CustomerID);
+                .HasForeignKey(o => o.CustomerID)
+                .IsRequired(false);
+
+            builder.HasOne(o => o.Branch)
+                .WithMany(b => b.Orders)
+                .HasForeignKey(o => o.BranchID)
+                .IsRequired(false);
+
+            builder.HasOne(o => o.Waiter)
+                .WithMany()
+                .HasForeignKey(o => o.StaffID)
+                .IsRequired(false);
+
+            builder.HasOne(o => o.Chef)
+                .WithMany()
+                .HasForeignKey(o => o.ChefID)
+                .IsRequired(false);
 
             // Seed Data
             builder.HasData(

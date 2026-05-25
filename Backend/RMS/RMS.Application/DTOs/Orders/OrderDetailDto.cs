@@ -1,5 +1,6 @@
 using System;
 using RMS.Application.DTOs.ProductDTOs.OutputDTOs;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs.Orders
 {
@@ -14,6 +15,6 @@ namespace RMS.Application.DTOs.Orders
         public decimal Amount { get; set; }
         public int? PromotionDetailID { get; set; }
 
-        public ProductDto Product { get; set; } // Navigation property for Product
+        public ProductDto? Product { get; set; } // Navigation property for Product
     }
 }

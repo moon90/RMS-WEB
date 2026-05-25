@@ -13,6 +13,6 @@ namespace RMS.Application.Interfaces
         Task<ResponseDto<OrderDto>> UpdateOrderAsync(int id, UpdateOrderDto orderDto);
         Task<ResponseDto<bool>> DeleteOrderAsync(int id);
         Task<ResponseDto<OrderDto>> ProcessPaymentForOrderAsync(ProcessPaymentForOrderDto paymentDto);
-        Task<ResponseDto<OrderDto>> UpdateOrderStatusAsync(int id, string orderStatus);
+        Task<ResponseDto<OrderDto>> UpdateOrderStatusAsync(int id, string orderStatus, int? chefId = null);
     }
 }

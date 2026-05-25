@@ -8,7 +8,7 @@ namespace RMS.Application.Interfaces
     public interface IDiningTableService
     {
         Task<ResponseDto<DiningTableDto>> GetDiningTableByIdAsync(int id);
-        Task<ResponseDto<PagedResult<DiningTableDto>>> GetAllDiningTablesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection);
+        Task<ResponseDto<PagedResult<DiningTableDto>>> GetAllDiningTablesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status = null);
         Task<ResponseDto<DiningTableDto>> CreateDiningTableAsync(CreateDiningTableDto diningTableDto);
         Task<ResponseDto<DiningTableDto>> UpdateDiningTableAsync(int id, UpdateDiningTableDto diningTableDto);
         Task<ResponseDto<bool>> UpdateDiningTableStatusAsync(int id, bool status);

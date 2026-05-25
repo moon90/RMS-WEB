@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs
 {

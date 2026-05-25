@@ -1,5 +1,7 @@
+using RMS.Infrastructure.IRepositories;
+using RMS.Domain.Interfaces;
 using RMS.Domain.Entities;
-using RMS.Infrastructure.IRepositories; // Correct interface namespace
+using RMS.Domain.Interfaces; // Correct interface namespace
 using RMS.Infrastructure.Persistences;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,13 +15,13 @@ namespace RMS.Infrastructure.Repositories
 {
     public class DiningTableRepository : BaseRepository<DiningTable>, IDiningTableRepository
     {
-        public DiningTableRepository(RestaurantDbContext context) : base(context)
+        public DiningTableRepository(RestaurantDbContext context, ITenantService tenantService) : base(context, tenantService)
         {
         }
 
         public async Task<IEnumerable<DiningTable>> GetAvailableTablesAsync()
         {
-            return await _context.Set<DiningTable>().Where(dt => dt.Status == true).ToListAsync();
+            return await GetQueryable().Where(dt => dt.Status == true).ToListAsync();
         }
     }
 }

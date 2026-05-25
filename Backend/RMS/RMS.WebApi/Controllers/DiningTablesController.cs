@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs;
 using RMS.Application.DTOs.DiningTables;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Domain.Models.BaseModels; // For Result<T>
 using RMS.Domain.Queries; // For PagedQuery
 using System.Threading.Tasks;
@@ -48,19 +49,12 @@ namespace RMS.WebApi.Controllers
 
         [HttpGet]
         [Authorize(Policy = "DINING_TABLE_VIEW")]
-        public async Task<IActionResult> GetAllDiningTables([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null)
+        public async Task<IActionResult> GetAllDiningTables([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null)
         {
             try
             {
-                var result = await _diningTableService.GetAllDiningTablesAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection);
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Dining Tables retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-                return Ok(response);
+                var result = await _diningTableService.GetAllDiningTablesAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
+                return Ok(result);
             }
             catch (Exception ex)
             {

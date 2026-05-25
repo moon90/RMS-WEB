@@ -60,32 +60,54 @@ namespace RMS.Application.Implementations
             return new ResponseDto<ManufacturerDto> { IsSuccess = true, Data = manufacturerDto, Code = "200" };
         }
 
-        public async Task<PagedResult<ManufacturerDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<ManufacturerDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
-            var query = _manufacturerRepository.GetQueryable();
-
-            if (status.HasValue)
+            try
             {
-                query = query.Where(m => m.Status == status.Value);
-            }
+                var query = _manufacturerRepository.GetQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(m => m.ManufacturerName.Contains(searchQuery));
-            }
+                if (status.HasValue)
+                {
+                    query = query.Where(m => m.Status == status.Value);
+                }
 
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
-            }
-            else
-            {
-                query = query.OrderBy(m => m.ManufacturerName);
-            }
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(m => m.ManufacturerName.Contains(searchQuery));
+                }
 
-            var pagedResult = await query.ToPagedList(pageNumber, pageSize);
-            var manufacturerDtos = _mapper.Map<List<ManufacturerDto>>(pagedResult.Items);
-            return new PagedResult<ManufacturerDto>(manufacturerDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                }
+                else
+                {
+                    query = query.OrderBy(m => m.ManufacturerName);
+                }
+
+                var pagedResult = await query.ToPagedList(pageNumber, pageSize);
+                var dtos = _mapper.Map<List<ManufacturerDto>>(pagedResult.Items);
+                var result = new PagedResult<ManufacturerDto>(dtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+
+                return new ResponseDto<PagedResult<ManufacturerDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Manufacturers retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving manufacturers.");
+                return new ResponseDto<PagedResult<ManufacturerDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving manufacturers.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
         public async Task<ResponseDto<ManufacturerDto>> CreateAsync(CreateManufacturerDto createDto)

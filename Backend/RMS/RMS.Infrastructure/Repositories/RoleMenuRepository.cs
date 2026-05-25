@@ -1,23 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+using RMS.Infrastructure.IRepositories;
 using RMS.Domain.Entities;
 using RMS.Domain.Interfaces;
-using RMS.Infrastructure.Interfaces;
 using RMS.Infrastructure.Persistences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace RMS.Infrastructure.Repositories
 {
-    public class RoleMenuRepository : IRoleMenuRepository
+    public class RoleMenuRepository : BaseRepository<RoleMenu>, IRoleMenuRepository
     {
-        private readonly RestaurantDbContext _context;
-
-        public RoleMenuRepository(RestaurantDbContext context)
+        public RoleMenuRepository(RestaurantDbContext context, ITenantService tenantService) : base(context, tenantService)
         {
-            _context = context;
         }
 
         public async Task<RoleMenu?> GetRoleMenuByIdAsync(int roleMenuId)

@@ -1,5 +1,6 @@
 using FluentValidation;
 using RMS.Application.DTOs.Orders;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.Validators.OrderValidators
 {
@@ -9,7 +10,7 @@ namespace RMS.Application.Validators.OrderValidators
         {
             RuleFor(x => x.OrderDate).NotEmpty().WithMessage("Order Date is required.");
             RuleFor(x => x.OrderTime).NotEmpty().WithMessage("Order Time is required.").MaximumLength(15);
-            RuleFor(x => x.TableName).NotEmpty().WithMessage("Table Name is required.").MaximumLength(50);
+            RuleFor(x => x.TableName).NotEmpty().When(x => x.OrderType == "DineIn").WithMessage("Table Name is required for Dine-In orders.").MaximumLength(50);
             RuleFor(x => x.WaiterName).MaximumLength(50);
             RuleFor(x => x.OrderStatus).NotEmpty().WithMessage("Order Status is required.").MaximumLength(20);
             RuleFor(x => x.OrderType).NotEmpty().WithMessage("Order Type is required.").MaximumLength(20);

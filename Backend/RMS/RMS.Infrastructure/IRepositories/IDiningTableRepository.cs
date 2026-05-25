@@ -1,5 +1,6 @@
+using RMS.Domain.Interfaces;
 using RMS.Domain.Entities;
-using RMS.Infrastructure.IRepositories; // Correct namespace for IBaseRepository
+using RMS.Domain.Interfaces; // Correct namespace for IBaseRepository
 
 namespace RMS.Infrastructure.IRepositories
 {

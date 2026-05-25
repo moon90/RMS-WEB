@@ -1,4 +1,5 @@
 using System;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs.StockTransactionDTOs.InputDTOs
 {
@@ -15,6 +16,9 @@ namespace RMS.Application.DTOs.StockTransactionDTOs.InputDTOs
         public int? SaleID { get; set; }
         public int? PurchaseID { get; set; }
         public string? TransactionSource { get; set; }
+        public string? AdjustmentType { get; set; }
+        public string? Reason { get; set; }
+        public int? IngredientID { get; set; }
         public bool Status { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace RMS.Application.Interfaces
     public interface IStaffService
     {
         Task<ResponseDto<StaffDto>> GetByIdAsync(int id);
-        Task<PagedResult<StaffDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
+        Task<ResponseDto<PagedResult<StaffDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
         Task<ResponseDto<StaffDto>> CreateAsync(CreateStaffDto createDto);
         Task<ResponseDto<StaffDto>> UpdateAsync(UpdateStaffDto updateDto);
         Task<ResponseDto<string>> DeleteAsync(int id);

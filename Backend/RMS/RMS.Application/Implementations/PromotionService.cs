@@ -78,10 +78,19 @@ namespace RMS.Application.Implementations
 
         public async Task<ResponseDto<PromotionDto>> CreatePromotionAsync(CreatePromotionDto createPromotionDto)
         {
-            var promotion = _mapper.Map<Promotion>(createPromotionDto);
-            await _promotionRepository.AddAsync(promotion);
-            await _unitOfWork.CommitTransactionAsync();
-            return ResponseDto<PromotionDto>.CreateSuccessResponse(_mapper.Map<PromotionDto>(promotion));
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var promotion = _mapper.Map<Promotion>(createPromotionDto);
+                await _promotionRepository.AddAsync(promotion);
+                await _unitOfWork.CommitTransactionAsync();
+                return ResponseDto<PromotionDto>.CreateSuccessResponse(_mapper.Map<PromotionDto>(promotion));
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return ResponseDto<PromotionDto>.CreateErrorResponse(ex.Message);
+            }
         }
 
         public async Task<ResponseDto<PromotionDto>> UpdatePromotionAsync(int id, UpdatePromotionDto updatePromotionDto)
@@ -92,10 +101,19 @@ namespace RMS.Application.Implementations
                 return ResponseDto<PromotionDto>.CreateErrorResponse("Promotion not found.", ApiErrorCode.NotFound);
             }
 
-            _mapper.Map(updatePromotionDto, existingPromotion);
-            await _promotionRepository.UpdateAsync(existingPromotion);
-            await _unitOfWork.CommitTransactionAsync();
-            return ResponseDto<PromotionDto>.CreateSuccessResponse(_mapper.Map<PromotionDto>(existingPromotion));
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                _mapper.Map(updatePromotionDto, existingPromotion);
+                await _promotionRepository.UpdateAsync(existingPromotion);
+                await _unitOfWork.CommitTransactionAsync();
+                return ResponseDto<PromotionDto>.CreateSuccessResponse(_mapper.Map<PromotionDto>(existingPromotion));
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return ResponseDto<PromotionDto>.CreateErrorResponse(ex.Message);
+            }
         }
 
         public async Task<ResponseDto<bool>> DeletePromotionAsync(int id)
@@ -106,9 +124,18 @@ namespace RMS.Application.Implementations
                 return ResponseDto<bool>.CreateErrorResponse("Promotion not found.", ApiErrorCode.NotFound);
             }
 
-            await _promotionRepository.DeleteAsync(promotion);
-            await _unitOfWork.CommitTransactionAsync();
-            return ResponseDto<bool>.CreateSuccessResponse(true);
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                await _promotionRepository.DeleteAsync(promotion);
+                await _unitOfWork.CommitTransactionAsync();
+                return ResponseDto<bool>.CreateSuccessResponse(true);
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return ResponseDto<bool>.CreateErrorResponse(ex.Message);
+            }
         }
 
         public async Task<ResponseDto<bool>> UpdateStatusAsync(int id, bool status)
@@ -119,12 +146,21 @@ namespace RMS.Application.Implementations
                 return ResponseDto<bool>.CreateErrorResponse("Promotion not found.", ApiErrorCode.NotFound);
             }
 
-            promotion.IsActive = status;
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                promotion.IsActive = status;
 
-            await _promotionRepository.UpdateAsync(promotion);
-            await _unitOfWork.CommitTransactionAsync();
+                await _promotionRepository.UpdateAsync(promotion);
+                await _unitOfWork.CommitTransactionAsync();
 
-            return ResponseDto<bool>.CreateSuccessResponse(true);
+                return ResponseDto<bool>.CreateSuccessResponse(true);
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return ResponseDto<bool>.CreateErrorResponse(ex.Message);
+            }
         }
     }
 }

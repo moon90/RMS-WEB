@@ -1,4 +1,5 @@
 using System;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs.InventoryDTOs.InputDTOs
 {
@@ -7,6 +8,7 @@ namespace RMS.Application.DTOs.InventoryDTOs.InputDTOs
         public int InventoryID { get; set; }
         public int ProductID { get; set; }
         public int InitialStock { get; set; }
+        public int CurrentStock { get; set; }
         public int MinStockLevel { get; set; }
         public bool Status { get; set; }
     }

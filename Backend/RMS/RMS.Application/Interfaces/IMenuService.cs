@@ -1,4 +1,4 @@
-﻿using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
+using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Application.DTOs;
 using RMS.Application.DTOs.MenuDTOs.InputDTOs;
@@ -12,7 +12,7 @@ namespace RMS.Application.Interfaces
     {
         Task<ResponseDto<MenuDto>> GetMenuByIdAsync(int menuId);
         Task<ResponseDto<IEnumerable<MenuDto>>> GetAllMenusAsync();
-        Task<PagedResult<MenuDto>> GetAllMenusAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection);
+        Task<ResponseDto<PagedResult<MenuDto>>> GetAllMenusAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection);
         Task<ResponseDto<int>> CreateMenuAsync(MenuCreateDto menuCreateDto);
         Task<ResponseDto<object>> UpdateMenuAsync(MenuUpdateDto menuUpdateDto);
         Task<ResponseDto<object>> DeleteMenuAsync(int menuId);

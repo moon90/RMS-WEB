@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.WebApi.Hubs;
 using System.Threading.Tasks;
 using RMS.Application.DTOs.RealtimeUpdates; // Added for DTOs

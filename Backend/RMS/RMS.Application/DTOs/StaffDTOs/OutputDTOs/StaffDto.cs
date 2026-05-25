@@ -1,3 +1,5 @@
+using RMS.Application.Interfaces;
+
 namespace RMS.Application.DTOs.StaffDTOs.OutputDTOs
 {
     public class StaffDto

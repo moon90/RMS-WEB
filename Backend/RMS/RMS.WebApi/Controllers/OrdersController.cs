@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs.Orders;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using System.Threading.Tasks;
 using RMS.Domain.Queries;
 using RMS.Application.DTOs;
@@ -52,23 +53,20 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _orderService.GetAllOrdersAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Orders retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-                return Ok(response);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseDto<object>
+                var detailedError = ex.Message;
+                if (ex.InnerException != null) detailedError += " | Inner: " + ex.InnerException.Message;
+
+                return StatusCode(500, new 
                 {
                     IsSuccess = false,
                     Message = "An error occurred while retrieving orders.",
                     Code = "INTERNAL_SERVER_ERROR",
-                    Details = ex.Message
+                    Details = detailedError,
+                    StackTrace = ex.StackTrace
                 });
             }
         }
@@ -88,12 +86,15 @@ namespace RMS.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                var detailedError = ex.Message;
+                if (ex.InnerException != null) detailedError += " | Inner: " + ex.InnerException.Message;
+
                 return StatusCode(500, new ResponseDto<object>
                 {
                     IsSuccess = false,
-                    Message = "An error occurred while creating the order.",
+                    Message = $"Backend Error: {detailedError}",
                     Code = "INTERNAL_SERVER_ERROR",
-                    Details = ex.Message
+                    Details = ex.StackTrace
                 });
             }
         }
@@ -136,7 +137,7 @@ namespace RMS.WebApi.Controllers
                 var result = await _orderService.DeleteOrderAsync(id);
                 if (!result.IsSuccess)
                 {
-                    return NotFound(result);
+                    return BadRequest(result);
                 }
                 return Ok(result);
             }
@@ -161,12 +162,19 @@ namespace RMS.WebApi.Controllers
                 var result = await _orderService.ProcessPaymentForOrderAsync(paymentDto);
                 if (!result.IsSuccess)
                 {
+                    // Log the failure details for easier debugging
+                    Console.WriteLine($"Payment processing failed for Order {paymentDto.OrderID}: {result.Message}");
+                    if (result.Details != null)
+                    {
+                        Console.WriteLine($"Details: {System.Text.Json.JsonSerializer.Serialize(result.Details)}");
+                    }
                     return BadRequest(result);
                 }
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Critical error in ProcessPaymentForOrder: {ex.Message}");
                 return StatusCode(500, new ResponseDto<object>
                 {
                     IsSuccess = false,

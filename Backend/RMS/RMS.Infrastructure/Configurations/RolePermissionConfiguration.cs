@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RMS.Domain.Entities;
 using System;
@@ -74,7 +74,11 @@ namespace RMS.Infrastructure.Configurations
                 new RolePermission { Id = 41, RoleID = 3, PermissionID = 1, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // USER_VIEW
                 new RolePermission { Id = 42, RoleID = 3, PermissionID = 11, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // MENU_VIEW
                 new RolePermission { Id = 43, RoleID = 3, PermissionID = 28, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INVENTORY_VIEW
-                new RolePermission { Id = 44, RoleID = 3, PermissionID = 29, AssignedBy = "System", AssignedAt = DateTime.UtcNow },
+                new RolePermission { Id = 44, RoleID = 3, PermissionID = 29, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // KITCHEN_VIEW
+                new RolePermission { Id = 129, RoleID = 3, PermissionID = 76, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // ORDER_VIEW
+                new RolePermission { Id = 130, RoleID = 3, PermissionID = 77, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // ORDER_CREATE
+                new RolePermission { Id = 131, RoleID = 3, PermissionID = 78, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // ORDER_UPDATE
+                new RolePermission { Id = 132, RoleID = 3, PermissionID = 104, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // POS_VIEW
 
                 // Admin Role (ID 1) gets Category permissions
                 new RolePermission { Id = 45, RoleID = 1, PermissionID = 31, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // CATEGORY_VIEW
@@ -121,7 +125,7 @@ namespace RMS.Infrastructure.Configurations
                 new RolePermission { Id = 74, RoleID = 1, PermissionID = 60, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INVENTORY_CREATE
                 new RolePermission { Id = 75, RoleID = 1, PermissionID = 61, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INVENTORY_UPDATE
                 new RolePermission { Id = 76, RoleID = 1, PermissionID = 62, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // INVENTORY_DELETE
-                new RolePermission { Id = 89, RoleID = 1, PermissionID = 75, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INVENTORY_LOW_STOCK_VIEW
+                new RolePermission { Id = 89, RoleID = 1, PermissionID = 75, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // ALERT_VIEW
 
                 // Admin Role (ID 1) gets Stock Transaction permissions
                 new RolePermission { Id = 77, RoleID = 1, PermissionID = 63, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STOCK_TRANSACTION_VIEW
@@ -169,7 +173,40 @@ namespace RMS.Infrastructure.Configurations
                 new RolePermission { Id = 106, RoleID = 1, PermissionID = 95, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // SALE_VIEW
                 new RolePermission { Id = 107, RoleID = 1, PermissionID = 96, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // SALE_CREATE
                 new RolePermission { Id = 108, RoleID = 1, PermissionID = 97, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // SALE_UPDATE
-                new RolePermission { Id = 109, RoleID = 1, PermissionID = 98, AssignedBy = "System", AssignedAt = DateTime.UtcNow }  // SALE_DELETE
+                new RolePermission { Id = 109, RoleID = 1, PermissionID = 98, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // SALE_DELETE
+                new RolePermission { Id = 110, RoleID = 1, PermissionID = 100, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // LOW_STOCK_ALERT_VIEW
+                new RolePermission { Id = 111, RoleID = 1, PermissionID = 101, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // INVENTORY_LOW_STOCK_VIEW
+                new RolePermission { Id = 112, RoleID = 1, PermissionID = 102, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // KITCHEN_UPDATE
+
+                // Admin gets new permissions
+                new RolePermission { Id = 113, RoleID = 1, PermissionID = 103, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // DASHBOARD_VIEW
+                new RolePermission { Id = 114, RoleID = 1, PermissionID = 104, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // POS_VIEW
+                new RolePermission { Id = 115, RoleID = 1, PermissionID = 105, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // BRANCH_VIEW
+                new RolePermission { Id = 116, RoleID = 1, PermissionID = 106, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // SYSTEM_SETTING_VIEW
+                new RolePermission { Id = 117, RoleID = 1, PermissionID = 107, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PAYROLL_VIEW
+                new RolePermission { Id = 118, RoleID = 1, PermissionID = 108, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STOCK_TRANSFER_VIEW
+
+                // Manager gets selected new permissions
+                new RolePermission { Id = 119, RoleID = 2, PermissionID = 103, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // DASHBOARD_VIEW
+                new RolePermission { Id = 120, RoleID = 2, PermissionID = 104, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // POS_VIEW
+                new RolePermission { Id = 121, RoleID = 2, PermissionID = 108, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STOCK_TRANSFER_VIEW
+
+                // Manager gets operational view permissions
+                new RolePermission { Id = 122, RoleID = 2, PermissionID = 55, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // STAFF_VIEW
+                new RolePermission { Id = 123, RoleID = 2, PermissionID = 47, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PRODUCT_VIEW
+                new RolePermission { Id = 124, RoleID = 2, PermissionID = 31, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // CATEGORY_VIEW
+                new RolePermission { Id = 125, RoleID = 2, PermissionID = 51, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // CUSTOMER_VIEW
+                new RolePermission { Id = 126, RoleID = 2, PermissionID = 71, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // SALE_VIEW
+                new RolePermission { Id = 127, RoleID = 2, PermissionID = 91, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // PURCHASE_VIEW
+                new RolePermission { Id = 128, RoleID = 2, PermissionID = 76, AssignedBy = "System", AssignedAt = DateTime.UtcNow },  // ORDER_VIEW
+                
+                // New Role Permissions for Categories
+                new RolePermission { Id = 133, RoleID = 1, PermissionID = 86, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Admin CATEGORY_TOGGLE_STATUS
+                new RolePermission { Id = 134, RoleID = 1, PermissionID = 109, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Admin CATEGORY_EXPORT
+                new RolePermission { Id = 135, RoleID = 1, PermissionID = 110, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Admin CATEGORY_IMPORT
+                new RolePermission { Id = 136, RoleID = 2, PermissionID = 86, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Manager CATEGORY_TOGGLE_STATUS
+                new RolePermission { Id = 137, RoleID = 2, PermissionID = 109, AssignedBy = "System", AssignedAt = DateTime.UtcNow }, // Manager CATEGORY_EXPORT
+                new RolePermission { Id = 138, RoleID = 2, PermissionID = 110, AssignedBy = "System", AssignedAt = DateTime.UtcNow }  // Manager CATEGORY_IMPORT
             );
         }
     }

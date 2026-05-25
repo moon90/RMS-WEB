@@ -58,32 +58,54 @@ namespace RMS.Application.Implementations
             return new ResponseDto<SupplierDto> { IsSuccess = true, Data = supplierDto, Code = "200" };
         }
 
-        public async Task<PagedResult<SupplierDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<SupplierDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
-            var query = _supplierRepository.GetQueryable();
-
-            if (status.HasValue)
+            try
             {
-                query = query.Where(s => s.Status == status.Value);
-            }
+                var query = _supplierRepository.GetQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(s => s.SupplierName.Contains(searchQuery) || s.ContactPerson.Contains(searchQuery));
-            }
+                if (status.HasValue)
+                {
+                    query = query.Where(s => s.Status == status.Value);
+                }
 
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
-            }
-            else
-            {
-                query = query.OrderBy(s => s.SupplierName); // Default sort
-            }
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(s => s.SupplierName.Contains(searchQuery) || s.ContactPerson.Contains(searchQuery));
+                }
 
-            var pagedResult = await _supplierRepository.GetPagedResultAsync(new PagedQuery { PageNumber = pageNumber, PageSize = pageSize }, null, false, query);
-            var supplierDtos = _mapper.Map<List<SupplierDto>>(pagedResult.Items);
-            return new PagedResult<SupplierDto>(supplierDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                }
+                else
+                {
+                    query = query.OrderBy(s => s.SupplierName); // Default sort
+                }
+
+                var pagedResult = await _supplierRepository.GetPagedResultAsync(new PagedQuery { PageNumber = pageNumber, PageSize = pageSize }, null, false, query);
+                var supplierDtos = _mapper.Map<List<SupplierDto>>(pagedResult.Items);
+                var result = new PagedResult<SupplierDto>(supplierDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+
+                return new ResponseDto<PagedResult<SupplierDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Suppliers retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving suppliers.");
+                return new ResponseDto<PagedResult<SupplierDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving suppliers.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
         public async Task<ResponseDto<SupplierDto>> CreateAsync(CreateSupplierDto createDto)

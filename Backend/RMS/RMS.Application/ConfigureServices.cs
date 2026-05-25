@@ -1,9 +1,11 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using RMS.Application.Implementations;
 using RMS.Application.Interfaces;
 using RMS.Application.Services.Processing;
 using RMS.Application.Validators;
+using RMS.Application.Events;
+using RMS.Application.Handlers;
 using RMS.Application.Validators.CustomerValidators;
 using RMS.Application.Validators.DiningTableValidators;
 using RMS.Application.Validators.IngredientValidators;
@@ -55,6 +57,17 @@ namespace RMS.Application
             services.AddScoped<IAlertService, AlertService>();
             services.AddScoped<IUnitConversionService, UnitConversionService>();
             services.AddScoped<ISplitPaymentService, SplitPaymentService>();
+            services.AddScoped<IBranchService, BranchService>();
+            services.AddScoped<IStockTransferService, StockTransferService>();
+            services.AddScoped<IInventoryAuditService, InventoryAuditService>();
+            services.AddScoped<IPayrollService, PayrollService>();
+            services.AddScoped<ISystemService, SystemService>();
+            services.AddScoped<ISystemSettingService, SystemSettingService>();
+            services.AddScoped<IDashboardService, DashboardService>();
+
+            // Domain Events
+            services.AddScoped<IEventPublisher, EventPublisher>();
+            services.AddScoped<IEventHandler<OrderPlacedEvent>, InventoryDeductionHandler>();
 
             // FluentValidation
             services.AddValidatorsFromAssemblyContaining<CreatePurchaseDtoValidator>();

@@ -39,6 +39,8 @@ using RMS.Domain.Enum;
 using RMS.Application.DTOs;
 using RMS.Application.DTOs.SplitPaymentDTOs;
 using RMS.Application.DTOs.AlertDTOs;
+using RMS.Application.DTOs.SystemSettings;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.AutoMappers
 {
@@ -46,6 +48,13 @@ namespace RMS.Application.AutoMappers
     {
         public MappingProfile()
         {
+            // Branch mappings
+            CreateMap<Branch, BranchDto>().ReverseMap();
+            CreateMap<CreateBranchDto, Branch>();
+
+            // SystemSetting mappings
+            CreateMap<SystemSetting, SystemSettingDto>().ReverseMap();
+
             // User mappings
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.Id))
@@ -162,33 +171,30 @@ namespace RMS.Application.AutoMappers
 
             // Inventory mappings
             CreateMap<Inventory, InventoryDto>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.ProductName));
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.ProductName : "Unknown Product"));
             CreateMap<CreateInventoryDto, Inventory>();
             CreateMap<UpdateInventoryDto, Inventory>();
 
             // StockTransaction mappings
             CreateMap<StockTransaction, StockTransactionDto>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
-                .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier.SupplierName))
-                .ForMember(dest => dest.IngredientID, opt => opt.MapFrom(src => src.IngredientID));
-            CreateMap<CreateStockTransactionDto, StockTransaction>()
-                .ForMember(dest => dest.AdjustmentType, opt => opt.MapFrom(src => src.AdjustmentType))
-                .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Reason))
-                .ForMember(dest => dest.IngredientID, opt => opt.MapFrom(src => src.IngredientID));
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.ProductName : null))
+                .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.SupplierName : null))
+                .ForMember(dest => dest.IngredientName, opt => opt.MapFrom(src => src.Ingredient != null ? src.Ingredient.Name : null));
+            CreateMap<CreateStockTransactionDto, StockTransaction>();
             CreateMap<UpdateStockTransactionDto, StockTransaction>();
 
             // Ingredient mappings
             CreateMap<Ingredient, IngredientDto>()
-                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.Unit.Name))
-                .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier.SupplierName));
+                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.Unit != null ? src.Unit.Name : "N/A"))
+                .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.SupplierName : "N/A"));
             CreateMap<CreateIngredientDto, Ingredient>();
             CreateMap<UpdateIngredientDto, Ingredient>();
 
             // ProductIngredient mappings
             CreateMap<ProductIngredient, ProductIngredientDto>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
-                .ForMember(dest => dest.IngredientName, opt => opt.MapFrom(src => src.Ingredient.Name))
-                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.Unit.Name));
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.ProductName : "Unknown Product"))
+                .ForMember(dest => dest.IngredientName, opt => opt.MapFrom(src => src.Ingredient != null ? src.Ingredient.Name : "Unknown Ingredient"))
+                .ForMember(dest => dest.UnitName, opt => opt.MapFrom(src => src.Unit != null ? src.Unit.Name : "N/A"));
             CreateMap<CreateProductIngredientDto, ProductIngredient>();
             CreateMap<UpdateProductIngredientDto, ProductIngredient>();
 
@@ -196,13 +202,12 @@ namespace RMS.Application.AutoMappers
             CreateMap<Order, OrderDto>().ReverseMap();
             CreateMap<UpdateOrderDto, Order>()
                 .ForMember(dest => dest.OrderDetails, opt => opt.Ignore()); // OrderDetails are handled separately
-            CreateMap<CreateOrderDto, Order>()
-                .ForMember(dest => dest.OrderDetails, opt => opt.Ignore()); // OrderDetails handled separately in handler
+            CreateMap<CreateOrderDto, Order>();
             
 
             // OrderDetail mappings
             CreateMap<OrderDetail, OrderDetailDto>()
-                .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product != null ? new ProductDto { Id = src.Product.Id, ProductName = src.Product.ProductName } : null))
+                .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
                 .ReverseMap();
             CreateMap<CreateOrderDetailDto, OrderDetail>();
             CreateMap<UpdateOrderDetailDto, OrderDetail>();
@@ -218,9 +223,10 @@ namespace RMS.Application.AutoMappers
 
             // Product mappings
             CreateMap<Product, ProductDto>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
-                .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier.SupplierName))
-                .ForMember(dest => dest.ManufacturerName, opt => opt.MapFrom(src => src.Manufacturer.ManufacturerName))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName : "N/A"))
+                .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.SupplierName : "N/A"))
+                .ForMember(dest => dest.ManufacturerName, opt => opt.MapFrom(src => src.Manufacturer != null ? src.Manufacturer.ManufacturerName : "N/A"))
+                .ForMember(dest => dest.StockQuantity, opt => opt.MapFrom(src => src.Inventory != null ? src.Inventory.CurrentStock : 0))
                 .ForMember(dest => dest.ProductImage, opt => opt.MapFrom(src => src.ProductImage != null ? $"data:image/png;base64,{Convert.ToBase64String(src.ProductImage)}" : null))
                 .ForMember(dest => dest.ThumbnailImage, opt => opt.MapFrom(src => src.ThumbnailImage != null ? $"data:image/png;base64,{Convert.ToBase64String(src.ThumbnailImage)}" : null));
             CreateMap<CreateProductDto, Product>()
@@ -245,13 +251,13 @@ namespace RMS.Application.AutoMappers
 
             // Purchase mappings
             CreateMap<Purchase, PurchaseDto>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName));
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName : "N/A"));
             CreateMap<CreatePurchaseDto, Purchase>();
             CreateMap<PurchaseDetailDto, PurchaseDetail>().ReverseMap();
 
             // Sale mappings
             CreateMap<Sale, SaleDto>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName));
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName : "N/A"));
             CreateMap<CreateSaleDto, Sale>();
             CreateMap<SaleDetailDto, SaleDetail>().ReverseMap();
 
@@ -268,6 +274,12 @@ namespace RMS.Application.AutoMappers
             // Alert mappings
             CreateMap<Alert, AlertDto>().ReverseMap();
             CreateMap<CreateAlertDto, Alert>();
+
+            // InventoryAudit mappings
+            CreateMap<InventoryAudit, InventoryAuditDto>()
+                .ForMember(dest => dest.TotalVarianceValue, opt => opt.MapFrom(src => src.Details != null ? src.Details.Sum(d => d.VarianceValue) : 0));
+            CreateMap<InventoryAuditDetail, InventoryAuditDetailDto>()
+                .ForMember(dest => dest.IngredientName, opt => opt.MapFrom(src => src.Ingredient != null ? src.Ingredient.Name : "Unknown"));
         }
     private byte[]? ConvertBase64ToBytes(string? base64String)
         {

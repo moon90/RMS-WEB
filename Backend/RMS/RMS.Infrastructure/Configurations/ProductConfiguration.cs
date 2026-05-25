@@ -47,14 +47,20 @@ namespace RMS.Infrastructure.Configurations
                 .HasForeignKey(p => p.ManufacturerID)
                 .IsRequired(false);
 
+            builder.HasOne(p => p.Branch)
+                .WithMany(b => b.Products)
+                .HasForeignKey(p => p.BranchID)
+                .IsRequired(false);
+
             builder.Property(p => p.ExpireDate)
                 .HasColumnType("date");
 
             // Seed
             builder.HasData(
-                new Product { Id = 1, ProductName = "Product A", ProductPrice = 10.00m, CostPrice = 5.00m, ProductBarcode = "BARCODE001", CategoryID = 1, SupplierID = 1, ManufacturerID = 1, ExpireDate = DateTime.UtcNow.AddYears(1), Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
-                new Product { Id = 2, ProductName = "Product B", ProductPrice = 20.00m, CostPrice = 10.00m, ProductBarcode = "BARCODE002", CategoryID = 2, SupplierID = 2, ManufacturerID = 2, ExpireDate = DateTime.UtcNow.AddYears(2), Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
-                new Product { Id = 3, ProductName = "Product C", ProductPrice = 30.00m, CostPrice = 15.00m, ProductBarcode = "BARCODE003", CategoryID = 1, SupplierID = 1, ManufacturerID = 3, ExpireDate = DateTime.UtcNow.AddYears(3), Status = false, CreatedBy = "system", CreatedDate = DateTime.UtcNow }
+                new Product { Id = 1, ProductName = "Signature Wagyu Burger", ProductPrice = 28.50m, CostPrice = 12.00m, ProductBarcode = "PRD-WGY-01", CategoryID = 1, SupplierID = 1, ManufacturerID = 1, ExpireDate = DateTime.UtcNow.AddYears(1), Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new Product { Id = 2, ProductName = "Atlantic Lobster Pasta", ProductPrice = 42.00m, CostPrice = 18.50m, ProductBarcode = "PRD-LOB-02", CategoryID = 2, SupplierID = 2, ManufacturerID = 2, ExpireDate = DateTime.UtcNow.AddYears(2), Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new Product { Id = 3, ProductName = "Wild Mushroom Truffle Risotto", ProductPrice = 34.00m, CostPrice = 14.20m, ProductBarcode = "PRD-RIS-03", CategoryID = 1, SupplierID = 1, ManufacturerID = 3, ExpireDate = DateTime.UtcNow.AddYears(3), Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new Product { Id = 4, ProductName = "Aged Ribeye Steak (400g)", ProductPrice = 58.00m, CostPrice = 24.00m, ProductBarcode = "PRD-RB-04", CategoryID = 1, SupplierID = 1, ManufacturerID = 1, ExpireDate = DateTime.UtcNow.AddYears(1), Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow }
             );
         }
     }

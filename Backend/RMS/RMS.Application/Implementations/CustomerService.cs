@@ -58,32 +58,54 @@ namespace RMS.Application.Implementations
             return new ResponseDto<CustomerDto> { IsSuccess = true, Data = customerDto, Code = "200" };
         }
 
-        public async Task<PagedResult<CustomerDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<CustomerDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
-            var query = _customerRepository.GetQueryable();
-
-            if (status.HasValue)
+            try
             {
-                query = query.Where(c => c.Status == status.Value);
-            }
+                var query = _customerRepository.GetQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(c => c.CustomerName.Contains(searchQuery) || c.CustomerPhone.Contains(searchQuery) || c.CustomerEmail.Contains(searchQuery));
-            }
+                if (status.HasValue)
+                {
+                    query = query.Where(c => c.Status == status.Value);
+                }
 
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
-            }
-            else
-            {
-                query = query.OrderBy(c => c.CustomerName);
-            }
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(c => c.CustomerName.Contains(searchQuery) || c.CustomerPhone.Contains(searchQuery) || c.CustomerEmail.Contains(searchQuery));
+                }
 
-            var pagedResult = await query.ToPagedList(pageNumber, pageSize);
-            var customerDtos = _mapper.Map<List<CustomerDto>>(pagedResult.Items);
-            return new PagedResult<CustomerDto>(customerDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                }
+                else
+                {
+                    query = query.OrderBy(c => c.CustomerName);
+                }
+
+                var pagedResult = await query.ToPagedList(pageNumber, pageSize);
+                var customerDtos = _mapper.Map<List<CustomerDto>>(pagedResult.Items);
+                var result = new PagedResult<CustomerDto>(customerDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+
+                return new ResponseDto<PagedResult<CustomerDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Customers retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all customers.");
+                return new ResponseDto<PagedResult<CustomerDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving customers.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
         public async Task<ResponseDto<CustomerDto>> CreateAsync(CreateCustomerDto createDto)

@@ -10,9 +10,29 @@ GO
 -- Common Lookup Tables
 -- ================
 
+CREATE TABLE Branches (
+    BranchID INT IDENTITY(1,1) PRIMARY KEY,
+    BranchName VARCHAR(100) NOT NULL,
+    Location VARCHAR(255),
+    CurrencyCode VARCHAR(10) DEFAULT 'BDT',
+    CurrencySymbol NVARCHAR(10) DEFAULT '৳',
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
 CREATE TABLE Categories (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
-    CategoryName VARCHAR(100) NOT NULL
+    CategoryName VARCHAR(100) NOT NULL,
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
 );
 
 CREATE TABLE Units (
@@ -22,8 +42,21 @@ CREATE TABLE Units (
     Status BIT DEFAULT 1,
     CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
     CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    UpdatedBy NVARCHAR(100),
-    UpdatedDate DATETIME,
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE TABLE UnitConversions (
+    UnitConversionID INT IDENTITY(1,1) PRIMARY KEY,
+    FromUnitID INT NOT NULL FOREIGN KEY REFERENCES Units(UnitID),
+    ToUnitID INT NOT NULL FOREIGN KEY REFERENCES Units(UnitID),
+    ConversionFactor DECIMAL(18,4) NOT NULL,
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
     IsDeleted BIT DEFAULT 0
 );
 
@@ -37,8 +70,8 @@ CREATE TABLE Suppliers (
     Status BIT DEFAULT 1,
     CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
     CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    UpdatedBy NVARCHAR(100),
-    UpdatedDate DATETIME,
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
     IsDeleted BIT DEFAULT 0
 );
 
@@ -48,14 +81,134 @@ CREATE TABLE Manufacturers (
     Status BIT DEFAULT 1,
     CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
     CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    UpdatedBy NVARCHAR(100),
-    UpdatedDate DATETIME,
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
     IsDeleted BIT DEFAULT 0
 );
 
 -- ================
--- Products & Inventory
+-- Customer & Staff
 -- ================
+
+CREATE TABLE Customers (
+    CustomerID INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerName VARCHAR(100) NOT NULL,
+    CustomerPhone VARCHAR(20),
+    CustomerEmail VARCHAR(100),
+    Address NVARCHAR(250),
+    DriverName VARCHAR(100),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE TABLE Staff (
+    StaffID INT IDENTITY(1,1) PRIMARY KEY,
+    StaffName VARCHAR(100),
+    StaffPhone VARCHAR(20),
+    StaffRole VARCHAR(100),
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+-- ================
+-- User & Role Management
+-- ================
+
+CREATE TABLE Roles (
+    RoleID INT IDENTITY(1,1) PRIMARY KEY,
+    RoleName NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(250),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE TABLE Users (
+    UserID INT IDENTITY(1,1) PRIMARY KEY,
+    UserName NVARCHAR(100) NOT NULL,
+    PasswordHash NVARCHAR(256) NOT NULL,
+    FullName NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(100),
+    Phone NVARCHAR(20),
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE TABLE UserRoles (
+    UserRoleID INT IDENTITY(1,1) PRIMARY KEY,
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    RoleID INT FOREIGN KEY REFERENCES Roles(RoleID),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE TABLE Permissions (
+    PermissionID INT IDENTITY(1,1) PRIMARY KEY,
+    PermissionName NVARCHAR(100) NOT NULL,
+    FormName NVARCHAR(100),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE TABLE RolePermissions (
+    RolePermissionID INT IDENTITY(1,1) PRIMARY KEY,
+    RoleID INT FOREIGN KEY REFERENCES Roles(RoleID),
+    PermissionID INT FOREIGN KEY REFERENCES Permissions(PermissionID),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+-- ================
+-- Ingredients & Products
+-- ================
+
+CREATE TABLE Ingredients (
+    IngredientID INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    QuantityAvailable DECIMAL(18,2) NOT NULL,
+    UnitID INT NOT NULL FOREIGN KEY REFERENCES Units(UnitID),
+    ReorderLevel DECIMAL(18,2) NOT NULL,
+    ReorderQuantity DECIMAL(18,2) NOT NULL,
+    SupplierID INT FOREIGN KEY REFERENCES Suppliers(SupplierID),
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
+    ExpireDate DATE,
+    Remarks NVARCHAR(250),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
 
 CREATE TABLE Products (
     ProductID INT IDENTITY(1,1) PRIMARY KEY,
@@ -68,7 +221,23 @@ CREATE TABLE Products (
     CategoryID INT FOREIGN KEY REFERENCES Categories(CategoryID),
     SupplierID INT FOREIGN KEY REFERENCES Suppliers(SupplierID),
     ManufacturerID INT FOREIGN KEY REFERENCES Manufacturers(ManufacturerID),
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
     ExpireDate DATE,
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE TABLE ProductIngredients (
+    ProductIngredientID INT IDENTITY(1,1) PRIMARY KEY,
+    ProductID INT NOT NULL FOREIGN KEY REFERENCES Products(ProductID),
+    IngredientID INT NOT NULL FOREIGN KEY REFERENCES Ingredients(IngredientID),
+    Quantity DECIMAL(18,2) NOT NULL,
+    UnitID INT NOT NULL FOREIGN KEY REFERENCES Units(UnitID),
+    Remarks NVARCHAR(250),
     Status BIT DEFAULT 1,
     CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
     CreatedDate DATETIME DEFAULT GETUTCDATE(),
@@ -83,6 +252,7 @@ CREATE TABLE Inventory (
     InitialStock INT NOT NULL,
     CurrentStock INT NOT NULL,
     MinStockLevel INT NOT NULL,
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
     LastUpdated DATETIME DEFAULT GETUTCDATE(),
     Status BIT DEFAULT 1,
     CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
@@ -94,163 +264,24 @@ CREATE TABLE Inventory (
 
 
 -- ================
--- User & Role Management
--- ================
-
-CREATE TABLE Roles (
-    RoleID INT IDENTITY(1,1) PRIMARY KEY,
-    RoleName NVARCHAR(100) NOT NULL,
-    Description NVARCHAR(250),
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    UpdatedBy NVARCHAR(100),
-    UpdatedDate DATETIME,
-    IsDeleted BIT DEFAULT 0
-);
-
-CREATE TABLE Users (
-    UserID INT IDENTITY(1,1) PRIMARY KEY,
-    UserName NVARCHAR(100) NOT NULL,
-    PasswordHash NVARCHAR(256) NOT NULL,
-    FullName NVARCHAR(100) NOT NULL,
-    Email NVARCHAR(100),
-    Phone NVARCHAR(20),
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedBy NVARCHAR(100),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0
-);
-
-CREATE TABLE UserRoles (
-    UserRoleID INT IDENTITY(1,1) PRIMARY KEY,
-    UserID INT FOREIGN KEY REFERENCES Users(UserID),
-    RoleID INT FOREIGN KEY REFERENCES Roles(RoleID)
-);
-
-CREATE TABLE Permissions (
-    PermissionID INT IDENTITY(1,1) PRIMARY KEY,
-    PermissionName NVARCHAR(100) NOT NULL,
-    FormName NVARCHAR(100),
-    IsActive BIT DEFAULT 1
-);
-
-CREATE TABLE RolePermissions (
-    RolePermissionID INT IDENTITY(1,1) PRIMARY KEY,
-    RoleID INT FOREIGN KEY REFERENCES Roles(RoleID),
-    PermissionID INT FOREIGN KEY REFERENCES Permissions(PermissionID)
-);
-
--- ================
--- Audit
--- ================
-
-CREATE TABLE AuditLog (
-    LogID INT IDENTITY(1,1) PRIMARY KEY,
-    ActionType VARCHAR(50) NOT NULL,
-    EntityName VARCHAR(100) NOT NULL,
-    EntityID INT NOT NULL,
-    OldValue NVARCHAR(MAX),
-    NewValue NVARCHAR(MAX),
-    ChangedBy NVARCHAR(100) NOT NULL,
-    ChangedOn DATETIME DEFAULT GETUTCDATE()
-);
-
--- =============================================
--- Redesigned RM Schema for Best Practices
--- =============================================
--- This version includes:
--- - Consistent naming conventions (PascalCase)
--- - Proper foreign key relationships
--- - Data normalization across related entities
--- - Audit fields (CreatedBy, ModifiedBy, Timestamps, Status, IsDeleted)
--- - Indexed foreign keys and frequently queried fields
--- - Improved stored procedures for security, clarity, and performance
-
-
--- ================
--- Customer & Staff
--- ================
-
-CREATE TABLE Customers (
-    CustomerID INT IDENTITY(1,1) PRIMARY KEY,
-    CustomerName VARCHAR(100) NOT NULL,
-    CustomerPhone VARCHAR(20),
-    CustomerEmail VARCHAR(100),
-    Address NVARCHAR(250),
-    DriverName VARCHAR(100),
-    Status BIT DEFAULT 1,
-    CreatedBy VARCHAR(100) NOT NULL DEFAULT 'system',
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedBy VARCHAR(100),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0
-);
-
-CREATE TABLE Staff (
-    StaffID INT IDENTITY(1,1) PRIMARY KEY,
-    StaffName VARCHAR(100),
-    StaffPhone VARCHAR(20),
-    StaffRole VARCHAR(100),
-    Status BIT DEFAULT 1,
-    CreatedBy VARCHAR(100) NOT NULL DEFAULT 'system',
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedBy VARCHAR(100),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0
-);
-
--- ================
--- Ingredients & Products
--- ================
-
-CREATE TABLE Ingredients (
-    IngredientID INT IDENTITY(1,1) PRIMARY KEY,
-    Name NVARCHAR(100) NOT NULL,
-    QuantityAvailable DECIMAL(10,2) NOT NULL,
-    UnitID INT NOT NULL FOREIGN KEY REFERENCES Units(UnitID),
-    ReorderLevel DECIMAL(10,2) NOT NULL,
-    ReorderQuantity DECIMAL(10,2) NOT NULL,
-    SupplierID INT FOREIGN KEY REFERENCES Suppliers(SupplierID),
-    ExpireDate DATE DEFAULT GETUTCDATE(),
-    Remarks NVARCHAR(250),
-    CreatedBy NVARCHAR(50),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    UpdatedBy NVARCHAR(50),
-    UpdatedDate DATETIME DEFAULT GETUTCDATE(),
-    IsDeleted BIT DEFAULT 0
-);
-
-CREATE TABLE ProductIngredients (
-    ProductIngredientID INT IDENTITY(1,1) PRIMARY KEY,
-    ProductID INT NOT NULL FOREIGN KEY REFERENCES Products(ProductID),
-    IngredientID INT NOT NULL FOREIGN KEY REFERENCES Ingredients(IngredientID),
-    Quantity DECIMAL(10,2) NOT NULL,
-    UnitID INT NOT NULL FOREIGN KEY REFERENCES Units(UnitID),
-    Remarks NVARCHAR(250),
-    CreatedBy NVARCHAR(50),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    UpdatedBy NVARCHAR(50),
-    UpdatedDate DATETIME DEFAULT GETUTCDATE(),
-    IsDeleted BIT DEFAULT 0
-);
-
-
--- ================
 -- Promotions
 -- ================
 
 CREATE TABLE Promotions (
     PromotionID INT IDENTITY(1,1) PRIMARY KEY,
     CouponCode VARCHAR(50) NOT NULL,
-    DiscountAmount DECIMAL(10,2) DEFAULT 0,
-    DiscountPercentage DECIMAL(10,2) DEFAULT 0,
+    DiscountAmount DECIMAL(18,2) DEFAULT 0,
+    DiscountPercentage DECIMAL(18,2) DEFAULT 0,
     Description VARCHAR(255),
     ValidFrom DATE NOT NULL,
     ValidTo DATETIME NOT NULL,
-    IsActive BIT DEFAULT 1
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
 );
 
 -- ================
@@ -263,7 +294,13 @@ CREATE TABLE Purchases (
     SupplierID INT FOREIGN KEY REFERENCES Suppliers(SupplierID),
     TotalAmount DECIMAL(18,2) NOT NULL,
     PaymentMethod VARCHAR(50),
-    CreatedOn DATETIME DEFAULT GETUTCDATE()
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
 );
 
 CREATE TABLE PurchaseDetails (
@@ -272,7 +309,86 @@ CREATE TABLE PurchaseDetails (
     ProductID INT NOT NULL FOREIGN KEY REFERENCES Products(ProductID),
     Quantity INT NOT NULL,
     UnitPrice DECIMAL(18,2) NOT NULL,
-    TotalAmount DECIMAL(18,2) NOT NULL
+    TotalAmount DECIMAL(18,2) NOT NULL,
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+-- ================
+-- Tables (Seating)
+-- ================
+
+CREATE TABLE DiningTables (
+    TableID INT IDENTITY(1,1) PRIMARY KEY,
+    TableName VARCHAR(100),
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
+    Status BIT DEFAULT 1,
+    CreatedBy VARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy VARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+-- ================
+-- Orders
+-- ================
+
+CREATE TABLE Orders (
+    OrderID INT IDENTITY(1,1) PRIMARY KEY,
+    OrderDate DATETIME DEFAULT GETUTCDATE(),
+    OrderTime VARCHAR(15),
+    TableName VARCHAR(50),
+    WaiterName VARCHAR(50),
+    StaffID INT, -- Waiter ID
+    ChefID INT,
+    PreparationStart DATETIME,
+    PreparationEnd DATETIME,
+    OrderStatus VARCHAR(20), -- Pending, Preparing, Ready, Completed, Paid, Cancelled
+    OrderType VARCHAR(20),    -- DineIn, TakeOut, Delivery
+    Total DECIMAL(18,2) DEFAULT 0,
+    TaxAmount DECIMAL(18,2) DEFAULT 0,
+    ServiceChargeAmount DECIMAL(18,2) DEFAULT 0,
+    DiscountAmount DECIMAL(18,2) DEFAULT 0,
+    DiscountPercentage DECIMAL(18,2) DEFAULT 0,
+    PromotionID INT FOREIGN KEY REFERENCES Promotions(PromotionID),
+    Received DECIMAL(18,2) DEFAULT 0,
+    ChangeAmount DECIMAL(18,2) DEFAULT 0,
+    DriverID INT,
+    CustomerID INT FOREIGN KEY REFERENCES Customers(CustomerID),
+    PaymentStatus VARCHAR(20) DEFAULT 'Unpaid',
+    PaymentMethod VARCHAR(50),
+    AmountPaid DECIMAL(18,2) DEFAULT 0,
+    TokenNumber VARCHAR(20),
+    TipAmount DECIMAL(18,2) DEFAULT 0,
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
+);
+
+CREATE TABLE OrderDetails (
+    OrderDetailID INT IDENTITY(1,1) PRIMARY KEY,
+    OrderID INT FOREIGN KEY REFERENCES Orders(OrderID),
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    Quantity INT,
+    Price DECIMAL(18,2),
+    DiscountPrice DECIMAL(18,2),
+    Amount DECIMAL(18,2),
+    PromotionDetailID INT,
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
 );
 
 -- ================
@@ -284,10 +400,20 @@ CREATE TABLE Sales (
     SaleDate DATETIME DEFAULT GETUTCDATE(),
     CustomerID INT FOREIGN KEY REFERENCES Customers(CustomerID),
     TotalAmount DECIMAL(18,2) NOT NULL,
+    TaxAmount DECIMAL(18,2) DEFAULT 0,
+    ServiceChargeAmount DECIMAL(18,2) DEFAULT 0,
     DiscountAmount DECIMAL(18,2) DEFAULT 0,
     FinalAmount DECIMAL(18,2) NOT NULL,
     PaymentMethod VARCHAR(50),
-    CreatedOn DATETIME DEFAULT GETUTCDATE()
+    TokenNumber VARCHAR(20),
+    TipAmount DECIMAL(18,2) DEFAULT 0,
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
 );
 
 CREATE TABLE SaleDetails (
@@ -297,7 +423,13 @@ CREATE TABLE SaleDetails (
     Quantity INT NOT NULL,
     UnitPrice DECIMAL(18,2) NOT NULL,
     Discount DECIMAL(18,2) DEFAULT 0,
-    TotalAmount DECIMAL(18,2) NOT NULL
+    TotalAmount DECIMAL(18,2) NOT NULL,
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
 );
 
 CREATE TABLE SplitPayments (
@@ -305,56 +437,13 @@ CREATE TABLE SplitPayments (
     SaleID INT NOT NULL FOREIGN KEY REFERENCES Sales(SaleID),
     Amount DECIMAL(18,2) NOT NULL,
     PaymentMethod VARCHAR(50) NOT NULL,
-    CreatedOn DATETIME DEFAULT GETUTCDATE()
-);
-
-
--- ================
--- Tables (Seating/Restaurant Context)
--- ================
-
-CREATE TABLE DiningTables (
-    TableID INT IDENTITY(1,1) PRIMARY KEY,
-    TableName VARCHAR(100),
+    CreatedOn DATETIME DEFAULT GETUTCDATE(),
     Status BIT DEFAULT 1,
-    CreatedBy VARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
     CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedBy VARCHAR(100),
+    ModifiedBy NVARCHAR(100),
     ModifiedDate DATETIME,
     IsDeleted BIT DEFAULT 0
-);
-
--- ================
--- Orders and Details (tblMaster/tblDetails normalized)
--- ================
-
-CREATE TABLE Orders (
-    OrderID INT IDENTITY(1,1) PRIMARY KEY,
-    OrderDate DATE,
-    OrderTime VARCHAR(15),
-    TableName VARCHAR(50),
-    WaiterName VARCHAR(50),
-    OrderStatus VARCHAR(20),
-    OrderType VARCHAR(20),
-    Total DECIMAL(18,2) DEFAULT 0,
-    DiscountAmount DECIMAL(10,2) DEFAULT 0,
-    DiscountPercentage DECIMAL(10,2) DEFAULT 0,
-    PromotionID INT FOREIGN KEY REFERENCES Promotions(PromotionID),
-    Received DECIMAL(18,2) DEFAULT 0,
-    ChangeAmount DECIMAL(18,2) DEFAULT 0,
-    DriverID INT,
-    CustomerID INT FOREIGN KEY REFERENCES Customers(CustomerID)
-);
-
-CREATE TABLE OrderDetails (
-    OrderDetailID INT IDENTITY(1,1) PRIMARY KEY,
-    OrderID INT FOREIGN KEY REFERENCES Orders(OrderID),
-    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
-    Quantity INT,
-    Price DECIMAL(18,2),
-    DiscountPrice DECIMAL(18,2),
-    Amount DECIMAL(18,2),
-    PromotionDetailID INT
 );
 
 -- ================
@@ -364,209 +453,78 @@ CREATE TABLE OrderDetails (
 CREATE TABLE StockTransactions (
     TransactionID INT IDENTITY(1,1) PRIMARY KEY,
     ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    IngredientID INT FOREIGN KEY REFERENCES Ingredients(IngredientID),
     SupplierID INT FOREIGN KEY REFERENCES Suppliers(SupplierID),
-    TransactionType VARCHAR(10) NOT NULL,
+    TransactionType VARCHAR(10) NOT NULL, -- IN, OUT
     Quantity INT NOT NULL,
     TransactionDate DATETIME DEFAULT GETUTCDATE(),
-    ExpireDate DATE DEFAULT GETUTCDATE(),
+    ExpireDate DATE,
     Remarks NVARCHAR(250),
     SaleID INT,
     PurchaseID INT,
-    TransactionSource VARCHAR(50)
+    TransactionSource VARCHAR(50),
+    AdjustmentType VARCHAR(20), -- Addition, Subtraction
+    Reason VARCHAR(250),
+    Status BIT DEFAULT 1,
+    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
+    CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
+    ModifiedDate DATETIME,
+    IsDeleted BIT DEFAULT 0
 );
 
--- =============================================
--- Audit/Status Fields Update
--- =============================================
+-- ================
+-- System & Support
+-- ================
 
-ALTER TABLE Products ADD
+CREATE TABLE AuditLogs (
+    LogID INT IDENTITY(1,1) PRIMARY KEY,
+    ActionType VARCHAR(50) NOT NULL,
+    EntityName VARCHAR(100) NOT NULL,
+    EntityID VARCHAR(100) NOT NULL,
+    OldValue NVARCHAR(MAX),
+    NewValue NVARCHAR(MAX),
+    ChangedBy NVARCHAR(100) NOT NULL,
+    ChangedOn DATETIME DEFAULT GETUTCDATE()
+);
+
+CREATE TABLE SystemSettings (
+    SettingID INT IDENTITY(1,1) PRIMARY KEY,
+    SettingKey VARCHAR(100) NOT NULL UNIQUE,
+    SettingValue NVARCHAR(MAX),
+    Description NVARCHAR(250),
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
     Status BIT DEFAULT 1,
     CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
     CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
     ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
+    IsDeleted BIT DEFAULT 0
+);
 
-ALTER TABLE Inventory ADD
+CREATE TABLE Alerts (
+    AlertID INT IDENTITY(1,1) PRIMARY KEY,
+    Message NVARCHAR(MAX) NOT NULL,
+    Type VARCHAR(20), -- LowStock, Expire, etc.
+    IsResolved BIT DEFAULT 0,
+    BranchID INT FOREIGN KEY REFERENCES Branches(BranchID),
     Status BIT DEFAULT 1,
     CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
     CreatedDate DATETIME DEFAULT GETUTCDATE(),
+    ModifiedBy NVARCHAR(100),
     ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
+    IsDeleted BIT DEFAULT 0
+);
 
-ALTER TABLE Categories ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
+-- ================
+-- Initial Data (Seeding)
+-- ================
 
-ALTER TABLE Suppliers ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
+INSERT INTO Units (UnitName, ShortCode, CreatedBy) VALUES ('Kilograms', 'kg', 'system');
+INSERT INTO Units (UnitName, ShortCode, CreatedBy) VALUES ('Liters', 'L', 'system');
+INSERT INTO Units (UnitName, ShortCode, CreatedBy) VALUES ('Pieces', 'pcs', 'system');
+INSERT INTO Units (UnitName, ShortCode, CreatedBy) VALUES ('Grams', 'g', 'system');
+INSERT INTO Units (UnitName, ShortCode, CreatedBy) VALUES ('Milliliters', 'ml', 'system');
 
-ALTER TABLE Manufacturers ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Units ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Users ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Roles ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Permissions ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE UserRoles ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE RolePermissions ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Customers ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Staff ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Ingredients ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE ProductIngredients ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Promotions ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Purchases ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE PurchaseDetails ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Sales ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE SaleDetails ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE Orders ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE OrderDetails ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE StockTransactions ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
-
-ALTER TABLE DiningTables ADD
-    Status BIT DEFAULT 1,
-    CreatedBy NVARCHAR(100) NOT NULL DEFAULT 'system',
-    ModifiedBy NVARCHAR(100),
-    CreatedDate DATETIME DEFAULT GETUTCDATE(),
-    ModifiedDate DATETIME,
-    IsDeleted BIT DEFAULT 0;
+INSERT INTO UnitConversions (FromUnitID, ToUnitID, ConversionFactor, CreatedBy) VALUES (1, 4, 1000.0000, 'system'); -- kg to g
+INSERT INTO UnitConversions (FromUnitID, ToUnitID, ConversionFactor, CreatedBy) VALUES (2, 5, 1000.0000, 'system'); -- L to ml

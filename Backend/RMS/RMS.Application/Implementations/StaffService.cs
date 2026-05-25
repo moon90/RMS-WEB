@@ -26,6 +26,7 @@ namespace RMS.Application.Implementations
         private readonly IValidator<UpdateStaffDto> _updateValidator;
         private readonly IAuditLogService _auditLogService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ITenantService _tenantService;
         private readonly ILogger<StaffService> _logger;
 
         public StaffService(
@@ -35,6 +36,7 @@ namespace RMS.Application.Implementations
             IValidator<UpdateStaffDto> updateValidator,
             IAuditLogService auditLogService,
             IUnitOfWork unitOfWork,
+            ITenantService tenantService,
             ILogger<StaffService> logger)
         {
             _staffRepository = staffRepository;
@@ -43,6 +45,7 @@ namespace RMS.Application.Implementations
             _updateValidator = updateValidator;
             _auditLogService = auditLogService;
             _unitOfWork = unitOfWork;
+            _tenantService = tenantService;
             _logger = logger;
         }
 
@@ -59,32 +62,56 @@ namespace RMS.Application.Implementations
             return new ResponseDto<StaffDto> { IsSuccess = true, Data = staffDto, Code = "200" };
         }
 
-        public async Task<PagedResult<StaffDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<StaffDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
-            var query = _staffRepository.GetQueryable();
-
-            if (status.HasValue)
+            try
             {
-                query = query.Where(s => s.Status == status.Value);
-            }
+                var query = _staffRepository.GetQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(s => s.StaffName.Contains(searchQuery) || s.StaffPhone.Contains(searchQuery) || s.StaffRole.Contains(searchQuery));
-            }
+                _logger.LogInformation("StaffService.GetAllAsync: BranchID context={BranchID}, Status Filter={Status}", _tenantService.BranchID, status);
 
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
-            }
-            else
-            {
-                query = query.OrderBy(s => s.StaffName); // Default sort
-            }
+                if (status.HasValue)
+                {
+                    query = query.Where(s => s.Status == status.Value);
+                }
 
-            var pagedResult = await query.ToPagedList(pageNumber, pageSize);
-            var staffDtos = _mapper.Map<List<StaffDto>>(pagedResult.Items);
-            return new PagedResult<StaffDto>(staffDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(s => s.StaffName.Contains(searchQuery) || s.StaffPhone.Contains(searchQuery) || s.StaffRole.Contains(searchQuery));
+                }
+
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                }
+                else
+                {
+                    query = query.OrderBy(s => s.StaffName); // Default sort
+                }
+
+                var pagedResult = await query.ToPagedList(pageNumber, pageSize);
+                var staffDtos = _mapper.Map<List<StaffDto>>(pagedResult.Items);
+                var result = new PagedResult<StaffDto>(staffDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+
+                return new ResponseDto<PagedResult<StaffDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Staff retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all staff.");
+                return new ResponseDto<PagedResult<StaffDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving staff.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
         public async Task<ResponseDto<StaffDto>> CreateAsync(CreateStaffDto createDto)

@@ -1,3 +1,5 @@
+using RMS.Application.Interfaces;
+
 namespace RMS.Application.DTOs.Promotions
 {
     public class PromotionStatusUpdateDto

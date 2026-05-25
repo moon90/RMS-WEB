@@ -1,14 +1,15 @@
 using System;
 using RMS.Domain.Enum;
+using RMS.Domain.Interfaces;
 
 namespace RMS.Domain.Entities
 {
-    public class DiningTable : BaseEntity
+    public class DiningTable : BaseEntity, IMultiTenant
     {
         public int TableID { get; set; }
         public string TableName { get; set; }
-        // Status is already in BaseEntity, but if you need a specific table status (e.g., "Occupied", "Available", "Reserved"), you might add it here.
-        // For now, I'll rely on BaseEntity.Status.
         public DiningTableStatusEnum DiningTableStatus { get; set; }
+        public int? BranchID { get; set; }
+        public virtual Branch? Branch { get; set; }
     }
 }

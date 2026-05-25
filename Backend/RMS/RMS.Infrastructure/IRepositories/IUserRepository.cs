@@ -1,13 +1,9 @@
-﻿using RMS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RMS.Domain.Interfaces;
+using RMS.Domain.Entities;
 
-namespace RMS.Infrastructure.Interfaces
+namespace RMS.Infrastructure.IRepositories
 {
-    public interface IUserRepository
+    public interface IUserRepository : IBaseRepository<User>
     {
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task<(IEnumerable<User> Users, int TotalCount)> GetAllUsersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, string? role);

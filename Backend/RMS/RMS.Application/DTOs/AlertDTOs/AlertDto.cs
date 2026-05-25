@@ -1,5 +1,6 @@
 using RMS.Domain.Enum;
 using System;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs.AlertDTOs
 {

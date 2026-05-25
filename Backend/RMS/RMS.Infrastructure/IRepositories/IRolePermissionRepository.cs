@@ -1,13 +1,11 @@
-﻿using RMS.Domain.Entities;
-using System;
+using RMS.Domain.Entities;
+using RMS.Domain.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace RMS.Infrastructure.Interfaces
+namespace RMS.Infrastructure.IRepositories
 {
-    public interface IRolePermissionRepository
+    public interface IRolePermissionRepository : IBaseRepository<RolePermission>
     {
         Task<RolePermission?> GetRolePermissionByIdAsync(int rolePermissionId);
         Task<IEnumerable<RolePermission>> GetRolePermissionsByRoleIdAsync(int roleId);

@@ -1,4 +1,6 @@
 
+using RMS.Application.Interfaces;
+
 namespace RMS.Application.DTOs.ManufacturerDTOs.InputDTOs
 {
     public class CreateManufacturerDto

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs;
-using RMS.Infrastructure.IRepositories;
-using Microsoft.AspNetCore.Authorization;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using RMS.Domain.Interfaces;
 
 namespace RMS.WebApi.Controllers
 {
@@ -27,13 +28,7 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _auditLogService.GetAllAuditLogsAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection);
-                return Ok(new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Audit logs retrieved successfully",
-                    Code = "200",
-                    Data = result
-                });
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -54,27 +49,8 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                // This method will now use the paginated GetAllAuditLogsAsync internally if needed, or be refactored.
-                // For now, I'll leave it as is, but it's a potential area for improvement to use the new paginated method.
-                var logs = await _auditLogService.GetAllAuditLogsAsync(1, 1000, entityType, "PerformedAt", "desc"); // Example: fetch all for entity type
-                var filteredLogs = logs.Items.Where(l => l.EntityType == entityType).ToList();
-
-                if (!filteredLogs.Any())
-                {
-                    return NotFound(new ResponseDto<object>
-                    {
-                        IsSuccess = false,
-                        Message = $"No audit logs found for entity type {entityType}.",
-                        Code = "404"
-                    });
-                }
-                return Ok(new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = $"Audit logs for entity type {entityType} retrieved successfully",
-                    Code = "200",
-                    Data = filteredLogs
-                });
+                var logs = await _auditLogService.GetAllAuditLogsAsync(1, 1000, entityType, "PerformedAt", "desc");
+                return Ok(logs);
             }
             catch (Exception ex)
             {
@@ -95,27 +71,8 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                // This method will now use the paginated GetAllAuditLogsAsync internally if needed, or be refactored.
-                // For now, I'll leave it as is, but it's a potential area for improvement to use the new paginated method.
-                var logs = await _auditLogService.GetAllAuditLogsAsync(1, 1000, performedBy, "PerformedAt", "desc"); // Example: fetch all for user
-                var filteredLogs = logs.Items.Where(l => l.PerformedBy == performedBy).ToList();
-
-                if (!filteredLogs.Any())
-                {
-                    return NotFound(new ResponseDto<object>
-                    {
-                        IsSuccess = false,
-                        Message = $"No audit logs found for user {performedBy}.",
-                        Code = "404"
-                    });
-                }
-                return Ok(new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = $"Audit logs for user {performedBy} retrieved successfully",
-                    Code = "200",
-                    Data = filteredLogs
-                });
+                var logs = await _auditLogService.GetAllAuditLogsAsync(1, 1000, performedBy, "PerformedAt", "desc");
+                return Ok(logs);
             }
             catch (Exception ex)
             {

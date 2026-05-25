@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RMS.Application.Helpers
 {
@@ -23,12 +20,8 @@ namespace RMS.Application.Helpers
             using var hmac = new HMACSHA256(saltBytes);
             byte[] hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-            // Truncate the hash to 16 bytes (128 bits)
-            byte[] truncatedHash = new byte[16];
-            Array.Copy(hashBytes, truncatedHash, 16);
-
-            // Encode truncated hash in Base64Url
-            string hash = Base64UrlEncode(truncatedHash);
+            // Encode full hash in Base64Url
+            string hash = Base64UrlEncode(hashBytes);
 
             return (hash, salt);
         }
@@ -42,12 +35,18 @@ namespace RMS.Application.Helpers
             using var hmac = new HMACSHA256(saltBytes);
             byte[] hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-            // Truncate the hash to 16 bytes (128 bits)
-            byte[] truncatedHash = new byte[16];
-            Array.Copy(hashBytes, truncatedHash, 16);
+            // Backward compatibility: If the stored hash is 128-bit (truncated to 16 bytes)
+            // 16 bytes in Base64Url is typically 22 characters.
+            if (storedHash.Length == 22)
+            {
+                byte[] truncatedHash = new byte[16];
+                Array.Copy(hashBytes, truncatedHash, 16);
+                string computedTruncatedHash = Base64UrlEncode(truncatedHash);
+                if (computedTruncatedHash == storedHash) return true;
+            }
 
-            // Encode truncated hash in Base64Url
-            string computedHash = Base64UrlEncode(truncatedHash);
+            // Encode full hash in Base64Url
+            string computedHash = Base64UrlEncode(hashBytes);
 
             // Compare the computed hash with the stored hash
             return computedHash == storedHash;

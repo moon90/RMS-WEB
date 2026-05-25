@@ -61,35 +61,57 @@ namespace RMS.Application.Implementations
             return new ResponseDto<IngredientDto> { IsSuccess = true, Data = ingredientDto, Code = "200" };
         }
 
-        public async Task<PagedResult<IngredientDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
+        public async Task<ResponseDto<PagedResult<IngredientDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status)
         {
-            var query = _ingredientRepository.GetQueryable();
-
-            query = query.Include(i => i.Unit)
-                         .Include(i => i.Supplier);
-
-            if (status.HasValue)
+            try
             {
-                query = query.Where(i => i.Status == status.Value);
-            }
+                var query = _ingredientRepository.GetQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(i => i.Name.Contains(searchQuery) || i.Remarks.Contains(searchQuery));
-            }
+                query = query.Include(i => i.Unit)
+                             .Include(i => i.Supplier);
 
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
-            }
-            else
-            {
-                query = query.OrderBy(i => i.Name);
-            }
+                if (status.HasValue)
+                {
+                    query = query.Where(i => i.Status == status.Value);
+                }
 
-            var pagedResult = await query.ToPagedList(pageNumber, pageSize);
-            var ingredientDtos = _mapper.Map<List<IngredientDto>>(pagedResult.Items);
-            return new PagedResult<IngredientDto>(ingredientDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(i => i.Name.Contains(searchQuery) || i.Remarks.Contains(searchQuery));
+                }
+
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                }
+                else
+                {
+                    query = query.OrderBy(i => i.Name);
+                }
+
+                var pagedResult = await query.ToPagedList(pageNumber, pageSize);
+                var ingredientDtos = _mapper.Map<List<IngredientDto>>(pagedResult.Items);
+                var result = new PagedResult<IngredientDto>(ingredientDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+
+                return new ResponseDto<PagedResult<IngredientDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Ingredients retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in GetAllAsync (ingredients).");
+                return new ResponseDto<PagedResult<IngredientDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving ingredients.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
         public async Task<ResponseDto<IngredientDto>> CreateAsync(CreateIngredientDto createDto)

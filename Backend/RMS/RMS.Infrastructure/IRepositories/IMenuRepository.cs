@@ -1,13 +1,9 @@
-﻿using RMS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RMS.Domain.Interfaces;
+using RMS.Domain.Entities;
 
-namespace RMS.Infrastructure.Interfaces
+namespace RMS.Infrastructure.IRepositories
 {
-    public interface IMenuRepository
+    public interface IMenuRepository : IBaseRepository<Menu>
     {
         Task<Menu?> GetMenuByIdAsync(int menuId);
         Task<Menu?> GetMenuByNameAsync(string menuName);

@@ -1,3 +1,4 @@
+using RMS.Domain.Interfaces;
 using RMS.Domain.Entities;
 using System.Threading.Tasks;
 

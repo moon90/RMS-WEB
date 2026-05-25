@@ -2,6 +2,7 @@ using AutoMapper;
 using RMS.Application.DTOs.CategoryDTOs.InputDTOs;
 using RMS.Application.DTOs.CategoryDTOs.OutputDTOs;
 using RMS.Domain.Entities;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.AutoMappers
 {

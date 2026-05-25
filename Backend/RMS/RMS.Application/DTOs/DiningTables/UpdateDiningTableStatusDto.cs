@@ -1,5 +1,6 @@
 using System;
 using RMS.Domain.Enum;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs.DiningTables
 {

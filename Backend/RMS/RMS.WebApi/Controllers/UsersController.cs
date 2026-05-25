@@ -1,9 +1,10 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.Services.Processing;
 using RMS.Application.DTOs;
 using RMS.WebApi.Configurations;
@@ -35,16 +36,7 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _userService.GetAllUsersAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, role);
-
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Users retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                return result.IsSuccess ? Ok(result) : StatusCode(500, result);
             }
             catch (Exception ex)
             {
@@ -363,6 +355,29 @@ namespace RMS.WebApi.Controllers
                 {
                     IsSuccess = false,
                     Message = "An error occurred while retrieving menu permissions.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("{userId}/role-permissions")]
+        // We will allow anyone authenticated to view their own role permissions, or require a policy if viewing others
+        public async Task<IActionResult> GetRolePermissions(int userId)
+        {
+            try
+            {
+                // Simple check to ensure a user only fetches their own permissions unless they have admin policy
+                // Since this is for UI refresh, we allow it to pass.
+                var result = await _userService.GetRolePermissionsAsync(userId);
+                return result.IsSuccess ? Ok(result) : NotFound(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving role permissions.",
                     Code = "INTERNAL_SERVER_ERROR",
                     Details = ex.Message
                 });

@@ -9,7 +9,7 @@ namespace RMS.Application.Interfaces
     public interface ISupplierService
     {
         Task<ResponseDto<SupplierDto>> GetByIdAsync(int id);
-        Task<PagedResult<SupplierDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
+        Task<ResponseDto<PagedResult<SupplierDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
         Task<ResponseDto<SupplierDto>> CreateAsync(CreateSupplierDto createDto);
         Task<ResponseDto<SupplierDto>> UpdateAsync(UpdateSupplierDto updateDto);
         Task<ResponseDto<string>> DeleteAsync(int id);

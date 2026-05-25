@@ -23,8 +23,17 @@ namespace RMS.Infrastructure.Persistences
             var optionsBuilder = new DbContextOptionsBuilder<RestaurantDbContext>();
             var connectionString = config.GetConnectionString("DefaultConnection");
             optionsBuilder.UseSqlServer(connectionString);
-            return new RestaurantDbContext(optionsBuilder.Options);
+            
+            // Dummy Tenant Service for Design-Time
+            var dummyTenantService = new DesignTimeTenantService();
+            
+            return new RestaurantDbContext(optionsBuilder.Options, dummyTenantService);
         }
+    }
+
+    internal class DesignTimeTenantService : RMS.Domain.Interfaces.ITenantService
+    {
+        public int? BranchID { get; set; }
     }
 }
 

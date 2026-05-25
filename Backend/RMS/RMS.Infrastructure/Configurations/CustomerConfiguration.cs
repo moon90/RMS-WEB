@@ -29,8 +29,13 @@ namespace RMS.Infrastructure.Configurations
             builder.Property(c => c.Address)
                 .HasMaxLength(250);
 
-            builder.Property(c => c.DriverName)
-                .HasMaxLength(100);
+            builder.Property(c => c.TotalSpent)
+                .HasPrecision(18, 2);
+
+            builder.Property(c => c.LoyaltyTier)
+                .HasMaxLength(50);
+
+
 
             // Configure common BaseEntity properties
             builder.Property(c => c.Status)
@@ -56,7 +61,6 @@ namespace RMS.Infrastructure.Configurations
                     CustomerPhone = "123-456-7890",
                     CustomerEmail = "john.doe@example.com",
                     Address = "123 Main St, Anytown",
-                    DriverName = "John Doe",
                     Status = true,
                     CreatedBy = "system",
                     CreatedDate = DateTime.UtcNow,
@@ -69,7 +73,6 @@ namespace RMS.Infrastructure.Configurations
                     CustomerPhone = "098-765-4321",
                     CustomerEmail = "jane.smith@example.com",
                     Address = "456 Oak Ave, Somewhere",
-                    DriverName = "Jane Smith",
                     Status = true,
                     CreatedBy = "system",
                     CreatedDate = DateTime.UtcNow,

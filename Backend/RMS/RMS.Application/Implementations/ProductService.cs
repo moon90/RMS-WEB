@@ -35,7 +35,8 @@ namespace RMS.Application.Implementations
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IStockTransactionService _stockTransactionService;
         private readonly IUnitConversionService _unitConversionService;
-        private readonly INotificationService _notificationService; // Replaced IHubContext with INotificationService
+        private readonly INotificationService _notificationService; 
+        private readonly IAlertService _alertService;
 
         public ProductService(
             IProductRepository productRepository,
@@ -50,7 +51,8 @@ namespace RMS.Application.Implementations
             IInventoryRepository inventoryRepository,
             IStockTransactionService stockTransactionService,
             IUnitConversionService unitConversionService,
-            INotificationService notificationService) // Injected INotificationService
+            INotificationService notificationService,
+            IAlertService alertService) 
         {
             _productRepository = productRepository;
             _mapper = mapper;
@@ -64,7 +66,8 @@ namespace RMS.Application.Implementations
             _inventoryRepository = inventoryRepository;
             _stockTransactionService = stockTransactionService;
             _unitConversionService = unitConversionService;
-            _notificationService = notificationService; // Assigned INotificationService
+            _notificationService = notificationService; 
+            _alertService = alertService;
         }
 
         public async Task<ResponseDto<ProductDto>> GetByIdAsync(int id)
@@ -73,6 +76,7 @@ namespace RMS.Application.Implementations
             var product = await query.Include(p => p.Category)
                                      .Include(p => p.Supplier)
                                      .Include(p => p.Manufacturer)
+                                     .Include(p => p.Inventory)
                                      .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
@@ -83,41 +87,74 @@ namespace RMS.Application.Implementations
             return new ResponseDto<ProductDto> { IsSuccess = true, Data = productDto, Code = "200" };
         }
 
-        public async Task<PagedResult<ProductDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, int? categoryId)
+        public async Task<ResponseDto<PagedResult<ProductDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status, int? categoryId, int? supplierId = null, int? manufacturerId = null)
         {
-            var query = _productRepository.GetQueryable();
-
-            query = query.Include(p => p.Category)
-                         .Include(p => p.Supplier)
-                         .Include(p => p.Manufacturer);
-
-            if (status.HasValue)
+            try
             {
-                query = query.Where(p => p.Status == status.Value);
-            }
+                var query = _productRepository.GetQueryable();
 
-            if (categoryId.HasValue)
-            {
-                query = query.Where(p => p.CategoryID == categoryId.Value);
-            }
+                query = query.Include(p => p.Category)
+                             .Include(p => p.Supplier)
+                             .Include(p => p.Manufacturer)
+                             .Include(p => p.Inventory);
 
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(p => p.ProductName.Contains(searchQuery) || p.ProductBarcode.Contains(searchQuery) || p.Id.ToString().Contains(searchQuery));
-            }
+                if (status.HasValue)
+                {
+                    query = query.Where(p => p.Status == status.Value);
+                }
 
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
-            }
-            else
-            {
-                query = query.OrderBy(p => p.ProductName); // Default sort
-            }
+                if (categoryId.HasValue)
+                {
+                    query = query.Where(p => p.CategoryID == categoryId.Value);
+                }
 
-            var pagedResult = await query.ToPagedList(pageNumber, pageSize);
-            var productDtos = _mapper.Map<List<ProductDto>>(pagedResult.Items);
-            return new PagedResult<ProductDto>(productDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+                if (supplierId.HasValue)
+                {
+                    query = query.Where(p => p.SupplierID == supplierId.Value);
+                }
+
+                if (manufacturerId.HasValue)
+                {
+                    query = query.Where(p => p.ManufacturerID == manufacturerId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(p => p.ProductName.Contains(searchQuery) || p.ProductBarcode.Contains(searchQuery) || p.Id.ToString().Contains(searchQuery));
+                }
+
+                if (!string.IsNullOrEmpty(sortColumn))
+                {
+                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
+                }
+                else
+                {
+                    query = query.OrderBy(p => p.ProductName); // Default sort
+                }
+
+                var pagedResult = await query.ToPagedList(pageNumber, pageSize);
+                var productDtos = _mapper.Map<List<ProductDto>>(pagedResult.Items);
+                var result = new PagedResult<ProductDto>(productDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
+
+                return new ResponseDto<PagedResult<ProductDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Products retrieved successfully.",
+                    Code = "200",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all products.");
+                return new ResponseDto<PagedResult<ProductDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving products.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
         }
 
         public async Task<ResponseDto<ProductDto>> CreateAsync(CreateProductDto createDto)
@@ -133,6 +170,30 @@ namespace RMS.Application.Implementations
             var product = _mapper.Map<Product>(createDto);
             await _productRepository.AddAsync(product);
             await _unitOfWork.SaveChangesAsync();
+
+            // AUTOMATIC INVENTORY INITIALIZATION
+            // Create a default inventory entry for the new product to ensure visibility in stock list
+            try
+            {
+                var inventory = new Inventory
+                {
+                    ProductID = product.Id,
+                    InitialStock = 0,
+                    CurrentStock = 0,
+                    MinStockLevel = 5, // Default safe threshold
+                    LastUpdated = DateTime.UtcNow,
+                    Status = true,
+                    BranchID = product.BranchID ?? 1 // Link to the same branch
+                };
+                await _inventoryRepository.AddAsync(inventory);
+                await _unitOfWork.SaveChangesAsync();
+                _logger.LogInformation("System initialized default inventory protocol for Product ID: {ProductId}", product.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Inventory auto-initialization failed for Product: {ProductName}", product.ProductName);
+                // We don't rollback the product creation here, but we log the failure.
+            }
 
             var productDto = _mapper.Map<ProductDto>(product);
             await _auditLogService.LogAsync("CreateProduct", "Product", $"ProductId:{product.Id}", "System", $"Product '{product.ProductName}' created.");
@@ -251,18 +312,33 @@ namespace RMS.Application.Implementations
                     ingredient.QuantityAvailable -= finalQuantityToDeduct;
                     await _ingredientRepository.UpdateAsync(ingredient);
 
+                    // Check for low stock alert
+                    if (ingredient.QuantityAvailable <= ingredient.ReorderLevel)
+                    {
+                        await _alertService.CreateAlertAsync(new DTOs.AlertDTOs.CreateAlertDto
+                        {
+                            Message = $"Low Stock Alert: '{ingredient.Name}' has only {ingredient.QuantityAvailable} {ingredient.Unit?.ShortCode} remaining.",
+                            Type = Domain.Enum.AlertType.LowStock
+                        });
+                    }
+
                     // Log as a stock transaction (OUT type)
                     var stockTransactionDto = new CreateStockTransactionDto
                     {
                         ProductID = productId, // This is the finished product ID
                         IngredientID = pi.IngredientID, // The consumed ingredient ID
                         TransactionType = "OUT",
-                        Quantity = (int)finalQuantityToDeduct, // Assuming quantity is integer for stock transactions
+                        Quantity = (int)Math.Max(1, Math.Round(finalQuantityToDeduct)), // Assuming quantity is integer for stock transactions
                         TransactionDate = DateTime.UtcNow,
                         Remarks = $"Consumed for product sale (Product ID: {productId}, Quantity Sold: {quantitySold})",
                         TransactionSource = "RecipeConsumption",
                     };
-                    await _stockTransactionService.ProcessStockTransactionAsync(stockTransactionDto);
+                    var transactionResult = await _stockTransactionService.ProcessStockTransactionAsync(stockTransactionDto);
+                    if (!transactionResult.IsSuccess)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+                        return new ResponseDto<string> { IsSuccess = false, Message = $"Stock transaction failed: {transactionResult.Message}", Code = transactionResult.Code };
+                    }
 
                     // Send real-time update for each ingredient consumed
                     var inventoryUpdateDto = new InventoryUpdateDto
@@ -285,7 +361,88 @@ namespace RMS.Application.Implementations
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Error consuming ingredients for product {ProductId} (Quantity Sold: {QuantitySold}).", productId, quantitySold);
-                return new ResponseDto<string> { IsSuccess = false, Message = "An error occurred while consuming ingredients.", Code = "500" };
+                return new ResponseDto<string> { IsSuccess = false, Message = $"Error: {ex.Message}", Code = "500" };
+            }
+        }
+
+        public async Task<ResponseDto<string>> RevertIngredientConsumptionAsync(int productId, int quantityToReturn)
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var productIngredients = await _productIngredientRepository.GetQueryable()
+                                                                           .Where(pi => pi.ProductID == productId)
+                                                                           .Include(pi => pi.Ingredient)
+                                                                           .Include(pi => pi.Unit)
+                                                                           .ToListAsync();
+
+                if (!productIngredients.Any())
+                {
+                    await _unitOfWork.CommitTransactionAsync();
+                    return new ResponseDto<string> { IsSuccess = true, Message = "No ingredients to revert for this product.", Code = "200" };
+                }
+
+                foreach (var pi in productIngredients)
+                {
+                    var quantityToRestore = pi.Quantity * quantityToReturn;
+                    var ingredient = await _ingredientRepository.GetByIdAsync(pi.IngredientID);
+
+                    if (ingredient == null) continue;
+
+                    // Perform unit conversion if necessary
+                    decimal finalQuantityToRestore = quantityToRestore;
+                    if (pi.UnitID != ingredient.UnitID)
+                    {
+                        var conversionResult = await _unitConversionService.ConvertUnitsAsync(pi.UnitID, ingredient.UnitID, quantityToRestore);
+                        if (conversionResult.IsSuccess)
+                        {
+                            finalQuantityToRestore = conversionResult.Data;
+                        }
+                    }
+
+                    var oldQuantity = ingredient.QuantityAvailable;
+                    ingredient.QuantityAvailable += finalQuantityToRestore;
+                    await _ingredientRepository.UpdateAsync(ingredient);
+
+                    // Log as a stock transaction (IN type)
+                    var stockTransactionDto = new CreateStockTransactionDto
+                    {
+                        ProductID = productId,
+                        IngredientID = pi.IngredientID,
+                        TransactionType = "IN",
+                        Quantity = (int)Math.Max(1, Math.Round(finalQuantityToRestore)),
+                        TransactionDate = DateTime.UtcNow,
+                        Remarks = $"Reverted consumption due to order reversal (Product ID: {productId}, Quantity Reverted: {quantityToReturn})",
+                        TransactionSource = "RecipeReversal",
+                    };
+                    var transactionResult = await _stockTransactionService.ProcessStockTransactionAsync(stockTransactionDto);
+                    if (!transactionResult.IsSuccess)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+                        return new ResponseDto<string> { IsSuccess = false, Message = $"Stock transaction failed: {transactionResult.Message}", Code = transactionResult.Code };
+                    }
+
+                    // Send real-time update
+                    var inventoryUpdateDto = new InventoryUpdateDto
+                    {
+                        ProductId = ingredient.IngredientID,
+                        ProductName = ingredient.Name,
+                        OldQuantity = oldQuantity,
+                        NewQuantity = ingredient.QuantityAvailable,
+                        ChangeType = "Reverted",
+                        Message = $"Ingredient '{ingredient.Name}' restored. Old: {oldQuantity}, New: {ingredient.QuantityAvailable}"
+                    };
+                    await _notificationService.SendInventoryUpdateAsync(inventoryUpdateDto);
+                }
+
+                await _unitOfWork.CommitTransactionAsync();
+                return new ResponseDto<string> { IsSuccess = true, Message = "Ingredients restored successfully.", Code = "200" };
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Error reverting ingredients for product {ProductId}.", productId);
+                return new ResponseDto<string> { IsSuccess = false, Message = $"Error: {ex.Message}", Code = "500" };
             }
         }
     }

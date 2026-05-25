@@ -1,4 +1,5 @@
 ﻿using RMS.Domain.Entities;
+using RMS.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RMS.Domain.Entities
 {
-    public class User : BaseEntity
+    public class User : BaseEntity, IMultiTenant
     {
         public int Id { get; set; }
         public required string UserName { get; set; }
@@ -17,6 +18,9 @@ namespace RMS.Domain.Entities
         public required string FullName { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
+
+        public int? BranchID { get; set; }
+        public virtual Branch? Branch { get; set; }
 
         public byte[]? ProfilePicture { get; set; }
         public string? RefreshToken { get; set; }

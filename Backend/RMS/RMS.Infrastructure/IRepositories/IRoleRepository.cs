@@ -1,13 +1,9 @@
-﻿using RMS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RMS.Domain.Interfaces;
+using RMS.Domain.Entities;
 
-namespace RMS.Infrastructure.Interfaces
+namespace RMS.Infrastructure.IRepositories
 {
-    public interface IRoleRepository
+    public interface IRoleRepository : IBaseRepository<Role>
     {
         Task<Role?> GetRoleByIdAsync(int roleId);
         Task<Role?> GetRoleByNameAsync(string roleName);

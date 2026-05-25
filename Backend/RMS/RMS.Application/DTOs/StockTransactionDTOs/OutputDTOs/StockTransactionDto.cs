@@ -1,4 +1,5 @@
 using System;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs.StockTransactionDTOs.OutputDTOs
 {
@@ -7,6 +8,8 @@ namespace RMS.Application.DTOs.StockTransactionDTOs.OutputDTOs
         public int TransactionID { get; set; }
         public int? ProductID { get; set; }
         public string? ProductName { get; set; }
+        public int? IngredientID { get; set; }
+        public string? IngredientName { get; set; }
         public int? SupplierID { get; set; }
         public string? SupplierName { get; set; }
         public required string TransactionType { get; set; }
@@ -19,7 +22,6 @@ namespace RMS.Application.DTOs.StockTransactionDTOs.OutputDTOs
         public string? TransactionSource { get; set; }
         public string? AdjustmentType { get; set; }
         public string? Reason { get; set; }
-        public int? IngredientID { get; set; }
         public bool Status { get; set; }
     }
 }

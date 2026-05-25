@@ -21,5 +21,6 @@ namespace RMS.Domain.Entities
         // Navigation properties
         public Product? Product { get; set; }
         public Supplier? Supplier { get; set; }
+        public virtual Ingredient? Ingredient { get; set; }
     }
 }

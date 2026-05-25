@@ -1,3 +1,5 @@
+using RMS.Application.Interfaces;
+
 namespace RMS.Application.DTOs.RolePermissionDTOs.InputDTOs
 {
     public class RolePermissionCreateDto

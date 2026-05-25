@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs.ProductIngredientDTOs.InputDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs;
 using System;
 using System.Threading.Tasks;
@@ -48,16 +49,7 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _productIngredientService.GetAllAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
-
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Product ingredients retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -70,7 +62,6 @@ namespace RMS.WebApi.Controllers
                 });
             }
         }
-
         [HttpPost]
         [Authorize(Policy = "PRODUCT_INGREDIENT_CREATE")]
         public async Task<IActionResult> Create([FromBody] CreateProductIngredientDto createDto)
@@ -156,7 +147,7 @@ namespace RMS.WebApi.Controllers
 
         [HttpPut("{id}/status")]
         [Authorize(Policy = "PRODUCT_INGREDIENT_UPDATE")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateProductIngredientDto dto)
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] ProductIngredientStatusUpdateDto dto)
         {
             try
             {

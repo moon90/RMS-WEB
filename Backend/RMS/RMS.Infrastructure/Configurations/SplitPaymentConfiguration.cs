@@ -24,7 +24,7 @@ namespace RMS.Infrastructure.Configurations
                 .HasMaxLength(50);
 
             builder.HasOne(sp => sp.Sale)
-                .WithMany()
+                .WithMany(s => s.SplitPayments)
                 .HasForeignKey(sp => sp.SaleID);
 
             // Seed Data

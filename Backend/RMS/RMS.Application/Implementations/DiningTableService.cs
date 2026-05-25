@@ -54,13 +54,18 @@ namespace RMS.Application.Implementations
             return ResponseDto<DiningTableDto>.CreateSuccessResponse(_mapper.Map<DiningTableDto>(diningTable));
         }
 
-        public async Task<ResponseDto<PagedResult<DiningTableDto>>> GetAllDiningTablesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection)
+        public async Task<ResponseDto<PagedResult<DiningTableDto>>> GetAllDiningTablesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status = null)
         {
             var query = _diningTableRepository.GetQueryable();
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 query = query.Where(dt => dt.TableName.Contains(searchQuery));
+            }
+
+            if (status.HasValue)
+            {
+                query = query.Where(dt => dt.Status == status.Value);
             }
 
             if (!string.IsNullOrEmpty(sortColumn))
@@ -92,13 +97,22 @@ namespace RMS.Application.Implementations
                 return ResponseDto<DiningTableDto>.CreateErrorResponse("Validation failed.", ApiErrorCode.BadRequest, validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }));
             }
 
-            var diningTable = _mapper.Map<DiningTable>(diningTableDto);
-            await _diningTableRepository.AddAsync(diningTable);
-            await _unitOfWork.CommitTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var diningTable = _mapper.Map<DiningTable>(diningTableDto);
+                await _diningTableRepository.AddAsync(diningTable);
+                await _unitOfWork.CommitTransactionAsync();
 
-            await _auditLogService.LogAsync("CreateDiningTable", "DiningTable", $"TableId:{diningTable.TableID}", "System", $"Dining Table '{diningTable.TableName}' created.");
+                await _auditLogService.LogAsync("CreateDiningTable", "DiningTable", $"TableId:{diningTable.TableID}", "System", $"Dining Table '{diningTable.TableName}' created.");
 
-            return ResponseDto<DiningTableDto>.CreateSuccessResponse(_mapper.Map<DiningTableDto>(diningTable), "Dining Table created successfully.", "201");
+                return ResponseDto<DiningTableDto>.CreateSuccessResponse(_mapper.Map<DiningTableDto>(diningTable), "Dining Table created successfully.", "201");
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return ResponseDto<DiningTableDto>.CreateErrorResponse(ex.Message);
+            }
         }
 
         public async Task<ResponseDto<DiningTableDto>> UpdateDiningTableAsync(int id, UpdateDiningTableDto diningTableDto)
@@ -115,13 +129,22 @@ namespace RMS.Application.Implementations
                 return ResponseDto<DiningTableDto>.CreateErrorResponse("Dining Table not found.", ApiErrorCode.NotFound);
             }
 
-            _mapper.Map(diningTableDto, existingDiningTable);
-            await _diningTableRepository.UpdateAsync(existingDiningTable);
-            await _unitOfWork.CommitTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                _mapper.Map(diningTableDto, existingDiningTable);
+                await _diningTableRepository.UpdateAsync(existingDiningTable);
+                await _unitOfWork.CommitTransactionAsync();
 
-            await _auditLogService.LogAsync("UpdateDiningTable", "DiningTable", $"TableId:{existingDiningTable.TableID}", "System", $"Dining Table '{existingDiningTable.TableName}' updated.");
+                await _auditLogService.LogAsync("UpdateDiningTable", "DiningTable", $"TableId:{existingDiningTable.TableID}", "System", $"Dining Table '{existingDiningTable.TableName}' updated.");
 
-            return ResponseDto<DiningTableDto>.CreateSuccessResponse(_mapper.Map<DiningTableDto>(existingDiningTable), "Dining Table updated successfully.");
+                return ResponseDto<DiningTableDto>.CreateSuccessResponse(_mapper.Map<DiningTableDto>(existingDiningTable), "Dining Table updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return ResponseDto<DiningTableDto>.CreateErrorResponse(ex.Message);
+            }
         }
 
         public async Task<ResponseDto<bool>> UpdateDiningTableStatusAsync(int id, bool status)
@@ -138,14 +161,23 @@ namespace RMS.Application.Implementations
                 return ResponseDto<bool>.CreateErrorResponse("Dining Table not found.", ApiErrorCode.NotFound);
             }
 
-            diningTable.Status = status;
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                diningTable.Status = status;
 
-            await _diningTableRepository.UpdateAsync(diningTable);
-            await _unitOfWork.CommitTransactionAsync();
+                await _diningTableRepository.UpdateAsync(diningTable);
+                await _unitOfWork.CommitTransactionAsync();
 
-            await _auditLogService.LogAsync("UpdateDiningTableStatus", "DiningTable", $"TableId:{id}", "System", $"Dining Table '{diningTable.TableName}' status updated to {(status ? "Active" : "Inactive")}.");
+                await _auditLogService.LogAsync("UpdateDiningTableStatus", "DiningTable", $"TableId:{id}", "System", $"Dining Table '{diningTable.TableName}' status updated to {(status ? "Active" : "Inactive")}.");
 
-            return ResponseDto<bool>.CreateSuccessResponse(true, "Dining Table status updated successfully.");
+                return ResponseDto<bool>.CreateSuccessResponse(true, "Dining Table status updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return ResponseDto<bool>.CreateErrorResponse(ex.Message);
+            }
         }
 
         public async Task<ResponseDto<bool>> DeleteDiningTableAsync(int id)
@@ -156,12 +188,21 @@ namespace RMS.Application.Implementations
                 return ResponseDto<bool>.CreateErrorResponse("Dining Table not found.", ApiErrorCode.NotFound);
             }
 
-            await _diningTableRepository.DeleteAsync(diningTable);
-            await _unitOfWork.CommitTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                await _diningTableRepository.DeleteAsync(diningTable);
+                await _unitOfWork.CommitTransactionAsync();
 
-            await _auditLogService.LogAsync("DeleteDiningTable", "DiningTable", $"TableId:{id}", "System", $"Dining Table '{diningTable.TableName}' deleted.");
+                await _auditLogService.LogAsync("DeleteDiningTable", "DiningTable", $"TableId:{id}", "System", $"Dining Table '{diningTable.TableName}' deleted.");
 
-            return ResponseDto<bool>.CreateSuccessResponse(true, "Dining Table deleted successfully.");
+                return ResponseDto<bool>.CreateSuccessResponse(true, "Dining Table deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return ResponseDto<bool>.CreateErrorResponse(ex.Message);
+            }
         }
     }
 }

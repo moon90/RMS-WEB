@@ -20,6 +20,12 @@ namespace RMS.WebApi.Filters
                     }))
                     .ToList();
 
+                Console.WriteLine("Validation failed for request: " + context.HttpContext.Request.Path);
+                foreach (var error in validationErrors)
+                {
+                    Console.WriteLine($"Property: {error.PropertyName}, Error: {error.ErrorMessage}");
+                }
+
                 context.Result = new BadRequestObjectResult(new ResponseDto<object>
                 {
                     IsSuccess = false,

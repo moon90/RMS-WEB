@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RMS.Domain.Interfaces;
-using RMS.Infrastructure.Interfaces;
 using RMS.Infrastructure.IRepositories;
 using RMS.Infrastructure.Persistences;
 using RMS.Infrastructure.Repositories;
+using RMS.Infrastructure.Services;
 
 namespace RMS.Infrastructure
 {
@@ -56,7 +56,11 @@ namespace RMS.Infrastructure
             services.AddScoped<IUnitConversionRepository, UnitConversionRepository>();
             services.AddScoped<ISplitPaymentRepository, SplitPaymentRepository>();
             services.AddScoped<IAlertRepository, AlertRepository>();
+            services.AddScoped<ISystemSettingRepository, SystemSettingRepository>();
+            services.AddScoped<IBranchRepository, BranchRepository>();
+            services.AddScoped<ITenantService, TenantService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
             return services;
         }

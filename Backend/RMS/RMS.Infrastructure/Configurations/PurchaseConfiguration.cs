@@ -39,6 +39,7 @@ namespace RMS.Infrastructure.Configurations
                     TotalAmount = 55.00m, // 25.00 + 30.00
                     PaymentMethod = "Credit Card",
                     CategoryId = 1,
+                    BranchID = 1,
                     Status = true,
                     CreatedBy = "system",
                     CreatedDate = DateTime.UtcNow,

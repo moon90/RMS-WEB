@@ -1,6 +1,8 @@
+using RMS.Infrastructure.IRepositories;
+using RMS.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using RMS.Domain.Entities;
-using RMS.Infrastructure.IRepositories; // Correct interface namespace
+using RMS.Domain.Interfaces; // Correct interface namespace
 using RMS.Infrastructure.Persistences;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,13 +12,13 @@ namespace RMS.Infrastructure.Repositories
 {
     public class OrderRepository : BaseRepository<Order>, IOrderRepository
     {
-        public OrderRepository(RestaurantDbContext context) : base(context)
+        public OrderRepository(RestaurantDbContext context, ITenantService tenantService) : base(context, tenantService)
         {
         }
 
         public new async Task<Order> GetByIdAsync(object id)
         {
-            return await _context.Set<Order>() // Use _context.Set<Order>()
+            return await GetQueryable()
                                  .Include(o => o.OrderDetails)
                                  .ThenInclude(od => od.Product)
                                  .FirstOrDefaultAsync(o => o.OrderID == (int)id);
@@ -24,7 +26,7 @@ namespace RMS.Infrastructure.Repositories
 
         public new async Task<List<Order>> GetAllAsync()
         {
-            return await _context.Set<Order>() // Use _context.Set<Order>()
+            return await GetQueryable()
                                  .Include(o => o.OrderDetails)
                                  .ThenInclude(od => od.Product)
                                  .ToListAsync();
@@ -32,7 +34,7 @@ namespace RMS.Infrastructure.Repositories
 
         public async Task<IEnumerable<Order>> GetOrdersByCustomerIdAsync(int customerId)
         {
-            return await _context.Set<Order>() // Use _context.Set<Order>()
+            return await GetQueryable()
                                  .Where(o => o.CustomerID == customerId)
                                  .Include(o => o.OrderDetails)
                                  .ThenInclude(od => od.Product)

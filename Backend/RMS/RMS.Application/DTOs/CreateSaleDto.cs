@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.DTOs
 {

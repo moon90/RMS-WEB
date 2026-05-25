@@ -20,56 +20,12 @@ namespace RMS.Infrastructure.Configurations
 
             // Seed Data
             builder.HasData(
-                new DiningTable
-                {
-                    TableID = 1,
-                    TableName = "Table 1",
-                    Status = true, // Keep existing Status
-                    DiningTableStatus = DiningTableStatusEnum.Available,
-                    CreatedBy = "system",
-                    CreatedDate = DateTime.UtcNow,
-                    IsDeleted = false
-                },
-                new DiningTable
-                {
-                    TableID = 2,
-                    TableName = "Table 2",
-                    Status = true, // Keep existing Status
-                    DiningTableStatus = DiningTableStatusEnum.Available,
-                    CreatedBy = "system",
-                    CreatedDate = DateTime.UtcNow,
-                    IsDeleted = false
-                },
-                new DiningTable
-                {
-                    TableID = 3,
-                    TableName = "Table 3",
-                    Status = true, // Keep existing Status
-                    DiningTableStatus = DiningTableStatusEnum.Available,
-                    CreatedBy = "system",
-                    CreatedDate = DateTime.UtcNow,
-                    IsDeleted = false
-                },
-                new DiningTable
-                {
-                    TableID = 4,
-                    TableName = "Table 4",
-                    Status = true, // Keep existing Status
-                    DiningTableStatus = DiningTableStatusEnum.Available,
-                    CreatedBy = "system",
-                    CreatedDate = DateTime.UtcNow,
-                    IsDeleted = false
-                },
-                new DiningTable
-                {
-                    TableID = 5,
-                    TableName = "Table 5",
-                    Status = true, // Keep existing Status
-                    DiningTableStatus = DiningTableStatusEnum.Available,
-                    CreatedBy = "system",
-                    CreatedDate = DateTime.UtcNow,
-                    IsDeleted = false
-                }
+                new DiningTable { TableID = 1, TableName = "Window Booth A1", BranchID = 1, Status = true, DiningTableStatus = DiningTableStatusEnum.Available, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new DiningTable { TableID = 2, TableName = "Garden Terrace T1", BranchID = 1, Status = true, DiningTableStatus = DiningTableStatusEnum.Available, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new DiningTable { TableID = 3, TableName = "VIP Lounge V1", BranchID = 1, Status = true, DiningTableStatus = DiningTableStatusEnum.Available, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new DiningTable { TableID = 4, TableName = "Express Table 01", BranchID = 2, Status = true, DiningTableStatus = DiningTableStatusEnum.Available, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new DiningTable { TableID = 5, TableName = "Express Table 02", BranchID = 2, Status = true, DiningTableStatus = DiningTableStatusEnum.Available, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                new DiningTable { TableID = 6, TableName = "Global Support Node", BranchID = null, Status = true, DiningTableStatus = DiningTableStatusEnum.Available, CreatedBy = "system", CreatedDate = DateTime.UtcNow }
             );
         }
     }

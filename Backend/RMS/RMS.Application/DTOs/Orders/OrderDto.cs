@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RMS.Application.Interfaces;
 using RMS.Application.DTOs.CustomerDTOs.OutputDTOs; // Assuming CustomerDto exists
 
 namespace RMS.Application.DTOs.Orders
@@ -8,12 +9,14 @@ namespace RMS.Application.DTOs.Orders
     {
         public int OrderID { get; set; }
         public DateTime? OrderDate { get; set; }
-        public string OrderTime { get; set; }
-        public string TableName { get; set; }
-        public string WaiterName { get; set; }
-        public string OrderStatus { get; set; }
-        public string OrderType { get; set; }
+        public string? OrderTime { get; set; }
+        public string? TableName { get; set; }
+        public string? WaiterName { get; set; }
+        public string? OrderStatus { get; set; }
+        public string? OrderType { get; set; }
         public decimal Total { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal ServiceChargeAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal DiscountPercentage { get; set; }
         public int? PromotionID { get; set; }
@@ -21,12 +24,15 @@ namespace RMS.Application.DTOs.Orders
         public decimal ChangeAmount { get; set; }
         public int? DriverID { get; set; }
         public int? CustomerID { get; set; }
+        public string? PaymentStatus { get; set; }
+        public string? PaymentMethod { get; set; }
         
         // New Additions
         public string? TokenNumber { get; set; }
         public decimal TipAmount { get; set; }
 
-        public CustomerDto Customer { get; set; } // Navigation property for Customer
-        public ICollection<OrderDetailDto> OrderDetails { get; set; }
+        public CustomerDto? Customer { get; set; } // Navigation property for Customer
+        public ICollection<OrderDetailDto>? OrderDetails { get; set; }
+        public DateTime? ModifiedDate { get; set; } // For conflict checking
     }
 }

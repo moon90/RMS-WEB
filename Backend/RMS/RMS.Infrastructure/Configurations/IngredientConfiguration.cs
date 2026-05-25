@@ -22,18 +22,23 @@ namespace RMS.Infrastructure.Configurations
 
             builder.Property(i => i.QuantityAvailable)
                 .IsRequired()
-                .HasColumnType("decimal(10,2)");
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(i => i.CostPrice)
+                .IsRequired()
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0m);
 
             builder.Property(i => i.UnitID)
                 .IsRequired();
 
             builder.Property(i => i.ReorderLevel)
                 .IsRequired()
-                .HasColumnType("decimal(10,2)");
+                .HasColumnType("decimal(18,2)");
 
             builder.Property(i => i.ReorderQuantity)
                 .IsRequired()
-                .HasColumnType("decimal(10,2)");
+                .HasColumnType("decimal(18,2)");
 
             builder.Property(i => i.Remarks)
                 .HasMaxLength(250);
@@ -70,14 +75,16 @@ namespace RMS.Infrastructure.Configurations
                 new Ingredient
                 {
                     IngredientID = 1,
-                    Name = "Flour",
-                    QuantityAvailable = 50.00m,
-                    UnitID = 1, // Assuming Unit with ID 1 exists (e.g., "kg")
-                    ReorderLevel = 10.00m,
-                    ReorderQuantity = 20.00m,
-                    SupplierID = 1, // Assuming Supplier with ID 1 exists
-                    ExpireDate = DateTime.UtcNow.AddMonths(12),
-                    Remarks = "All-purpose flour",
+                    Name = "Japanese A5 Wagyu Beef",
+                    QuantityAvailable = 25.50m,
+                    CostPrice = 120.00m,
+                    UnitID = 1, // kg
+                    ReorderLevel = 5.00m,
+                    ReorderQuantity = 10.00m,
+                    SupplierID = 1,
+                    ExpireDate = DateTime.UtcNow.AddDays(7),
+                    BranchID = 1,
+                    Remarks = "Flash frozen, premium grade",
                     Status = true,
                     CreatedBy = "system",
                     CreatedDate = DateTime.UtcNow,
@@ -86,14 +93,34 @@ namespace RMS.Infrastructure.Configurations
                 new Ingredient
                 {
                     IngredientID = 2,
-                    Name = "Sugar",
-                    QuantityAvailable = 25.00m,
-                    UnitID = 1, // Assuming Unit with ID 1 exists (e.g., "kg")
-                    ReorderLevel = 5.00m,
-                    ReorderQuantity = 10.00m,
-                    SupplierID = 1, // Assuming Supplier with ID 1 exists
-                    ExpireDate = DateTime.UtcNow.AddMonths(24),
-                    Remarks = "Granulated sugar",
+                    Name = "Black Truffle Oil",
+                    QuantityAvailable = 5.00m,
+                    CostPrice = 45.00m,
+                    UnitID = 2, // Liters
+                    ReorderLevel = 1.00m,
+                    ReorderQuantity = 2.00m,
+                    SupplierID = 2,
+                    ExpireDate = DateTime.UtcNow.AddMonths(6),
+                    BranchID = 1,
+                    Remarks = "Infused extra virgin oil",
+                    Status = true,
+                    CreatedBy = "system",
+                    CreatedDate = DateTime.UtcNow,
+                    IsDeleted = false
+                },
+                new Ingredient
+                {
+                    IngredientID = 3,
+                    Name = "Express Blend Coffee Beans",
+                    QuantityAvailable = 15.00m,
+                    CostPrice = 18.00m,
+                    UnitID = 1, // kg
+                    ReorderLevel = 3.00m,
+                    ReorderQuantity = 5.00m,
+                    SupplierID = 1,
+                    ExpireDate = DateTime.UtcNow.AddMonths(3),
+                    BranchID = 2,
+                    Remarks = "Custom dark roast for Downtown node",
                     Status = true,
                     CreatedBy = "system",
                     CreatedDate = DateTime.UtcNow,

@@ -1,5 +1,6 @@
 using FluentValidation;
 using RMS.Application.DTOs.StockTransactionDTOs.InputDTOs;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.Validators.StockTransactionValidators
 {
@@ -30,6 +31,10 @@ namespace RMS.Application.Validators.StockTransactionValidators
 
             RuleFor(x => x.Reason)
                 .MaximumLength(250).WithMessage("Reason cannot exceed 250 characters.");
+
+            RuleFor(x => x)
+                .Must(x => x.ProductID.HasValue || x.IngredientID.HasValue)
+                .WithMessage("Either Product ID or Ingredient ID must be provided.");
 
             When(x => !string.IsNullOrEmpty(x.AdjustmentType),
                 () =>

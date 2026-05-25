@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RMS.Domain.Entities;
 using System;
@@ -148,7 +148,18 @@ namespace RMS.Infrastructure.Configurations
                     new Permission { Id = 95, PermissionName = "View Sales", PermissionKey = "SALE_VIEW", ControllerName = "Sales", ActionName = "GetAllSales", ModuleName = "Sale Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
                     new Permission { Id = 96, PermissionName = "Create Sale", PermissionKey = "SALE_CREATE", ControllerName = "Sales", ActionName = "CreateSale", ModuleName = "Sale Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
                     new Permission { Id = 97, PermissionName = "Update Sale", PermissionKey = "SALE_UPDATE", ControllerName = "Sales", ActionName = "UpdateSale", ModuleName = "Sale Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
-                    new Permission { Id = 98, PermissionName = "Delete Sale", PermissionKey = "SALE_DELETE", ControllerName = "Sales", ActionName = "DeleteSale", ModuleName = "Sale Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow }
+                    new Permission { Id = 98, PermissionName = "Delete Sale", PermissionKey = "SALE_DELETE", ControllerName = "Sales", ActionName = "DeleteSale", ModuleName = "Sale Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 100, PermissionName = "View Low Stock Alerts", PermissionKey = "LOW_STOCK_ALERT_VIEW", ControllerName = "LowStockAlerts", ActionName = "GetLowStockAlerts", ModuleName = "Alert Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 101, PermissionName = "View Inventory Low Stock", PermissionKey = "INVENTORY_LOW_STOCK_VIEW", ControllerName = "Inventory", ActionName = "GetLowStockProducts", ModuleName = "Inventory Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 102, PermissionName = "Update Kitchen Status", PermissionKey = "KITCHEN_UPDATE", ControllerName = "Kitchen", ActionName = "UpdateStatus", ModuleName = "Kitchen Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 103, PermissionName = "View Dashboard", PermissionKey = "DASHBOARD_VIEW", ControllerName = "Dashboard", ActionName = "Get", ModuleName = "Dashboard", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 104, PermissionName = "View POS Terminal", PermissionKey = "POS_VIEW", ControllerName = "POS", ActionName = "Get", ModuleName = "POS Operations", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 105, PermissionName = "View Branch Network", PermissionKey = "BRANCH_VIEW", ControllerName = "Branches", ActionName = "GetAll", ModuleName = "System", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 106, PermissionName = "View System Settings", PermissionKey = "SYSTEM_SETTING_VIEW", ControllerName = "Settings", ActionName = "Get", ModuleName = "System", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 107, PermissionName = "View Payroll", PermissionKey = "PAYROLL_VIEW", ControllerName = "Payroll", ActionName = "Get", ModuleName = "Staff Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 108, PermissionName = "View Stock Transfers", PermissionKey = "STOCK_TRANSFER_VIEW", ControllerName = "StockTransfers", ActionName = "GetAll", ModuleName = "Stock Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 109, PermissionName = "Export Categories", PermissionKey = "CATEGORY_EXPORT", ControllerName = "Categories", ActionName = "Export", ModuleName = "Category Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow },
+                    new Permission { Id = 110, PermissionName = "Import Categories", PermissionKey = "CATEGORY_IMPORT", ControllerName = "Categories", ActionName = "Import", ModuleName = "Category Management", Status = true, CreatedBy = "system", CreatedDate = DateTime.UtcNow }
                 );
         }
     }

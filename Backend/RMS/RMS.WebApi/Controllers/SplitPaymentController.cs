@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs.SplitPaymentDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using System.Threading.Tasks;
 
 namespace RMS.WebApi.Controllers

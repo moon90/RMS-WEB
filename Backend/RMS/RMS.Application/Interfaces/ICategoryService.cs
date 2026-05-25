@@ -12,7 +12,7 @@ namespace RMS.Application.Interfaces
     {
         Task<ResponseDto<CategoryDto>> GetByIdAsync(int id);
         Task<ResponseDto<IEnumerable<CategoryDto>>> GetAllCategoriesAsync();
-        Task<PagedResult<CategoryDto>> GetAllCategoriesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
+        Task<ResponseDto<PagedResult<CategoryDto>>> GetAllCategoriesAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
         Task<FileExportDto> ExportCategoriesAsync();
         Task<ImportResultDto> ImportCategoriesAsync(IFormFile file);
         Task<ResponseDto<CategoryDto>> CreateAsync(CategoryCreateDto createDto);

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RMS.Application.DTOs.ProductDTOs.InputDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs;
 using RMS.WebApi.Configurations;
 using RMS.Application.Services.Processing; // Added for Exception
@@ -49,21 +50,12 @@ namespace RMS.WebApi.Controllers
 
         [HttpGet]
         [Authorize(Policy = "PRODUCT_VIEW")]
-        public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null, [FromQuery] int? categoryId = null)
+        public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] bool? status = null, [FromQuery] int? categoryId = null, [FromQuery] int? supplierId = null, [FromQuery] int? manufacturerId = null)
         {
             try
             {
-                var result = await _productService.GetAllAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, categoryId);
-
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Products retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                var result = await _productService.GetAllAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status, categoryId, supplierId, manufacturerId);
+                return Ok(result);
             }
             catch (Exception ex)
             {

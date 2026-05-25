@@ -5,7 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore; // Added
 using System.Linq;
-using RMS.Infrastructure.Interfaces; // Added
+using RMS.Application.Interfaces;
+using RMS.Infrastructure.IRepositories; // Added
 
 namespace RMS.Application.Validators
 {

@@ -1,6 +1,7 @@
 
 using RMS.Domain.Entities;
 using System;
+using RMS.Domain.Interfaces;
 
 namespace RMS.Domain.Entities
 {
@@ -19,9 +20,13 @@ namespace RMS.Domain.Entities
         
         public DateTime? ExpireDate { get; set; }
 
+        public int? BranchID { get; set; }
+        public virtual Branch? Branch { get; set; }
+
         // Navigation properties
         public Category? Category { get; set; }
         public Supplier? Supplier { get; set; }
         public Manufacturer? Manufacturer { get; set; }
+        public virtual Inventory? Inventory { get; set; }
     }
 }

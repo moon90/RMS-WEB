@@ -1,6 +1,7 @@
+using RMS.Infrastructure.IRepositories;
+using RMS.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using RMS.Domain.Entities;
-using RMS.Infrastructure.IRepositories;
 using RMS.Infrastructure.Persistences;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace RMS.Infrastructure.Repositories
 {
     public class PromotionRepository : BaseRepository<Promotion>, IPromotionRepository
     {
-        public PromotionRepository(RestaurantDbContext context) : base(context)
+        public PromotionRepository(RestaurantDbContext context, ITenantService tenantService) : base(context, tenantService)
         {
         }
 

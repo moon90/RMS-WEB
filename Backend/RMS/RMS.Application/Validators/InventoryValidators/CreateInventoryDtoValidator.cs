@@ -4,6 +4,7 @@ using RMS.Infrastructure.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.Validators.InventoryValidators
 {

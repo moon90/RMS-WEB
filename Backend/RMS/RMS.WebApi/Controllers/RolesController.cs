@@ -1,7 +1,8 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs;
 using RMS.Application.DTOs.RoleDTOs.InputDTOs;
 using RMS.Application.DTOs.RolePermissionDTOs.OutputDTOs;
@@ -28,16 +29,7 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _roleService.GetAllRolesAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection);
-
-                var response = new ResponseDto<object>
-                {
-                    IsSuccess = true,
-                    Message = "Roles retrieved successfully",
-                    Code = "200",
-                    Data = result
-                };
-
-                return Ok(response);
+                return result.IsSuccess ? Ok(result) : StatusCode(500, result);
             }
             catch (Exception ex)
             {
@@ -334,13 +326,14 @@ namespace RMS.WebApi.Controllers
         }
 
         [HttpGet("{roleId}/permissions")]
-        [Authorize(Policy = "ROLE_VIEW")] // Assuming you have a policy for viewing role permissions
+        [Authorize(Policy = "ROLE_VIEW")]
         public async Task<IActionResult> GetRolePermissionsByRoleId(int roleId)
         {
             try
             {
                 var result = await _roleService.GetRolePermissionsByRoleIdAsync(roleId);
-                return result.IsSuccess ? Ok(result) : NotFound(result);
+                // Always Ok — empty permissions list is valid (role has no permissions yet)
+                return Ok(result);
             }
             catch (Exception ex)
             {

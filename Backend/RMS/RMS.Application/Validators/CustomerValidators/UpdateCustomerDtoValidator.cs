@@ -1,5 +1,6 @@
 using FluentValidation;
 using RMS.Application.DTOs.CustomerDTOs.InputDTOs;
+using RMS.Application.Interfaces;
 
 namespace RMS.Application.Validators.CustomerValidators
 {

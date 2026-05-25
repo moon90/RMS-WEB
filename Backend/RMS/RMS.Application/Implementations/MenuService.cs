@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentValidation;
 using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
@@ -8,7 +8,7 @@ using RMS.Application.DTOs.RoleMenuDTOs.OutputDTOs;
 using RMS.Domain.Entities;
 using RMS.Domain.Models.BaseModels;
 using RMS.Application.DTOs.UserDTOs.OutputDTOs;
-using RMS.Infrastructure.Interfaces;
+using RMS.Infrastructure.IRepositories;
 using RMS.Application.DTOs.RoleMenuDTOs.InputDTOs;
 
 namespace RMS.Application.Implementations
@@ -119,7 +119,7 @@ namespace RMS.Application.Implementations
             }
         }
 
-        public async Task<PagedResult<MenuDto>> GetAllMenusAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection)
+        public async Task<ResponseDto<PagedResult<MenuDto>>> GetAllMenusAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection)
         {
             try
             {
@@ -128,13 +128,24 @@ namespace RMS.Application.Implementations
 
                 // Wrap in PagedResult
                 var pagedResult = new PagedResult<MenuDto>(menuDtos, pageNumber, pageSize, totalCount);
-                return pagedResult;
+                return new ResponseDto<PagedResult<MenuDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Menus retrieved successfully.",
+                    Code = "200",
+                    Data = pagedResult
+                };
             }
             catch (Exception ex)
             {
-                // Log the exception
                 Console.WriteLine($"Error in GetAllMenusAsync (paged): {ex.Message}");
-                throw; // Re-throw or handle as appropriate for your application's error handling strategy
+                return new ResponseDto<PagedResult<MenuDto>>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while retrieving menus.",
+                    Code = "500",
+                    Details = ex.Message
+                };
             }
         }
 
@@ -413,22 +424,12 @@ namespace RMS.Application.Implementations
             {
                 var roleMenus = await _roleMenuRepository.GetRoleMenusByRoleIdAsync(roleId);
 
-                if (roleMenus == null || !roleMenus.Any())
-                {
-                    return new ResponseDto<IEnumerable<RoleMenuDto>>
-                    {
-                        IsSuccess = false,
-                        Message = "No menus found for this role.",
-                        Code = "204"
-                    };
-                }
-
-                var roleMenuDtos = _mapper.Map<IEnumerable<RoleMenuDto>>(roleMenus);
+                var roleMenuDtos = _mapper.Map<IEnumerable<RoleMenuDto>>(roleMenus ?? Enumerable.Empty<object>());
 
                 return new ResponseDto<IEnumerable<RoleMenuDto>>
                 {
                     IsSuccess = true,
-                    Message = "Menus retrieved successfully for the role.",
+                    Message = roleMenuDtos.Any() ? "Menus retrieved successfully for the role." : "No menus assigned to this role.",
                     Code = "200",
                     Data = roleMenuDtos
                 };

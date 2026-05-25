@@ -1,8 +1,9 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using RMS.Application.DTOs;
 using RMS.Application.DTOs.MenuDTOs.InputDTOs;
 using RMS.Application.DTOs.RoleMenuDTOs.OutputDTOs;
@@ -52,7 +53,7 @@ namespace RMS.WebApi.Controllers
         // Get all menus with pagination
         [HttpGet]
         [Authorize(Policy = "MENU_VIEW")]
-        public async Task<ActionResult<PagedResult<MenuDto>>> GetAllMenus([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null)
+        public async Task<IActionResult> GetAllMenus([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null)
         {
             try
             {
@@ -66,8 +67,8 @@ namespace RMS.WebApi.Controllers
                     });
                 }
 
-                var pagedResult = await _menuService.GetAllMenusAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection);
-                return Ok(pagedResult);
+                var result = await _menuService.GetAllMenusAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection);
+                return result.IsSuccess ? Ok(result) : StatusCode(500, result);
             }
             catch (Exception ex)
             {
@@ -243,7 +244,7 @@ namespace RMS.WebApi.Controllers
 
         // Get menus by role ID
         [HttpGet("role/{roleId}")]
-        [Authorize(Policy = "MENU_VIEW")] // Assuming MENU_VIEW is sufficient for this
+        [Authorize(Policy = "MENU_VIEW")]
         public async Task<ActionResult<ResponseDto<IEnumerable<RoleMenuDto>>>> GetMenusByRoleId(int roleId)
         {
             try
@@ -259,10 +260,7 @@ namespace RMS.WebApi.Controllers
                 }
 
                 var response = await _menuService.GetMenusByRoleIdAsync(roleId);
-                if (!response.IsSuccess)
-                {
-                    return NotFound(response);
-                }
+                // Always return Ok — empty list is valid (role has no menus yet)
                 return Ok(response);
             }
             catch (Exception ex)

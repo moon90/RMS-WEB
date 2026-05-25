@@ -9,7 +9,7 @@ namespace RMS.Application.Interfaces
     public interface IIngredientService
     {
         Task<ResponseDto<IngredientDto>> GetByIdAsync(int id);
-        Task<PagedResult<IngredientDto>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
+        Task<ResponseDto<PagedResult<IngredientDto>>> GetAllAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, bool? status);
         Task<ResponseDto<IngredientDto>> CreateAsync(CreateIngredientDto createDto);
         Task<ResponseDto<IngredientDto>> UpdateAsync(UpdateIngredientDto updateDto);
         Task<ResponseDto<string>> DeleteAsync(int id);

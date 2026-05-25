@@ -1,6 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.Application.Interfaces;
+using RMS.Domain.Interfaces;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using RMS.Application.DTOs;
 using RMS.Application.DTOs.Orders;
 
 namespace RMS.WebApi.Controllers
@@ -17,42 +22,37 @@ namespace RMS.WebApi.Controllers
         }
 
         [HttpGet("orders/{statuses?}")]
+        [Authorize(Policy = "KITCHEN_VIEW")]
         public async Task<IActionResult> GetKitchenOrders(string? statuses = "Pending,Preparing")
         {
-            var allOrders = new List<OrderDto>();
-            var statusList = statuses?.Split(',').ToList() ?? new List<string> { "Pending", "Preparing" };
-
-            foreach (var status in statusList)
+            try
             {
-                var response = await _orderService.GetAllOrdersAsync(1, 100, null, null, null, status.Trim());
-                if (response.IsSuccess && response.Data != null && response.Data.Items != null)
+                var response = await _orderService.GetAllOrdersAsync(1, 1000, null, "OrderTime", "asc", statuses);
+                
+                if (response.IsSuccess && response.Data != null)
                 {
-                    allOrders.AddRange(response.Data.Items);
+                    return Ok(new { Items = response.Data.Items, TotalCount = response.Data.TotalRecords });
                 }
-                else if (!response.IsSuccess)
-                {
-                    // Log or handle individual status fetch errors if necessary
-                    // For now, we'll just continue to the next status
-                }
-            }
 
-            if (!allOrders.Any() && statusList.Any())
+                return Ok(new { Items = new List<OrderDto>(), TotalCount = 0 });
+            }
+            catch (Exception ex)
             {
-                return NotFound($"No orders found for statuses: {statuses}");
+                // Fallback or log error
+                return StatusCode(500, new { Message = "Internal server error", Details = ex.Message });
             }
-
-            return Ok(new { Items = allOrders, TotalCount = allOrders.Count });
         }
 
         [HttpPost("orders/{id}/status")]
+        [Authorize(Policy = "KITCHEN_UPDATE")]
         public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] UpdateOrderStatusDto statusDto)
         {
-            var response = await _orderService.UpdateOrderStatusAsync(id, statusDto.OrderStatus); // Assuming this method exists
+            var response = await _orderService.UpdateOrderStatusAsync(id, statusDto.OrderStatus, statusDto.ChefID);
             if (response.IsSuccess)
             {
-                return Ok(response.Data);
+                return Ok(response);
             }
-            return BadRequest(response.Message);
+            return BadRequest(response);
         }
     }
 }
