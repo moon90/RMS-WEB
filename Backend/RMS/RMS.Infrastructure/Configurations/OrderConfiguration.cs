@@ -61,10 +61,19 @@ namespace RMS.Infrastructure.Configurations
                 .HasColumnType("DECIMAL(18,2)")
                 .HasDefaultValue(0m);
 
+            builder.Property(o => o.DepositDeducted)
+                .HasColumnType("DECIMAL(18,2)")
+                .HasDefaultValue(0m);
+
             // Relationships
             builder.HasMany(o => o.OrderDetails)
                 .WithOne(od => od.Order)
                 .HasForeignKey(od => od.OrderID);
+
+            builder.HasOne(o => o.TableReservation)
+                .WithMany()
+                .HasForeignKey(o => o.TableReservationId)
+                .IsRequired(false);
 
             builder.HasOne(o => o.Customer)
                 .WithMany()
@@ -87,6 +96,7 @@ namespace RMS.Infrastructure.Configurations
                 .IsRequired(false);
 
             // Explicit Indexes for Foreign Keys
+            builder.HasIndex(o => o.TableReservationId).HasDatabaseName("IX_Orders_TableReservationId");
             builder.HasIndex(o => o.CustomerID).HasDatabaseName("IX_Orders_CustomerID");
             builder.HasIndex(o => o.BranchID).HasDatabaseName("IX_Orders_BranchID");
             builder.HasIndex(o => o.StaffID).HasDatabaseName("IX_Orders_StaffID");

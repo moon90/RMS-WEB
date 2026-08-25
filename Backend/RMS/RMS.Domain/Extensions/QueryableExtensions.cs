@@ -102,7 +102,7 @@ namespace RMS.Domain.Extensions
                 var propertyInfo = type.GetProperty(sortBy, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                 if (propertyInfo == null)
                 {
-                    throw new ArgumentException($"Property '{sortBy}' not found on type '{typeof(T).Name}'.", nameof(sortBy));
+                    return source;
                 }
                 var parameter = Expression.Parameter(type, "p");
                 var propertyAccess = Expression.MakeMemberAccess(parameter, propertyInfo);

@@ -22,6 +22,7 @@ namespace RMS.Application.Interfaces
         Task<ResponseDto<object>> AssignMenusToRoleAsync(RoleMenuBulkUpdateDto dto);
         Task<ResponseDto<object>> UnassignMenusFromRoleAsync(RoleMenuBulkUpdateDto dto);
         Task<ResponseDto<IEnumerable<RoleMenuDto>>> GetMenusByRoleIdAsync(int roleId);
+        Task<ResponseDto<object>> SyncRoleMenusAsync(int roleId, IEnumerable<RoleMenuDto> roleMenuDtos);
         Task<ResponseDto<IEnumerable<UserMenuPermissionDto>>> GetUserMenuPermissionsAsync(int userId);
     }
 }

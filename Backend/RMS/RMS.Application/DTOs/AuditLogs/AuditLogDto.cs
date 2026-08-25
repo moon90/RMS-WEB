@@ -11,6 +11,7 @@ namespace RMS.Application.DTOs.AuditLogs
         public string EntityId { get; set; }
         public string PerformedBy { get; set; }
         public DateTime Timestamp { get; set; }
+        public DateTime PerformedAt { get; set; }
         public string? Details { get; set; }
     }
 }

@@ -83,6 +83,7 @@ namespace RMS.Application
                 x.AddConsumer<OrderUpdatedConsumer>();
                 x.AddConsumer<OrderDeletedConsumer>();
                 x.AddConsumer<ReservationConfirmedConsumer>();
+                x.AddConsumer<ReservationCancelledConsumer>();
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     var rabbitHost = configuration["RabbitMQ:Host"] ?? "localhost";

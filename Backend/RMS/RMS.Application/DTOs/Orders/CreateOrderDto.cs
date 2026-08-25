@@ -23,6 +23,8 @@ namespace RMS.Application.DTOs.Orders
         public int? DriverID { get; set; }
         public int? CustomerID { get; set; }
         public decimal TipAmount { get; set; } = 0m;
+        public Guid? TableReservationId { get; set; }
+        public decimal DepositDeducted { get; set; } = 0m;
         public string? PaymentStatus { get; set; }
         public string? PaymentMethod { get; set; }
 

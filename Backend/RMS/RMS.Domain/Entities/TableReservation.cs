@@ -15,6 +15,9 @@ namespace RMS.Domain.Entities
         public DateTime HoldExpiresAt { get; set; }
         public string ReservationStatus { get; set; } = "PendingPayment";
         public decimal DepositAmount { get; set; }
+        public decimal RefundAmount { get; set; } = 0m;
+        public DateTime? CancelledAt { get; set; }
+        public string? CancellationReason { get; set; }
         public byte[] RowVersion { get; set; } = Array.Empty<byte>();
         public int? BranchID { get; set; }
         public virtual Branch? Branch { get; set; }

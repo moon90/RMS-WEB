@@ -14,6 +14,8 @@ namespace RMS.Application.DTOs
         public decimal DiscountAmount { get; set; }
         public decimal FinalAmount { get; set; }
         public string PaymentMethod { get; set; }
+        public Guid? TableReservationId { get; set; }
+        public decimal DepositDeducted { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public List<SaleDetailDto> SaleDetails { get; set; }

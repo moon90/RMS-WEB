@@ -45,6 +45,12 @@ namespace RMS.Domain.Entities
         // New Additions
         public string? TokenNumber { get; set; } // Token for Queue System
         public decimal TipAmount { get; set; }   // Track gratuity/tips
+
+        // Reservation Deposit Integration
+        public Guid? TableReservationId { get; set; }
+        public virtual TableReservation? TableReservation { get; set; }
+        public decimal DepositDeducted { get; set; }
+
         public int? BranchID { get; set; }
         public virtual Branch? Branch { get; set; }
 

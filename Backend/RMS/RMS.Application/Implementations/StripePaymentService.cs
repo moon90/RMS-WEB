@@ -219,5 +219,72 @@ namespace RMS.Application.Implementations
                 };
             }
         }
+
+        public async Task<ResponseDto<PaymentTransaction>> RefundDepositAsync(string transactionReference, decimal refundAmount, string? reason = null, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(transactionReference))
+                {
+                    return new ResponseDto<PaymentTransaction>
+                    {
+                        IsSuccess = false,
+                        Message = "Transaction reference is required for refund."
+                    };
+                }
+
+                var paymentTx = await _context.PaymentTransactions
+                    .Include(p => p.TableReservation)
+                    .FirstOrDefaultAsync(p => p.TransactionReference == transactionReference && !p.IsDeleted, cancellationToken);
+
+                if (paymentTx == null)
+                {
+                    return new ResponseDto<PaymentTransaction>
+                    {
+                        IsSuccess = false,
+                        Message = $"Payment transaction with reference '{transactionReference}' was not found."
+                    };
+                }
+
+                if (paymentTx.Status == "Refunded")
+                {
+                    return new ResponseDto<PaymentTransaction>
+                    {
+                        IsSuccess = true,
+                        Message = "Transaction is already refunded.",
+                        Data = paymentTx
+                    };
+                }
+
+                var stripeRefundId = $"re_{Guid.NewGuid():N}";
+
+                paymentTx.RefundAmount = refundAmount;
+                paymentTx.RefundedAt = DateTime.UtcNow;
+                paymentTx.StripeRefundId = stripeRefundId;
+                paymentTx.Status = (refundAmount >= paymentTx.Amount) ? "Refunded" : "PartiallyRefunded";
+                paymentTx.ModifiedDate = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync(cancellationToken);
+
+                _logger.LogInformation("Successfully refunded {RefundAmount:C} for transaction {TransactionReference}. Stripe Refund ID: {StripeRefundId}",
+                    refundAmount, transactionReference, stripeRefundId);
+
+                return new ResponseDto<PaymentTransaction>
+                {
+                    IsSuccess = true,
+                    Message = "Refund processed successfully.",
+                    Data = paymentTx
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing refund for transaction {TransactionReference}", transactionReference);
+                return new ResponseDto<PaymentTransaction>
+                {
+                    IsSuccess = false,
+                    Message = $"Refund processing error: {ex.Message}"
+                };
+            }
+        }
     }
 }

@@ -130,7 +130,10 @@ namespace RMS.Application.Implementations
 
                 // 3. Trending Menus
                 var thirtyDaysAgo = today.AddDays(-30);
-                var trendingSalesRaw = allSalesRaw.Where(s => s.SaleDate >= thirtyDaysAgo).ToList();
+                var trendingSalesRaw = await _db.Sales
+                    .Include(s => s.SaleDetails)
+                    .Where(s => s.SaleDate >= thirtyDaysAgo)
+                    .ToListAsync();
 
                 var trendingMenus = trendingSalesRaw
                     .Where(s => s.SaleDetails != null)
@@ -184,8 +187,13 @@ namespace RMS.Application.Implementations
                 try {
                     var staffDataRaw = await _db.Orders
                         .Include(o => o.Waiter)
-                        .Where(o => o.StaffID.HasValue && o.OrderStatus == "Paid")
-                        .Select(o => new { o.StaffID, o.Waiter.StaffName, o.Waiter.StaffRole, o.Total })
+                        .Where(o => o.StaffID.HasValue && (o.OrderStatus == "Paid" || o.PaymentStatus == "Paid"))
+                        .Select(o => new { 
+                            o.StaffID, 
+                            StaffName = o.Waiter != null ? o.Waiter.StaffName : (o.WaiterName ?? "Staff Member"), 
+                            StaffRole = o.Waiter != null ? o.Waiter.StaffRole : "Service", 
+                            o.Total 
+                        })
                         .ToListAsync();
 
                     staffPerformance = staffDataRaw
@@ -232,15 +240,20 @@ namespace RMS.Application.Implementations
                     var kitchenStatsRaw = await _db.Orders
                         .Include(o => o.Chef)
                         .Where(o => o.ChefID.HasValue && o.PreparationStart.HasValue && o.PreparationEnd.HasValue)
-                        .Select(o => new { o.ChefID, o.Chef.StaffName, o.PreparationStart, o.PreparationEnd })
+                        .Select(o => new { 
+                            o.ChefID, 
+                            ChefName = o.Chef != null ? o.Chef.StaffName : "Chef", 
+                            o.PreparationStart, 
+                            o.PreparationEnd 
+                        })
                         .ToListAsync();
 
                     kitchenProductivity = kitchenStatsRaw
-                        .GroupBy(x => new { x.ChefID, x.StaffName })
+                        .GroupBy(x => new { x.ChefID, x.ChefName })
                         .Select(g => new KitchenProductivityDto
                         {
                             ChefId = g.Key.ChefID.Value,
-                            ChefName = g.Key.StaffName ?? "Chef",
+                            ChefName = g.Key.ChefName ?? "Chef",
                             OrdersCompleted = g.Count(),
                             AveragePrepTimeMinutes = g.Average(x => (x.PreparationEnd.Value - x.PreparationStart.Value).TotalMinutes)
                         })

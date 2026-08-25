@@ -48,5 +48,40 @@ namespace RMS.WebApi.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("active-by-table/{tableId:int}")]
+        [Authorize(Policy = "ORDER_VIEW")]
+        public async Task<IActionResult> GetActiveByTable(int tableId, CancellationToken cancellationToken)
+        {
+            var response = await _reservationService.GetActiveReservationByTableAsync(tableId, cancellationToken);
+            return Ok(response);
+        }
+
+        [HttpPost("{id:guid}/cancel")]
+        public async Task<IActionResult> CancelReservation(Guid id, [FromBody] CancelReservationDto dto, CancellationToken cancellationToken)
+        {
+            var cancelledBy = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.Identity?.Name ?? "system";
+            var response = await _reservationService.CancelReservationAsync(id, dto, cancelledBy, cancellationToken);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("refund-calculation/{id:guid}")]
+        public async Task<IActionResult> GetRefundCalculation(Guid id, CancellationToken cancellationToken)
+        {
+            var response = await _reservationService.CalculateRefundAsync(id, cancellationToken);
+
+            if (!response.IsSuccess)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
     }
 }

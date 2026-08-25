@@ -9,6 +9,8 @@ using RMS.Domain.Interfaces;
 namespace RMS.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Route("api/auditlogs")]
+    [Route("api/audit-logs")]
     [ApiController]
     [Authorize] // Apply Authorize to the whole controller
     public class AuditLogController : ControllerBase
@@ -28,7 +30,12 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var result = await _auditLogService.GetAllAuditLogsAsync(lastSeenId, pageSize, searchQuery, sortColumn, sortDirection, cancellationToken);
-                return Ok(result);
+                return Ok(new ResponseDto<RMS.Domain.Models.BaseModels.KeysetPagedResult<RMS.Application.DTOs.AuditLogs.AuditLogDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Audit logs retrieved successfully.",
+                    Data = result
+                });
             }
             catch (Exception ex)
             {
@@ -50,7 +57,12 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var logs = await _auditLogService.GetAllAuditLogsAsync(null, 1000, entityType, "PerformedAt", "desc");
-                return Ok(logs);
+                return Ok(new ResponseDto<RMS.Domain.Models.BaseModels.KeysetPagedResult<RMS.Application.DTOs.AuditLogs.AuditLogDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Audit logs retrieved successfully.",
+                    Data = logs
+                });
             }
             catch (Exception ex)
             {
@@ -72,7 +84,12 @@ namespace RMS.WebApi.Controllers
             try
             {
                 var logs = await _auditLogService.GetAllAuditLogsAsync(null, 1000, performedBy, "PerformedAt", "desc");
-                return Ok(logs);
+                return Ok(new ResponseDto<RMS.Domain.Models.BaseModels.KeysetPagedResult<RMS.Application.DTOs.AuditLogs.AuditLogDto>>
+                {
+                    IsSuccess = true,
+                    Message = "Audit logs retrieved successfully.",
+                    Data = logs
+                });
             }
             catch (Exception ex)
             {

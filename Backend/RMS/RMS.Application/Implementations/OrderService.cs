@@ -163,6 +163,21 @@ namespace RMS.Application.Implementations
                 order.OrderType ??= "TakeOut";
                 order.OrderDate ??= DateTime.UtcNow;
 
+                // Handle Reservation Deposit Binding (Slice 4)
+                if (orderDto.TableReservationId.HasValue)
+                {
+                    var reservationRepo = _unitOfWork.GetRepository<TableReservation>();
+                    var reservation = await reservationRepo.GetQueryable().FirstOrDefaultAsync(r => r.Id == orderDto.TableReservationId.Value);
+                    if (reservation != null && (reservation.ReservationStatus == "Confirmed" || reservation.ReservationStatus == "PendingPayment"))
+                    {
+                        reservation.ReservationStatus = "Seated";
+                        await reservationRepo.UpdateAsync(reservation);
+
+                        order.TableReservationId = reservation.Id;
+                        order.DepositDeducted = orderDto.DepositDeducted > 0 ? orderDto.DepositDeducted : reservation.DepositAmount;
+                    }
+                }
+
                 var createdOrder = await _orderRepository.AddAsync(order);
 
                 // Update Table Status for DineIn
@@ -393,7 +408,10 @@ namespace RMS.Application.Implementations
 
                 await _orderRepository.UpdateAsync(order);
                 
-                // Create Sale Record
+                // Create Sale Record with Deposit Deduction (Slice 4)
+                var grossTotal = order.Total + order.TaxAmount + order.ServiceChargeAmount - order.DiscountAmount + order.TipAmount;
+                var finalAmount = Math.Max(0m, grossTotal - order.DepositDeducted);
+
                 var sale = new Sale
                 {
                     SaleDate = DateTime.UtcNow,
@@ -402,7 +420,9 @@ namespace RMS.Application.Implementations
                     TaxAmount = order.TaxAmount,
                     ServiceChargeAmount = order.ServiceChargeAmount,
                     DiscountAmount = order.DiscountAmount,
-                    FinalAmount = order.Total + order.TaxAmount + order.ServiceChargeAmount - order.DiscountAmount + order.TipAmount,
+                    DepositDeducted = order.DepositDeducted,
+                    TableReservationId = order.TableReservationId,
+                    FinalAmount = finalAmount,
                     PaymentMethod = order.PaymentMethod,
                     TokenNumber = order.TokenNumber,
                     TipAmount = order.TipAmount,
@@ -417,6 +437,18 @@ namespace RMS.Application.Implementations
                     }).ToList()
                 };
                 await _saleRepository.AddAsync(sale);
+
+                // Mark Linked Reservation Completed
+                if (order.TableReservationId.HasValue)
+                {
+                    var reservationRepo = _unitOfWork.GetRepository<TableReservation>();
+                    var reservation = await reservationRepo.GetQueryable().FirstOrDefaultAsync(r => r.Id == order.TableReservationId.Value);
+                    if (reservation != null)
+                    {
+                        reservation.ReservationStatus = "Completed";
+                        await reservationRepo.UpdateAsync(reservation);
+                    }
+                }
 
                 // Update Table Status for DineIn (Make available after payment)
                 if (order.OrderType == "DineIn" && !string.IsNullOrEmpty(order.TableName) && order.TableName != "N/A")

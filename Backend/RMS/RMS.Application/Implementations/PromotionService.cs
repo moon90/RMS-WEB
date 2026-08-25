@@ -34,7 +34,7 @@ namespace RMS.Application.Implementations
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                query = query.Where(p => p.CouponCode.Contains(searchQuery) || p.Description.Contains(searchQuery));
+                query = query.Where(p => p.CouponCode.Contains(searchQuery) || (p.Description != null && p.Description.Contains(searchQuery)));
             }
 
             if (status.HasValue)
@@ -42,7 +42,24 @@ namespace RMS.Application.Implementations
                 query = query.Where(p => p.IsActive == status.Value);
             }
 
-            query = query.ApplySort(sortColumn, sortDirection);
+            if (string.Equals(sortColumn, "Name", StringComparison.OrdinalIgnoreCase))
+            {
+                sortColumn = "Description";
+            }
+            else if (string.Equals(sortColumn, "StartDate", StringComparison.OrdinalIgnoreCase))
+            {
+                sortColumn = "ValidFrom";
+            }
+            else if (string.Equals(sortColumn, "EndDate", StringComparison.OrdinalIgnoreCase))
+            {
+                sortColumn = "ValidTo";
+            }
+            else if (string.IsNullOrEmpty(sortColumn))
+            {
+                sortColumn = "ValidFrom";
+            }
+
+            query = query.ApplySort(sortColumn, sortDirection ?? "desc");
 
             var pagedPromotions = await query.ToPagedList(pageNumber, pageSize);
             var promotionDtos = _mapper.Map<List<PromotionDto>>(pagedPromotions.Items);

@@ -13,6 +13,13 @@ namespace RMS.Infrastructure.Configurations
             builder.Property(r => r.DepositAmount)
                 .HasColumnType("decimal(18,2)");
 
+            builder.Property(r => r.RefundAmount)
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0m);
+
+            builder.Property(r => r.CancellationReason)
+                .HasMaxLength(500);
+
             builder.Property(r => r.ReservationStatus)
                 .HasMaxLength(20)
                 .IsRequired();

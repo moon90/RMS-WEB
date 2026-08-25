@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +20,7 @@ namespace RMS.Domain.Entities
         public Role? Role { get; set; }
         public Menu? Menu { get; set; }
 
-        public DateTime AssignedAt { get; set; }
-        public string? AssignedBy { get; set; }
+        public DateTime AssignedAt { get; set; } = DateTime.UtcNow;
+        public string? AssignedBy { get; set; } = "System";
     }
 }

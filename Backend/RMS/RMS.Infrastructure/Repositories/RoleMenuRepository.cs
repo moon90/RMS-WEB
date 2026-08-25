@@ -203,5 +203,46 @@ namespace RMS.Infrastructure.Repositories
                 throw;
             }
         }
+
+        public async Task SyncRoleMenusAsync(int roleId, IEnumerable<RoleMenu> roleMenus)
+        {
+            try
+            {
+                var existing = await _context.RoleMenus.Where(rm => rm.RoleID == roleId).ToListAsync();
+                if (existing.Any())
+                {
+                    _context.RoleMenus.RemoveRange(existing);
+                }
+
+                var validMenus = (roleMenus ?? Enumerable.Empty<RoleMenu>())
+                    .Where(rm => rm.CanView || rm.CanAdd || rm.CanEdit || rm.CanDelete)
+                    .GroupBy(rm => rm.MenuID)
+                    .Select(g => g.First())
+                    .Select(rm => new RoleMenu
+                    {
+                        RoleID = roleId,
+                        MenuID = rm.MenuID,
+                        CanView = rm.CanView,
+                        CanAdd = rm.CanAdd,
+                        CanEdit = rm.CanEdit,
+                        CanDelete = rm.CanDelete,
+                        AssignedAt = rm.AssignedAt == default ? DateTime.UtcNow : rm.AssignedAt,
+                        AssignedBy = string.IsNullOrWhiteSpace(rm.AssignedBy) ? "System" : rm.AssignedBy
+                    })
+                    .ToList();
+
+                if (validMenus.Any())
+                {
+                    await _context.RoleMenus.AddRangeAsync(validMenus);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error syncing role menus for RoleID: {roleId}. Error: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

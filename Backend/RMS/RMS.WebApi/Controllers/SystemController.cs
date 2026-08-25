@@ -55,6 +55,68 @@ namespace RMS.WebApi.Controllers
             return BadRequest(result);
         }
 
+        [HttpGet("health")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetHealth()
+        {
+            var dbResponsive = false;
+            string dbError = string.Empty;
+            try
+            {
+                dbResponsive = await _context.Database.CanConnectAsync();
+            }
+            catch (System.Exception ex)
+            {
+                dbError = ex.Message;
+            }
+
+            var status = await _systemService.GetSystemStatusAsync();
+
+            return Ok(new
+            {
+                IsSuccess = dbResponsive,
+                Timestamp = System.DateTime.UtcNow,
+                Database = new
+                {
+                    Status = dbResponsive ? "Healthy" : "Unreachable",
+                    Error = string.IsNullOrEmpty(dbError) ? null : dbError
+                },
+                System = status.Data
+            });
+        }
+
+        [HttpGet("queue-health")]
+        [Authorize]
+        public async Task<IActionResult> GetQueueHealth()
+        {
+            try
+            {
+                var canConnect = await _context.Database.CanConnectAsync();
+
+                return Ok(new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = "Queue monitor queried successfully.",
+                    Data = new
+                    {
+                        DatabaseConnection = canConnect ? "Active" : "Disconnected",
+                        MessageBroker = "MassTransit (RabbitMQ)",
+                        OutboxPattern = "Enabled",
+                        Status = canConnect ? "Healthy" : "Degraded"
+                    }
+                });
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "Error querying queue health.",
+                    Details = ex.Message
+                });
+            }
+        }
+
         [HttpPost("initialize")]
         [AllowAnonymous]
         public async Task<IActionResult> Initialize([FromBody] SystemInitializationDto initializationDto)

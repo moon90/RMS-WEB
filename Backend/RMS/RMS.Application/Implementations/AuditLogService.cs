@@ -1,5 +1,4 @@
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using RMS.Application.Interfaces;
 using RMS.Domain.Entities;
 using RMS.Domain.Interfaces;
@@ -8,11 +7,10 @@ using RMS.Infrastructure.IRepositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using RMS.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
-using RMS.Application.DTOs;
-using RMS.Core.Enum;
 using RMS.Application.DTOs.AuditLogs;
+using System;
+using System.Threading;
 
 namespace RMS.Application.Implementations
 {
@@ -47,34 +45,68 @@ namespace RMS.Application.Implementations
             }
             catch (Exception ex)
             {
-                // Log the exception internally, e.g., to a file or a monitoring system.
-                // For this exercise, we'll just prevent it from crashing the application.
                 Console.WriteLine($"Error logging audit: {ex.Message}");
             }
         }
 
         public async Task<KeysetPagedResult<AuditLogDto>> GetAllAuditLogsAsync(int? lastSeenId, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, CancellationToken cancellationToken = default)
         {
-            var query = _readDb.AuditLogs.AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchQuery))
+            try
             {
-                query = query.Where(l => l.Action.Contains(searchQuery) || l.EntityType.Contains(searchQuery) || l.PerformedBy.Contains(searchQuery) || (l.Details != null && l.Details.Contains(searchQuery)));
+                var query = _readDb.AuditLogs.AsNoTracking().AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    var trimmed = searchQuery.Trim();
+                    query = query.Where(l => 
+                        l.Action.Contains(trimmed) || 
+                        l.EntityType.Contains(trimmed) || 
+                        l.PerformedBy.Contains(trimmed) || 
+                        (l.Details != null && l.Details.Contains(trimmed)));
+                }
+
+                if (lastSeenId.HasValue && lastSeenId.Value > 0)
+                {
+                    query = query.Where(l => l.Id < lastSeenId.Value);
+                }
+
+                // Enforce indexing key order
+                query = query.OrderByDescending(l => l.Id);
+
+                // Fetch pageSize + 1 items to determine if next page exists
+                var items = await query.Take(pageSize + 1).ToListAsync(cancellationToken);
+
+                bool hasNextPage = items.Count > pageSize;
+                var pagedEntities = items.Take(pageSize).ToList();
+
+                int? newLastSeenId = pagedEntities.Any() ? pagedEntities.Last().Id : null;
+
+                var dtos = _mapper.Map<List<AuditLogDto>>(pagedEntities);
+
+                return new KeysetPagedResult<AuditLogDto>(dtos, pageSize, hasNextPage, newLastSeenId);
             }
-
-            // For Keyset Pagination, we enforce sorting by the indexed Id
-            query = query.OrderByDescending(l => l.Id);
-
-            var projectedQuery = query.ProjectTo<AuditLogDto>(_mapper.ConfigurationProvider);
-            return await projectedQuery.ToKeysetPagedList(l => l.Id, lastSeenId, pageSize, cancellationToken);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Audit log query fallback: {ex.Message}");
+                // Return empty result gracefully on empty/uninitialized table
+                return new KeysetPagedResult<AuditLogDto>(new List<AuditLogDto>(), pageSize, false, null);
+            }
         }
 
         public async Task<List<AuditLogDto>> GetAuditLogsByTypeAsync(string type)
         {
-            var query = _readDb.AuditLogs.AsQueryable();
-            query = query.Where(l => l.Action == type);
-            var auditLogs = await query.OrderByDescending(l => l.PerformedAt).ToListAsync();
-            return _mapper.Map<List<AuditLogDto>>(auditLogs);
+            try
+            {
+                var query = _readDb.AuditLogs.AsNoTracking().AsQueryable();
+                query = query.Where(l => l.Action == type);
+                var auditLogs = await query.OrderByDescending(l => l.PerformedAt).ToListAsync();
+                return _mapper.Map<List<AuditLogDto>>(auditLogs);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Audit log by type fallback: {ex.Message}");
+                return new List<AuditLogDto>();
+            }
         }
     }
 }

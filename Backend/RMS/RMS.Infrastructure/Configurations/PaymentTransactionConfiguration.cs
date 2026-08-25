@@ -34,6 +34,12 @@ namespace RMS.Infrastructure.Configurations
                 .HasMaxLength(20)
                 .IsRequired();
 
+            builder.Property(p => p.RefundAmount)
+                .HasPrecision(18, 2);
+
+            builder.Property(p => p.StripeRefundId)
+                .HasMaxLength(100);
+
             builder.Property(p => p.WebhookEventId)
                 .HasMaxLength(100);
 

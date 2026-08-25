@@ -17,5 +17,6 @@ namespace RMS.Infrastructure.IRepositories
         Task AssignMenuToRoleAsync(int roleId, int menuId, bool canView, bool canAdd, bool canEdit, bool canDelete);
         Task UnassignMenuFromRoleAsync(int roleId, int menuId);
         Task<RoleMenu?> GetRoleMenuByRoleIdAndMenuIdAsync(int roleId, int menuId);
+        Task SyncRoleMenusAsync(int roleId, IEnumerable<RoleMenu> roleMenus);
     }
 }

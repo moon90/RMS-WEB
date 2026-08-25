@@ -13,6 +13,9 @@ namespace RMS.Domain.Entities
         public decimal Amount { get; set; }
         public string Currency { get; set; } = "USD";
         public string Status { get; set; } = "Processing";
+        public decimal? RefundAmount { get; set; }
+        public DateTime? RefundedAt { get; set; }
+        public string? StripeRefundId { get; set; }
         public string? WebhookEventId { get; set; }
         public int? BranchID { get; set; }
         public virtual Branch? Branch { get; set; }

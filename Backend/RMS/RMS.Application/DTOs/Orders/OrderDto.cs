@@ -30,6 +30,8 @@ namespace RMS.Application.DTOs.Orders
         // New Additions
         public string? TokenNumber { get; set; }
         public decimal TipAmount { get; set; }
+        public Guid? TableReservationId { get; set; }
+        public decimal DepositDeducted { get; set; }
 
         public CustomerDto? Customer { get; set; } // Navigation property for Customer
         public ICollection<OrderDetailDto>? OrderDetails { get; set; }

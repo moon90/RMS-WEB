@@ -6,12 +6,18 @@ namespace RMS.Application.DTOs
     {
         public Guid Id { get; set; }
         public int DiningTableId { get; set; }
+        public string? TableName { get; set; }
         public int CustomerId { get; set; }
+        public string? CustomerName { get; set; }
+        public string? CustomerPhone { get; set; }
         public DateTime ReservationStartTime { get; set; }
         public DateTime ReservationEndTime { get; set; }
         public DateTime HoldExpiresAt { get; set; }
         public string ReservationStatus { get; set; } = string.Empty;
         public decimal DepositAmount { get; set; }
+        public decimal RefundAmount { get; set; }
+        public DateTime? CancelledAt { get; set; }
+        public string? CancellationReason { get; set; }
     }
 
     public class CreateReservationHoldDto

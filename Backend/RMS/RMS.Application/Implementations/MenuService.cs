@@ -446,6 +446,69 @@ namespace RMS.Application.Implementations
             }
         }
 
+        public async Task<ResponseDto<object>> SyncRoleMenusAsync(int roleId, IEnumerable<RoleMenuDto> roleMenuDtos)
+        {
+            try
+            {
+                if (roleId <= 0)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "Role ID must be greater than 0.",
+                        Code = "400"
+                    };
+                }
+
+                var roleExists = await _roleRepository.RoleExistsAsync(roleId);
+                if (!roleExists)
+                {
+                    return new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "Role not found.",
+                        Code = "404"
+                    };
+                }
+
+                var roleMenus = (roleMenuDtos ?? Enumerable.Empty<RoleMenuDto>())
+                    .Where(dto => dto.CanView || dto.CanAdd || dto.CanEdit || dto.CanDelete)
+                    .GroupBy(dto => dto.MenuID)
+                    .Select(g => g.First())
+                    .Select(dto => new RoleMenu
+                    {
+                        RoleID = roleId,
+                        MenuID = dto.MenuID,
+                        CanView = dto.CanView,
+                        CanAdd = dto.CanAdd,
+                        CanEdit = dto.CanEdit,
+                        CanDelete = dto.CanDelete,
+                        AssignedAt = DateTime.UtcNow,
+                        AssignedBy = "System"
+                    })
+                    .ToList();
+
+                await _roleMenuRepository.SyncRoleMenusAsync(roleId, roleMenus);
+
+                return new ResponseDto<object>
+                {
+                    IsSuccess = true,
+                    Message = "Navigation permissions synchronized successfully in atomic transaction.",
+                    Code = "200"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while synchronizing role menus.",
+                    Code = "500",
+                    Details = ex.Message
+                };
+            }
+        }
+
         public async Task<ResponseDto<IEnumerable<UserMenuPermissionDto>>> GetUserMenuPermissionsAsync(int userId)
         {
             try

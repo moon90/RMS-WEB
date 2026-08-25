@@ -344,5 +344,40 @@ namespace RMS.WebApi.Controllers
                 });
             }
         }
+
+        [HttpPost("{roleId}/sync-role-menus")]
+        [Authorize(Policy = "MENU_ASSIGN_ROLE")]
+        public async Task<ActionResult<ResponseDto<object>>> SyncRoleMenus(int roleId, [FromBody] IEnumerable<RoleMenuDto> roleMenus)
+        {
+            try
+            {
+                if (roleId <= 0)
+                {
+                    return BadRequest(new ResponseDto<object>
+                    {
+                        IsSuccess = false,
+                        Message = "Invalid Role ID provided.",
+                        Code = "400"
+                    });
+                }
+
+                var response = await _menuService.SyncRoleMenusAsync(roleId, roleMenus);
+                if (!response.IsSuccess)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "An error occurred while synchronizing role navigation menus.",
+                    Code = "INTERNAL_SERVER_ERROR",
+                    Details = ex.Message
+                });
+            }
+        }
     }
 }
