@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using RMS.Application.Implementations;
 using RMS.Application.Interfaces;
+using RMS.Infrastructure.Services;
 using RMS.Application.Services.Processing;
 using RMS.Application.Validators;
 using RMS.Application.Events;
@@ -21,12 +22,14 @@ using RMS.Application.Validators.SupplierValidators;
 using RMS.Application.Validators.UnitValidators;
 using RMS.Application.Validators.SaleValidators;
 using RMS.Application.Validators.UnitConversionValidators;
+using MassTransit;
+using Microsoft.Extensions.Configuration;
 
 namespace RMS.Application
 {
     public static class ConfigureServices
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Application Services
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -64,10 +67,37 @@ namespace RMS.Application
             services.AddScoped<ISystemService, SystemService>();
             services.AddScoped<ISystemSettingService, SystemSettingService>();
             services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<ITableReservationService, TableReservationService>();
+            services.AddScoped<IPaymentGatewayService, StripePaymentService>();
 
-            // Domain Events
-            services.AddScoped<IEventPublisher, EventPublisher>();
-            services.AddScoped<IEventHandler<OrderPlacedEvent>, InventoryDeductionHandler>();
+            // Domain Events (MassTransit + RabbitMQ with EF Core Outbox)
+            services.AddMassTransit(x =>
+            {
+                x.AddEntityFrameworkOutbox<RMS.Infrastructure.Persistences.RestaurantDbContext>(o =>
+                {
+                    o.UseSqlServer();
+                    o.UseBusOutbox();
+                });
+
+                x.AddConsumer<InventoryDeductionHandler>();
+                x.AddConsumer<OrderUpdatedConsumer>();
+                x.AddConsumer<OrderDeletedConsumer>();
+                x.AddConsumer<ReservationConfirmedConsumer>();
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    var rabbitHost = configuration["RabbitMQ:Host"] ?? "localhost";
+                    var rabbitUser = configuration["RabbitMQ:Username"] ?? "guest";
+                    var rabbitPass = configuration["RabbitMQ:Password"] ?? "guest";
+                    cfg.Host(rabbitHost, "/", h => {
+                        h.Username(rabbitUser);
+                        h.Password(rabbitPass);
+                    });
+                    
+                    // Inbox/Outbox is automatically applied to all receive endpoints via ConfigureEndpoints 
+                    // since we registered AddEntityFrameworkOutbox above.
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
 
             // FluentValidation
             services.AddValidatorsFromAssemblyContaining<CreatePurchaseDtoValidator>();

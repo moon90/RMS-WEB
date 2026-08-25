@@ -8,6 +8,7 @@ namespace RMS.Application.Interfaces
         Task SendInventoryUpdateAsync(InventoryUpdateDto updateDto);
         Task SendOrderUpdateAsync(OrderUpdateDto updateDto);
         Task SendKitchenOrderUpdateAsync(OrderUpdateDto updateDto);
+        Task SendReservationUpdateAsync(object updateDto);
         // Add other notification methods as needed
     }
 }

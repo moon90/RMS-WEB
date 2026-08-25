@@ -1,4 +1,4 @@
-﻿
+
 using RMS.Domain.Models.BaseModels;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace RMS.Application.Interfaces
     public interface IAuditLogService
     {
         Task LogAsync(string action, string entityType, string entityId, string performedBy, string? details = null);
-        Task<PagedResult<AuditLogDto>> GetAllAuditLogsAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection);
+        Task<KeysetPagedResult<AuditLogDto>> GetAllAuditLogsAsync(int? lastSeenId, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, CancellationToken cancellationToken = default);
         Task<List<AuditLogDto>> GetAuditLogsByTypeAsync(string type);
     }
 }

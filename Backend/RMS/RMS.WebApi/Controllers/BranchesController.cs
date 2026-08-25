@@ -43,6 +43,15 @@ namespace RMS.WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpPut("{id}")]
+        [Authorize(Policy = "ROLE_CREATE")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateBranchDto branchDto)
+        {
+            var result = await _branchService.UpdateBranchAsync(id, branchDto);
+            if (!result.IsSuccess) return BadRequest(result);
+            return Ok(result);
+        }
+
         [HttpDelete("{id}")]
         [Authorize(Policy = "ROLE_DELETE")]
         public async Task<IActionResult> Delete(int id)

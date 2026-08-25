@@ -9,6 +9,7 @@ namespace RMS.Application.Interfaces
         Task<ResponseDto<List<BranchDto>>> GetAllBranchesAsync();
         Task<ResponseDto<BranchDto>> GetBranchByIdAsync(int id);
         Task<ResponseDto<BranchDto>> CreateBranchAsync(CreateBranchDto branchDto);
+        Task<ResponseDto<BranchDto>> UpdateBranchAsync(int id, UpdateBranchDto branchDto);
         Task<ResponseDto<bool>> DeleteBranchAsync(int id);
     }
 }

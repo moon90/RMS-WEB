@@ -23,12 +23,50 @@ namespace RMS.Domain.Extensions
         /// <param name="pageNumber">The current page number (1-based).</param>
         /// <param name="pageSize">The number of items per page.</param>
         /// <returns>A Task that represents the asynchronous operation, containing a PagedResult<T>.</returns>
-        public static async Task<PagedResult<T>> ToPagedList<T>(this IQueryable<T> source, int pageNumber, int pageSize)
+        public static async Task<PagedResult<T>> ToPagedList<T>(this IQueryable<T> source, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
-            var count = await source.CountAsync();
-            var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var count = await source.CountAsync(cancellationToken);
+            var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
 
             return new PagedResult<T>(items, pageNumber, pageSize, count);
+        }
+
+        /// <summary>
+        /// Creates a keyset (cursor-based) paged result from an IQueryable.
+        /// </summary>
+        public static async Task<KeysetPagedResult<T>> ToKeysetPagedList<T>(
+            this IQueryable<T> source, 
+            Expression<Func<T, int>> idSelector, 
+            int? lastSeenId, 
+            int pageSize, 
+            CancellationToken cancellationToken = default) where T : class
+        {
+            var query = source;
+            if (lastSeenId.HasValue && lastSeenId.Value > 0)
+            {
+                // We need to build: x => idSelector(x) < lastSeenId (Assuming descending order for newest first)
+                var parameter = idSelector.Parameters[0];
+                var body = Expression.LessThan(idSelector.Body, Expression.Constant(lastSeenId.Value));
+                var lambda = Expression.Lambda<Func<T, bool>>(body, parameter);
+                
+                query = query.Where(lambda);
+            }
+
+            // We fetch pageSize + 1 to determine if there is a next page
+            var items = await query.Take(pageSize + 1).ToListAsync(cancellationToken);
+            
+            bool hasNextPage = items.Count > pageSize;
+            var finalItems = items.Take(pageSize).ToList();
+            
+            // Invoke the selector on the last item to get its ID, if any exist
+            int? newLastSeenId = null;
+            if (finalItems.Any())
+            {
+                var compiledSelector = idSelector.Compile();
+                newLastSeenId = compiledSelector(finalItems.Last());
+            }
+
+            return new KeysetPagedResult<T>(finalItems, pageSize, hasNextPage, newLastSeenId);
         }
 
         /// <summary>

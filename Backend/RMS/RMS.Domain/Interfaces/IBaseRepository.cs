@@ -12,18 +12,18 @@ namespace RMS.Domain.Interfaces
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task<T> GetByIdAsync(object id);
-        Task<List<T>> GetAllAsync();
-        Task<T> AddAsync(T entity);
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
-        Task AddRangeAsync(IEnumerable<T> entities);
-        Task<PagedResult<T>> GetPagedResultAsync(PagedQuery param, Expression<Func<T, object>>? orderByExpression = null, bool isDescending = false, IQueryable<T>? queryableInput = null);
-        Task<IEnumerable<T>> GetOrderedAsync(BaseSpecification<T> specs);
-        IQueryable<T> GetQueryable();
-        IQueryable<T> GetQueryableIgnoreTenantFilters();
-        Task<IEnumerable<T>> GetBySpecAsync(BaseSpecification<T> specs);
-        Task<bool> ExistsAsync(BaseSpecification<T> spec);
-        Task<bool> ExistsAsync(Expression<Func<T, bool>> expression);
+        Task<T> GetByIdAsync(object id, CancellationToken cancellationToken = default);
+        Task<List<T>> GetAllAsync(bool trackChanges = true, CancellationToken cancellationToken = default);
+        Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
+        Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
+        Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
+        Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
+        Task<PagedResult<T>> GetPagedResultAsync(PagedQuery param, Expression<Func<T, object>>? orderByExpression = null, bool isDescending = false, IQueryable<T>? queryableInput = null, bool trackChanges = true, CancellationToken cancellationToken = default);
+        Task<IEnumerable<T>> GetOrderedAsync(BaseSpecification<T> specs, bool trackChanges = true, CancellationToken cancellationToken = default);
+        IQueryable<T> GetQueryable(bool trackChanges = true);
+        IQueryable<T> GetQueryableIgnoreTenantFilters(bool trackChanges = true);
+        Task<IEnumerable<T>> GetBySpecAsync(BaseSpecification<T> specs, bool trackChanges = true, CancellationToken cancellationToken = default);
+        Task<bool> ExistsAsync(BaseSpecification<T> spec, CancellationToken cancellationToken = default);
+        Task<bool> ExistsAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default);
     }
 }

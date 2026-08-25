@@ -7,42 +7,76 @@ using RMS.Application.Events;
 using RMS.Application.Interfaces;
 using RMS.Domain.Interfaces;
 using RMS.Infrastructure.IRepositories;
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace RMS.Application.Handlers
 {
-    public class InventoryDeductionHandler : IEventHandler<OrderPlacedEvent>
+    public class InventoryDeductionHandler : IConsumer<OrderPlacedEvent>
     {
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IProductRepository _productRepository;
         private readonly IProductService _productService;
         private readonly INotificationService _notificationService;
         private readonly ILogger<InventoryDeductionHandler> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
         public InventoryDeductionHandler(
             IInventoryRepository inventoryRepository,
             IProductRepository productRepository,
             IProductService productService,
             INotificationService notificationService,
-            ILogger<InventoryDeductionHandler> logger)
+            ILogger<InventoryDeductionHandler> logger,
+            IUnitOfWork unitOfWork)
         {
             _inventoryRepository = inventoryRepository;
             _productRepository = productRepository;
             _productService = productService;
             _notificationService = notificationService;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task HandleAsync(OrderPlacedEvent domainEvent)
+        public async Task Consume(ConsumeContext<OrderPlacedEvent> context)
         {
+            var domainEvent = context.Message;
             _logger.LogInformation($"Handling inventory deduction for Order: {domainEvent.Order.OrderID}");
+            
+            // Explicit Idempotency Check (Phase 4.4 Finalization)
+            var messageId = context.MessageId?.ToString();
+            if (messageId != null)
+            {
+                var auditRepo = _unitOfWork.GetRepository<RMS.Domain.Entities.AuditLog>();
+                var alreadyProcessed = await auditRepo.GetQueryable().AnyAsync(a => a.EntityType == "Event" && a.EntityId == messageId);
+                if (alreadyProcessed) 
+                {
+                    _logger.LogInformation($"Message {messageId} already processed. Skipping duplicate inventory deduction.");
+                    return;
+                }
+                
+                await auditRepo.AddAsync(new RMS.Domain.Entities.AuditLog 
+                { 
+                    Action = "Consume_OrderPlaced", 
+                    EntityType = "Event", 
+                    EntityId = messageId, 
+                    PerformedBy = "System",
+                    Details = $"Order: {domainEvent.Order.OrderID}"
+                });
+            }
             
             var inventoryUpdates = new List<InventoryUpdateDto>();
 
             try
             {
+                var productIds = domainEvent.Order.OrderDetails.Select(d => d.ProductID).ToList();
+                var inventories = await _inventoryRepository.GetQueryable()
+                    .Where(i => productIds.Contains(i.ProductID))
+                    .ToListAsync();
+
                 foreach (var detail in domainEvent.Order.OrderDetails)
                 {
-                    var inventory = await _inventoryRepository.GetByProductIdAsync(detail.ProductID);
+                    var inventory = inventories.FirstOrDefault(i => i.ProductID == detail.ProductID);
                     if (inventory != null)
                     {
                         var oldStock = inventory.CurrentStock;
@@ -68,6 +102,8 @@ namespace RMS.Application.Handlers
                         }
                     }
                 }
+
+                await _unitOfWork.SaveChangesAsync();
 
                 foreach (var update in inventoryUpdates)
                 {

@@ -27,11 +27,11 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                var response = await _orderService.GetAllOrdersAsync(1, 1000, null, "OrderTime", "asc", statuses);
+                var response = await _orderService.GetAllOrdersAsync(null, 1000, null, "OrderTime", "asc", statuses);
                 
                 if (response.IsSuccess && response.Data != null)
                 {
-                    return Ok(new { Items = response.Data.Items, TotalCount = response.Data.TotalRecords });
+                    return Ok(new { Items = response.Data.Items, TotalCount = response.Data.Items.Count() });
                 }
 
                 return Ok(new { Items = new List<OrderDto>(), TotalCount = 0 });

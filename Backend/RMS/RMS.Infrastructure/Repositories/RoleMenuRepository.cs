@@ -35,6 +35,8 @@ namespace RMS.Infrastructure.Repositories
             try
             {
                 return await _context.RoleMenus
+                    .IgnoreQueryFilters()
+                    .AsNoTracking()
                     .Where(rm => rm.RoleID == roleId)
                     .Include(rm => rm.Menu)
                     .ToListAsync();
@@ -191,6 +193,8 @@ namespace RMS.Infrastructure.Repositories
             try
             {
                 return await _context.RoleMenus
+                    .IgnoreQueryFilters()
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(rm => rm.RoleID == roleId && rm.MenuID == menuId);
             }
             catch (Exception ex)

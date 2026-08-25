@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using RMS.Application.DTOs.ManufacturerDTOs.InputDTOs;
 using RMS.Application.DTOs.ManufacturerDTOs.OutputDTOs;
 using RMS.Application.DTOs.MenuDTOs.OutputDTOs;
@@ -51,6 +51,7 @@ namespace RMS.Application.AutoMappers
             // Branch mappings
             CreateMap<Branch, BranchDto>().ReverseMap();
             CreateMap<CreateBranchDto, Branch>();
+            CreateMap<UpdateBranchDto, Branch>();
 
             // SystemSetting mappings
             CreateMap<SystemSetting, SystemSettingDto>().ReverseMap();

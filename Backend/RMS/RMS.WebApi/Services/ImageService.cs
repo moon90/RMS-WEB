@@ -18,6 +18,18 @@ namespace RMS.WebApi.Services
             _imageSettings = imageSettings.Value;
         }
 
+        public string GetImageUrl(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName)) return null;
+
+            if (!string.IsNullOrEmpty(_imageSettings.CdnUrl))
+            {
+                return $"{_imageSettings.CdnUrl.TrimEnd('/')}/{fileName}";
+            }
+
+            return $"{_imageSettings.BaseUrl.TrimEnd('/')}/{fileName}";
+        }
+
         public async Task<byte[]> GetImageBytesAsync(IFormFile imageFile)
         {
             if (imageFile == null || imageFile.Length == 0)

@@ -90,7 +90,12 @@ namespace RMS.Infrastructure.Repositories
         {
             try
             {
-                return await _context.Users.FindAsync(userId);
+                return await _context.Users
+                    .IgnoreQueryFilters()
+                    .AsNoTracking()
+                    .Include(u => u.UserRoles)
+                        .ThenInclude(ur => ur.Role)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
             }
             catch (Exception ex)
             {

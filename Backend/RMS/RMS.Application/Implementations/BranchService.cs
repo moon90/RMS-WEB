@@ -44,6 +44,19 @@ namespace RMS.Application.Implementations
             return ResponseDto<BranchDto>.CreateSuccessResponse(_mapper.Map<BranchDto>(newBranch), "Branch created successfully.");
         }
 
+        public async Task<ResponseDto<BranchDto>> UpdateBranchAsync(int id, UpdateBranchDto branchDto)
+        {
+            var branch = await _branchRepository.GetByIdAsync(id);
+            if (branch == null) return ResponseDto<BranchDto>.CreateErrorResponse("Branch not found.");
+
+            _mapper.Map(branchDto, branch);
+            branch.ModifiedDate = DateTime.UtcNow;
+            branch.ModifiedBy = "system";
+
+            await _branchRepository.UpdateAsync(branch);
+            return ResponseDto<BranchDto>.CreateSuccessResponse(_mapper.Map<BranchDto>(branch), "Branch updated successfully.");
+        }
+
         public async Task<ResponseDto<bool>> DeleteBranchAsync(int id)
         {
             var branch = await _branchRepository.GetByIdAsync(id);

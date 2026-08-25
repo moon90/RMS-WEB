@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using MassTransit;
 
 namespace RMS.Infrastructure.Persistences
 {
@@ -16,6 +17,11 @@ namespace RMS.Infrastructure.Persistences
         private readonly ITenantService _tenantService;
 
         public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options, ITenantService tenantService) : base(options)
+        {
+            _tenantService = tenantService;
+        }
+
+        protected RestaurantDbContext(DbContextOptions options, ITenantService tenantService) : base(options)
         {
             _tenantService = tenantService;
         }
@@ -58,45 +64,50 @@ namespace RMS.Infrastructure.Persistences
         public DbSet<InventoryAudit> InventoryAudits { get; set; }
         public DbSet<InventoryAuditDetail> InventoryAuditDetails { get; set; }
         public DbSet<Payroll> Payrolls { get; set; }
+        public DbSet<TableReservation> TableReservations { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.AddInboxStateEntity();
+            modelBuilder.AddOutboxMessageEntity();
+            modelBuilder.AddOutboxStateEntity();
+
             modelBuilder.ApplyConfiguration(new BranchConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
-            modelBuilder.ApplyConfiguration(new PermissionConfiguration());
-            modelBuilder.ApplyConfiguration(new RolePermissionConfiguration());
-            modelBuilder.ApplyConfiguration(new MenuConfiguration());
-            modelBuilder.ApplyConfiguration(new RoleMenuConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new UnitConfiguration());
-            modelBuilder.ApplyConfiguration(new UnitConversionConfiguration());
-            modelBuilder.ApplyConfiguration(new SupplierConfiguration());
-            modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
-            modelBuilder.ApplyConfiguration(new StaffConfiguration());
-            modelBuilder.ApplyConfiguration(new InventoryConfiguration());
-            modelBuilder.ApplyConfiguration(new StockTransactionConfiguration());
+            modelBuilder.ApplyConfiguration(new DiningTableConfiguration());
             modelBuilder.ApplyConfiguration(new IngredientConfiguration());
+            modelBuilder.ApplyConfiguration(new InventoryAuditConfiguration());
+            modelBuilder.ApplyConfiguration(new InventoryAuditDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new InventoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
+            modelBuilder.ApplyConfiguration(new MenuConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new PayrollConfiguration());
+            modelBuilder.ApplyConfiguration(new PermissionConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new ProductIngredientConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
-
-            modelBuilder.ApplyConfiguration(new OrderConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderDetailConfiguration());
-            modelBuilder.ApplyConfiguration(new DiningTableConfiguration());
             modelBuilder.ApplyConfiguration(new PurchaseConfiguration());
             modelBuilder.ApplyConfiguration(new PurchaseDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new RolePermissionConfiguration());
             modelBuilder.ApplyConfiguration(new SaleConfiguration());
             modelBuilder.ApplyConfiguration(new SaleDetailConfiguration());
             modelBuilder.ApplyConfiguration(new SplitPaymentConfiguration());
-            modelBuilder.ApplyConfiguration(new AlertConfiguration());
+            modelBuilder.ApplyConfiguration(new StaffConfiguration());
+            modelBuilder.ApplyConfiguration(new StockTransactionConfiguration());
             modelBuilder.ApplyConfiguration(new StockTransferConfiguration());
             modelBuilder.ApplyConfiguration(new StockTransferDetailConfiguration());
-            modelBuilder.ApplyConfiguration(new InventoryAuditConfiguration());
-            modelBuilder.ApplyConfiguration(new InventoryAuditDetailConfiguration());
-            modelBuilder.ApplyConfiguration(new PayrollConfiguration());
+            modelBuilder.ApplyConfiguration(new SupplierConfiguration());
+            modelBuilder.ApplyConfiguration(new SystemSettingConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitConversionConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new TableReservationConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentTransactionConfiguration());
         }
 
     }

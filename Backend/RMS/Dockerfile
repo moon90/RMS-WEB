@@ -9,6 +9,7 @@ COPY RMS.Application/RMS.Application.csproj ./RMS.Application/
 COPY RMS.Core/RMS.Core.csproj ./RMS.Core/
 COPY RMS.Domain/RMS.Domain.csproj ./RMS.Domain/
 COPY RMS.Infrastructure/RMS.Infrastructure.csproj ./RMS.Infrastructure/
+COPY RMS.Tests/RMS.Tests.csproj ./RMS.Tests/
 
 RUN dotnet restore
 

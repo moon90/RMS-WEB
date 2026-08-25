@@ -120,7 +120,8 @@ namespace RMS.Application.Implementations
 
                 if (!string.IsNullOrEmpty(searchQuery))
                 {
-                    query = query.Where(p => p.ProductName.Contains(searchQuery) || p.ProductBarcode.Contains(searchQuery) || p.Id.ToString().Contains(searchQuery));
+                    // Full-Text Search (FTS) for ProductName, fallback to LIKE for others
+                    query = query.Where(p => EF.Functions.Contains(p.ProductName, $"\"{searchQuery}*\"") || p.ProductBarcode.Contains(searchQuery) || p.Id.ToString().Contains(searchQuery));
                 }
 
                 if (!string.IsNullOrEmpty(sortColumn))

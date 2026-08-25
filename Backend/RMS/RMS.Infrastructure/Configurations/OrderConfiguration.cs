@@ -86,6 +86,18 @@ namespace RMS.Infrastructure.Configurations
                 .HasForeignKey(o => o.ChefID)
                 .IsRequired(false);
 
+            // Explicit Indexes for Foreign Keys
+            builder.HasIndex(o => o.CustomerID).HasDatabaseName("IX_Orders_CustomerID");
+            builder.HasIndex(o => o.BranchID).HasDatabaseName("IX_Orders_BranchID");
+            builder.HasIndex(o => o.StaffID).HasDatabaseName("IX_Orders_StaffID");
+            builder.HasIndex(o => o.ChefID).HasDatabaseName("IX_Orders_ChefID");
+
+            // Composite Covering Index for High-Volume Lookups
+            builder.HasIndex(o => new { o.OrderStatus, o.OrderDate })
+                   .IsDescending(false, true)
+                   .IncludeProperties(o => new { o.Total, o.CustomerID, o.TableName, o.WaiterName })
+                   .HasDatabaseName("IX_Orders_Performance");
+
             // Seed Data
             builder.HasData(
                 new Order

@@ -32,6 +32,10 @@ namespace RMS.Infrastructure.Configurations
                 .WithMany() // Assuming Product does not have a collection of OrderDetails
                 .HasForeignKey(od => od.ProductID);
 
+            // Explicit Indexes for Foreign Keys
+            builder.HasIndex(od => od.OrderID).HasDatabaseName("IX_OrderDetails_OrderID");
+            builder.HasIndex(od => od.ProductID).HasDatabaseName("IX_OrderDetails_ProductID");
+
             // Seed Data
             builder.HasData(
                 new OrderDetail

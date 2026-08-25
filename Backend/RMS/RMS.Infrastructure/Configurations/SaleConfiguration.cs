@@ -50,6 +50,16 @@ namespace RMS.Infrastructure.Configurations
                 .WithOne(sd => sd.Sale)
                 .HasForeignKey(sd => sd.SaleID);
 
+            // Explicit Indexes for Foreign Keys
+            builder.HasIndex(s => s.CustomerID).HasDatabaseName("IX_Sales_CustomerID");
+            builder.HasIndex(s => s.BranchID).HasDatabaseName("IX_Sales_BranchID");
+
+            // Composite Covering Index for Sale Reports
+            builder.HasIndex(s => new { s.SaleDate, s.PaymentMethod })
+                   .IsDescending(true, false)
+                   .IncludeProperties(s => new { s.TotalAmount, s.FinalAmount })
+                   .HasDatabaseName("IX_Sales_Report");
+
             // Seed Data
             builder.HasData(
                 new Sale

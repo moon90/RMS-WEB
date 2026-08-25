@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using RMS.Application.Interfaces;
 using RMS.Domain.Entities;
 using RMS.Domain.Interfaces;
@@ -18,11 +19,13 @@ namespace RMS.Application.Implementations
     public class AuditLogService : IAuditLogService
     {
         private readonly IAuditLogRepository _repository;
+        private readonly RMS.Infrastructure.Persistences.ReadOnlyRestaurantDbContext _readDb;
         private readonly IMapper _mapper;
 
-        public AuditLogService(IAuditLogRepository repository, IMapper mapper)
+        public AuditLogService(IAuditLogRepository repository, RMS.Infrastructure.Persistences.ReadOnlyRestaurantDbContext readDb, IMapper mapper)
         {
             _repository = repository;
+            _readDb = readDb;
             _mapper = mapper;
         }
 
@@ -50,39 +53,25 @@ namespace RMS.Application.Implementations
             }
         }
 
-        public async Task<PagedResult<AuditLogDto>> GetAllAuditLogsAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection)
+        public async Task<KeysetPagedResult<AuditLogDto>> GetAllAuditLogsAsync(int? lastSeenId, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, CancellationToken cancellationToken = default)
         {
-            var query = _repository.GetQueryable();
+            var query = _readDb.AuditLogs.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 query = query.Where(l => l.Action.Contains(searchQuery) || l.EntityType.Contains(searchQuery) || l.PerformedBy.Contains(searchQuery) || (l.Details != null && l.Details.Contains(searchQuery)));
             }
 
-            if (!string.IsNullOrEmpty(sortColumn))
-            {
-                query = query.ApplySort(sortColumn, sortDirection ?? "asc");
-            }
-            else
-            {
-                query = query.OrderByDescending(l => l.PerformedAt);
-            }
+            // For Keyset Pagination, we enforce sorting by the indexed Id
+            query = query.OrderByDescending(l => l.Id);
 
-            var pagedResult = await query.ToPagedList(pageNumber, pageSize);
-            var auditLogDtos = _mapper.Map<List<AuditLogDto>>(pagedResult.Items);
-
-            return new PagedResult<AuditLogDto>
-            {
-                Items = auditLogDtos,
-                TotalRecords = pagedResult.TotalRecords,
-                PageNumber = pagedResult.PageNumber,
-                PageSize = pagedResult.PageSize
-            };
+            var projectedQuery = query.ProjectTo<AuditLogDto>(_mapper.ConfigurationProvider);
+            return await projectedQuery.ToKeysetPagedList(l => l.Id, lastSeenId, pageSize, cancellationToken);
         }
 
         public async Task<List<AuditLogDto>> GetAuditLogsByTypeAsync(string type)
         {
-            var query = _repository.GetQueryable();
+            var query = _readDb.AuditLogs.AsQueryable();
             query = query.Where(l => l.Action == type);
             var auditLogs = await query.OrderByDescending(l => l.PerformedAt).ToListAsync();
             return _mapper.Map<List<AuditLogDto>>(auditLogs);

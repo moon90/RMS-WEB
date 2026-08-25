@@ -39,6 +39,12 @@ namespace RMS.Infrastructure.Configurations
             builder.Property(al => al.Details) // Added Details property
                 .HasColumnType("nvarchar(max)");
 
+            // Composite Covering Index for Audit Logs
+            builder.HasIndex(al => new { al.PerformedAt, al.EntityType })
+                   .IsDescending(true, false)
+                   .IncludeProperties(al => new { al.Action, al.PerformedBy })
+                   .HasDatabaseName("IX_AuditLogs_PerformedAt");
+
             // No seed data for AuditLog as it's system-generated
         }
     }

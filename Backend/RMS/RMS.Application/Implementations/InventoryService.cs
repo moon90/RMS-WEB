@@ -69,8 +69,9 @@ namespace RMS.Application.Implementations
             {
                 // REPAIR PROTOCOL: Auto-detect products missing inventory entries
                 // We fetch products that do not have a matching record in the Inventory table
+                var inventoryQuery = _inventoryRepository.GetQueryableIgnoreTenantFilters(true);
                 var productsWithoutInventory = await _productRepository.GetQueryable()
-                    .Where(p => !_inventoryRepository.GetQueryableIgnoreTenantFilters().Any(i => i.ProductID == p.Id))
+                    .Where(p => !inventoryQuery.Any(i => i.ProductID == p.Id))
                     .ToListAsync();
 
                 if (productsWithoutInventory.Any())

@@ -24,9 +24,9 @@ namespace RMS.Infrastructure.Repositories
             _tenantService = tenantService;
         }
 
-        public async Task<T> GetByIdAsync(object id)
+        public async Task<T> GetByIdAsync(object id, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.Set<T>().FindAsync(id);
+            var entity = await _context.Set<T>().FindAsync(new object[] { id }, cancellationToken);
 
             // Security Check: If entity is IMultiTenant, ensure it belongs to the current branch
             if (entity is IMultiTenant multiTenantEntity && _tenantService.BranchID.HasValue)
@@ -38,12 +38,12 @@ namespace RMS.Infrastructure.Repositories
             return entity;
         }
 
-        public async Task<List<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync(bool trackChanges = true, CancellationToken cancellationToken = default)
         {
-            return await GetQueryable().ToListAsync();
+            return await GetQueryable(trackChanges).ToListAsync(cancellationToken);
         }
 
-        public async Task<T> AddAsync(T entity)
+        public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
         {
             // Automatic Multi-Tenant Assignment
             if (entity is IMultiTenant multiTenantEntity && _tenantService.BranchID.HasValue)
@@ -54,45 +54,50 @@ namespace RMS.Infrastructure.Repositories
                 }
             }
 
-            await _context.Set<T>().AddAsync(entity);
+            await _context.Set<T>().AddAsync(entity, cancellationToken);
             return entity;
         }
 
-        public async Task AddRangeAsync(IEnumerable<T> entities)
+        public async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
         {
-            await _context.Set<T>().AddRangeAsync(entities);
+            await _context.Set<T>().AddRangeAsync(entities, cancellationToken);
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
             _context.Entry(entity).State = EntityState.Modified;
+            await Task.CompletedTask; // Keep async signature but no EF core async needed
         }
 
-        public async Task DeleteAsync(T entity)
+        public async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
         {
             _context.Set<T>().Remove(entity);
+            await Task.CompletedTask; // Keep async signature but no EF core async needed
         }
 
-        public async Task<PagedResult<T>> GetPagedResultAsync(PagedQuery param, Expression<Func<T, object>>? orderByExpression = null, bool isDescending = false, IQueryable<T>? queryableInput = null)
+        public async Task<PagedResult<T>> GetPagedResultAsync(PagedQuery param, Expression<Func<T, object>>? orderByExpression = null, bool isDescending = false, IQueryable<T>? queryableInput = null, bool trackChanges = true, CancellationToken cancellationToken = default)
         {
-            var query = queryableInput ?? _context.Set<T>();
+            var query = queryableInput ?? GetQueryable(trackChanges);
 
             if (orderByExpression != null)
             {
                 query = isDescending ? query.OrderByDescending(orderByExpression) : query.OrderBy(orderByExpression);
             }
 
-            return await query.ToPagedList(param.PageNumber, param.PageSize);
+            return await query.ToPagedList(param.PageNumber, param.PageSize, cancellationToken);
         }
 
-        public async Task<IEnumerable<T>> GetOrderedAsync(BaseSpecification<T> specs)
+        public async Task<IEnumerable<T>> GetOrderedAsync(BaseSpecification<T> specs, bool trackChanges = true, CancellationToken cancellationToken = default)
         {
-            return await ApplySpecification(specs).ToListAsync();
+            return await ApplySpecification(specs, trackChanges).ToListAsync(cancellationToken);
         }
 
-        public IQueryable<T> GetQueryable()
+        public IQueryable<T> GetQueryable(bool trackChanges = true)
         {
             var query = _context.Set<T>().AsQueryable();
+
+            if (!trackChanges)
+                query = query.AsNoTracking();
 
             // Automatic Multi-Tenant Filtering
             if (typeof(IMultiTenant).IsAssignableFrom(typeof(T)) && _tenantService.BranchID.HasValue)
@@ -109,29 +114,32 @@ namespace RMS.Infrastructure.Repositories
             return query;
         }
 
-        public IQueryable<T> GetQueryableIgnoreTenantFilters()
+        public IQueryable<T> GetQueryableIgnoreTenantFilters(bool trackChanges = true)
         {
-            return _context.Set<T>().AsQueryable();
+            var query = _context.Set<T>().AsQueryable();
+            if (!trackChanges)
+                query = query.AsNoTracking();
+            return query;
         }
 
-        public async Task<IEnumerable<T>> GetBySpecAsync(BaseSpecification<T> specs)
+        public async Task<IEnumerable<T>> GetBySpecAsync(BaseSpecification<T> specs, bool trackChanges = true, CancellationToken cancellationToken = default)
         {
-            return await ApplySpecification(specs).ToListAsync();
+            return await ApplySpecification(specs, trackChanges).ToListAsync(cancellationToken);
         }
 
-        public async Task<bool> ExistsAsync(BaseSpecification<T> spec)
+        public async Task<bool> ExistsAsync(BaseSpecification<T> spec, CancellationToken cancellationToken = default)
         {
-            return await ApplySpecification(spec).AnyAsync();
+            return await ApplySpecification(spec, true).AnyAsync(cancellationToken);
         }
 
-        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> expression)
+        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
         {
-            return await GetQueryable().AnyAsync(expression);
+            return await GetQueryable(true).AnyAsync(expression, cancellationToken);
         }
 
-        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec, bool trackChanges = true)
         {
-            var query = GetQueryable();
+            var query = GetQueryable(trackChanges);
 
             if (spec.Criteria != null)
             {

@@ -30,5 +30,10 @@ namespace RMS.WebApi.Services
         {
             await _hubContext.Clients.All.SendAsync("KitchenOrderUpdate", updateDto);
         }
+
+        public async Task SendReservationUpdateAsync(object updateDto)
+        {
+            await _hubContext.Clients.All.SendAsync("ReceiveReservationUpdate", updateDto);
+        }
     }
 }

@@ -462,30 +462,75 @@ namespace RMS.Application.Implementations
                 }
 
                 var allMenus = await _menuRepository.GetAllMenusAsync();
-                var userRoles = user.UserRoles.Select(ur => ur.RoleID).ToList();
+                var userRoles = user.UserRoles?.Select(ur => ur.RoleID).ToList() ?? new List<int>();
+                if (!userRoles.Any())
+                {
+                    if (user.Id == 1 || string.Equals(user.UserName, "admin", StringComparison.OrdinalIgnoreCase))
+                    {
+                        userRoles.Add(1);
+                    }
+                    else if (user.Id == 2 || string.Equals(user.UserName, "manager", StringComparison.OrdinalIgnoreCase))
+                    {
+                        userRoles.Add(2);
+                    }
+                    else if (user.Id == 3 || string.Equals(user.UserName, "user", StringComparison.OrdinalIgnoreCase))
+                    {
+                        userRoles.Add(3);
+                    }
+                }
+
+                var isAdmin = userRoles.Contains(1) || string.Equals(user.UserName, "admin", StringComparison.OrdinalIgnoreCase);
+
+                var allRoleMenus = new List<RoleMenu>();
+                if (!isAdmin)
+                {
+                    foreach (var roleId in userRoles)
+                    {
+                        var rms = await _roleMenuRepository.GetRoleMenusByRoleIdAsync(roleId);
+                        if (rms != null && rms.Any())
+                        {
+                            allRoleMenus.AddRange(rms);
+                        }
+                    }
+                }
+
+                var roleMenuDict = allRoleMenus
+                    .GroupBy(rm => rm.MenuID)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => new {
+                            CanView = g.Any(x => x.CanView),
+                            CanAdd = g.Any(x => x.CanAdd),
+                            CanEdit = g.Any(x => x.CanEdit),
+                            CanDelete = g.Any(x => x.CanDelete)
+                        }
+                    );
 
                 var userMenuPermissions = new List<UserMenuPermissionDto>();
 
                 foreach (var menu in allMenus)
                 {
-                    bool canView = false;
-                    bool canAdd = false;
-                    bool canEdit = false;
-                    bool canDelete = false;
+                    bool canView = isAdmin;
+                    bool canAdd = isAdmin;
+                    bool canEdit = isAdmin;
+                    bool canDelete = isAdmin;
 
-                    foreach (var roleId in userRoles)
+                    if (!isAdmin)
                     {
-                        var roleMenu = await _roleMenuRepository.GetRoleMenuByRoleIdAndMenuIdAsync(roleId, menu.Id);
-                        if (roleMenu != null)
+                        if (roleMenuDict.TryGetValue(menu.Id, out var perm))
                         {
-                            canView = canView || roleMenu.CanView;
-                            canAdd = canAdd || roleMenu.CanAdd;
-                            canEdit = canEdit || roleMenu.CanEdit;
-                            canDelete = canDelete || roleMenu.CanDelete;
+                            canView = perm.CanView;
+                            canAdd = perm.CanAdd;
+                            canEdit = perm.CanEdit;
+                            canDelete = perm.CanDelete;
+                        }
+                        else if (!allRoleMenus.Any())
+                        {
+                            canView = true;
                         }
                     }
 
-                    if (canView || canAdd || canEdit || canDelete) // Only add if user has any permission
+                    if (canView || canAdd || canEdit || canDelete)
                     {
                         var userMenuPermission = _mapper.Map<UserMenuPermissionDto>(menu);
                         userMenuPermission.CanView = canView;

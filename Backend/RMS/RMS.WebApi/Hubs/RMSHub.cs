@@ -26,5 +26,10 @@ namespace RMS.WebApi.Hubs
         {
             await Clients.All.SendAsync("KitchenOrderUpdate", updateDto);
         }
+
+        public async Task SendReservationUpdate(object updateDto)
+        {
+            await Clients.All.SendAsync("ReceiveReservationUpdate", updateDto);
+        }
     }
 }

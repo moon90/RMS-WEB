@@ -6,6 +6,7 @@ using RMS.Infrastructure.IRepositories;
 using RMS.Infrastructure.Persistences;
 using RMS.Infrastructure.Repositories;
 using RMS.Infrastructure.Services;
+using RMS.Infrastructure.Services.BackgroundServices;
 
 namespace RMS.Infrastructure
 {
@@ -28,6 +29,11 @@ namespace RMS.Infrastructure
                         b => b.MigrationsAssembly(typeof(RestaurantDbContext).Assembly.FullName));
                 }
             });
+
+            // Register Read Replica
+            services.AddDbContext<ReadOnlyRestaurantDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("ReadReplicaConnection") ?? configuration.GetConnectionString("DefaultConnection"),
+                    builder => builder.MigrationsAssembly(typeof(RestaurantDbContext).Assembly.FullName)));
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
@@ -61,6 +67,8 @@ namespace RMS.Infrastructure
             services.AddScoped<ITenantService, TenantService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
+            services.AddHostedService<DatabaseMaintenanceWorker>();
 
             return services;
         }

@@ -9,6 +9,7 @@ using RMS.Application.Interfaces;
 using RMS.Domain.Interfaces;
 using RMS.Infrastructure;
 using RMS.Infrastructure.Persistences;
+using RMS.Infrastructure.Services.BackgroundServices; // Added
 using RMS.WebApi.Filters;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -20,12 +21,40 @@ using RMS.WebApi.Hubs; // Added for SignalR Hub
 using Microsoft.AspNetCore.ResponseCompression; // Added for Compression
 using Microsoft.AspNetCore.RateLimiting; // Added for Rate Limiting
 using System.Threading.RateLimiting; // Added for Rate Limiting
+using Serilog;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 1. Configure Serilog
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration)
+                 .Enrich.FromLogContext()
+                 .WriteTo.Console()
+                 .WriteTo.Seq(builder.Configuration["Seq:ServerUrl"] ?? "http://localhost:5341");
+});
+
 // Add services to the container.
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
+
+// 2. Configure OpenTelemetry
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("RMS.WebApi"))
+    .WithTracing(tracing =>
+    {
+        tracing.AddAspNetCoreInstrumentation()
+               .AddHttpClientInstrumentation()
+               .AddEntityFrameworkCoreInstrumentation()
+               .AddOtlpExporter(options =>
+               {
+                   options.Endpoint = new Uri(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"] ?? "http://localhost:4317");
+               });
+    });
 
 // 1. Performance: Response Compression
 builder.Services.AddResponseCompression(options =>
@@ -76,8 +105,20 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddSignalR();
+var redisConnection = builder.Configuration.GetConnectionString("RedisConnection");
+if (!string.IsNullOrEmpty(redisConnection))
+{
+    builder.Services.AddSignalR().AddStackExchangeRedis(redisConnection);
+}
+else
+{
+    builder.Services.AddSignalR();
+}
 builder.Services.AddScoped<INotificationService, SignalRNotificationService>(); // Register SignalRNotificationService
+
+// Phase 6: Maintenance & Archiving Workers
+builder.Services.AddHostedService<DatabaseMaintenanceWorker>();
+builder.Services.AddHostedService<ReservationHoldExpiryWorker>();
 
 // Configure ImageSettings
 builder.Services.Configure<ImageSettings>(builder.Configuration.GetSection("ImageSettings")); // Added
@@ -360,6 +401,10 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
+
+// 3. Configure Prometheus Metrics
+app.UseMetricServer(); // Exposes /metrics endpoint
+app.UseHttpMetrics();  // Captures HTTP request metrics automatically
 
 // Enable Response Compression
 app.UseResponseCompression();

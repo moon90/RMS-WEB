@@ -23,11 +23,11 @@ namespace RMS.WebApi.Controllers
         // Get all logs with pagination
         [HttpGet]
         [Authorize(Policy = "AUDIT_LOG_VIEW")]
-        public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null)
+        public async Task<IActionResult> GetAll([FromQuery] int? lastSeenId = null, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, CancellationToken cancellationToken = default)
         {
             try
             {
-                var result = await _auditLogService.GetAllAuditLogsAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection);
+                var result = await _auditLogService.GetAllAuditLogsAsync(lastSeenId, pageSize, searchQuery, sortColumn, sortDirection, cancellationToken);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                var logs = await _auditLogService.GetAllAuditLogsAsync(1, 1000, entityType, "PerformedAt", "desc");
+                var logs = await _auditLogService.GetAllAuditLogsAsync(null, 1000, entityType, "PerformedAt", "desc");
                 return Ok(logs);
             }
             catch (Exception ex)
@@ -71,7 +71,7 @@ namespace RMS.WebApi.Controllers
         {
             try
             {
-                var logs = await _auditLogService.GetAllAuditLogsAsync(1, 1000, performedBy, "PerformedAt", "desc");
+                var logs = await _auditLogService.GetAllAuditLogsAsync(null, 1000, performedBy, "PerformedAt", "desc");
                 return Ok(logs);
             }
             catch (Exception ex)

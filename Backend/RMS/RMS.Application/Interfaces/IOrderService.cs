@@ -8,7 +8,7 @@ namespace RMS.Application.Interfaces
     public interface IOrderService
     {
         Task<ResponseDto<OrderDto>> GetOrderByIdAsync(int id);
-        Task<ResponseDto<PagedResult<OrderDto>>> GetAllOrdersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, string? status);
+        Task<ResponseDto<KeysetPagedResult<OrderDto>>> GetAllOrdersAsync(int? lastSeenId, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, string? status, CancellationToken cancellationToken = default);
         Task<ResponseDto<OrderDto>> CreateOrderAsync(CreateOrderDto orderDto);
         Task<ResponseDto<OrderDto>> UpdateOrderAsync(int id, UpdateOrderDto orderDto);
         Task<ResponseDto<bool>> DeleteOrderAsync(int id);

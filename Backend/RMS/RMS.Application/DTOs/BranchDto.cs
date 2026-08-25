@@ -26,4 +26,15 @@ namespace RMS.Application.DTOs
         public string CurrencyCode { get; set; } = "USD";
         public string CurrencySymbol { get; set; } = "$";
     }
+
+    public class UpdateBranchDto
+    {
+        public string BranchName { get; set; }
+        public string? BranchCode { get; set; }
+        public string? Address { get; set; }
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
+        public string CurrencyCode { get; set; } = "USD";
+        public string CurrencySymbol { get; set; } = "$";
+    }
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using RMS.Application.DTOs.Orders;
@@ -18,6 +19,7 @@ using RMS.Application.DTOs.RealtimeUpdates;
 using RMS.Application.Events;
 using System;
 using System.Linq;
+using MassTransit;
 
 namespace RMS.Application.Implementations
 {
@@ -39,7 +41,7 @@ namespace RMS.Application.Implementations
         private readonly IPurchaseService _purchaseService;
         private readonly IProductService _productService;
         private readonly IDiningTableRepository _diningTableRepository;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public OrderService(
             IOrderRepository orderRepository,
@@ -58,7 +60,7 @@ namespace RMS.Application.Implementations
             IPurchaseService purchaseService,
             IProductService productService,
             IDiningTableRepository diningTableRepository,
-            IEventPublisher eventPublisher)
+            IPublishEndpoint publishEndpoint)
         {
             _orderRepository = orderRepository;
             _productRepository = productRepository;
@@ -76,7 +78,7 @@ namespace RMS.Application.Implementations
             _purchaseService = purchaseService;
             _productService = productService;
             _diningTableRepository = diningTableRepository;
-            _eventPublisher = eventPublisher;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<ResponseDto<OrderDto>> GetOrderByIdAsync(int id)
@@ -94,12 +96,12 @@ namespace RMS.Application.Implementations
             return ResponseDto<OrderDto>.CreateSuccessResponse(_mapper.Map<OrderDto>(orderResult));
         }
 
-        public async Task<ResponseDto<PagedResult<OrderDto>>> GetAllOrdersAsync(int pageNumber, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, string? status)
+        public async Task<ResponseDto<KeysetPagedResult<OrderDto>>> GetAllOrdersAsync(int? lastSeenId, int pageSize, string? searchQuery, string? sortColumn, string? sortDirection, string? status, CancellationToken cancellationToken = default)
         {
             try {
-                IQueryable<Order> query = _orderRepository.GetQueryable()
-                    .Include(o => o.OrderDetails)
-                        .ThenInclude(od => od.Product);
+                // Phase 2.1 & 2.2: AsNoTracking is handled implicitly by BaseRepository now if trackChanges = false.
+                // We also drop .Include() entirely because ProjectTo creates a perfectly tailored SQL SELECT projection.
+                IQueryable<Order> query = _orderRepository.GetQueryable(trackChanges: false);
 
                 if (!string.IsNullOrEmpty(status))
                 {
@@ -123,25 +125,20 @@ namespace RMS.Application.Implementations
                         (o.TokenNumber != null && o.TokenNumber.Contains(searchQuery)));
                 }
 
-                if (!string.IsNullOrEmpty(sortColumn))
-                {
-                    query = query.ApplySort(sortColumn, sortDirection ?? "asc");
-                }
-                else
-                {
-                    query = query.OrderByDescending(o => o.OrderDate).ThenByDescending(o => o.OrderID);
-                }
+                // For Keyset Pagination to work flawlessly on huge datasets, we MUST enforce clustering key order (OrderID DESC).
+                // Custom sorting on non-indexed columns ruins the O(1) speed, so we override it.
+                query = query.OrderByDescending(o => o.OrderID);
 
-                var pagedResult = await query.ToPagedList(pageNumber, pageSize);
-                var orderDtos = _mapper.Map<List<OrderDto>>(pagedResult.Items);
+                // Execute SQL Projection directly into the DTO to drop memory footprint and prevent over-fetching
+                var projectedQuery = query.ProjectTo<OrderDto>(_mapper.ConfigurationProvider);
+                var pagedResult = await projectedQuery.ToKeysetPagedList(o => o.OrderID, lastSeenId, pageSize, cancellationToken);
 
-                var result = new PagedResult<OrderDto>(orderDtos, pagedResult.PageNumber, pagedResult.PageSize, pagedResult.TotalRecords);
-                return ResponseDto<PagedResult<OrderDto>>.CreateSuccessResponse(result);
+                return ResponseDto<KeysetPagedResult<OrderDto>>.CreateSuccessResponse(pagedResult);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Order fetch protocol failed.");
-                return ResponseDto<PagedResult<OrderDto>>.CreateErrorResponse($"Orders Unavailable: {ex.Message}");
+                return ResponseDto<KeysetPagedResult<OrderDto>>.CreateErrorResponse($"Orders Unavailable: {ex.Message}");
             }
         }
 
@@ -167,10 +164,6 @@ namespace RMS.Application.Implementations
                 order.OrderDate ??= DateTime.UtcNow;
 
                 var createdOrder = await _orderRepository.AddAsync(order);
-                await _unitOfWork.SaveChangesAsync();
-
-                // Dispatch Domain Event for Inventory Deduction
-                await _eventPublisher.PublishAsync(new OrderPlacedEvent(createdOrder));
 
                 // Update Table Status for DineIn
                 if (createdOrder.OrderType == "DineIn" && !string.IsNullOrEmpty(createdOrder.TableName) && createdOrder.TableName != "N/A")
@@ -183,8 +176,15 @@ namespace RMS.Application.Implementations
                     }
                 }
 
-                await _unitOfWork.CommitTransactionAsync();
+                // Call SaveChangesAsync FIRST to generate the OrderID, but it remains uncommitted in the DB transaction
+                await _unitOfWork.SaveChangesAsync();
                 
+                // Dispatch Domain Event for Inventory Deduction inside the Outbox (transactional guarantee)
+                await _publishEndpoint.Publish(new OrderPlacedEvent(createdOrder));
+
+                // EXACTLY ONE CommitTransactionAsync happens here to commit the DB changes and Outbox messages atomically
+                await _unitOfWork.CommitTransactionAsync();
+
                 // Trigger AI Auto-PO Check (Async)
                 _ = Task.Run(() => _purchaseService.CheckAndGenerateAutoPOsAsync());
 
@@ -241,51 +241,14 @@ namespace RMS.Application.Implementations
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                // 1. Revert Old Stock
-                await RevertOrderStockAsync(existingOrder);
+                // We need to pass the old state to the consumer before it's mutated
+                // However, existingOrder is a tracked entity, so mutating it will mutate the reference.
+                // We need a shallow copy or deep copy of order details.
+                var oldOrderState = new Order { OrderID = existingOrder.OrderID, OrderDetails = existingOrder.OrderDetails.Select(d => new OrderDetail { ProductID = d.ProductID, Quantity = d.Quantity }).ToList() };
 
                 // 2. Update Order Data
                 _mapper.Map(orderDto, existingOrder);
                 await _orderRepository.UpdateAsync(existingOrder);
-                await _unitOfWork.SaveChangesAsync();
-
-                var inventoryUpdates = new List<InventoryUpdateDto>();
-
-                // 3. Deduct New Stock
-                foreach (var detail in existingOrder.OrderDetails)
-                {
-                    var inventory = await _inventoryRepository.GetByProductIdAsync(detail.ProductID);
-                    if (inventory != null)
-                    {
-                        if (inventory.CurrentStock < detail.Quantity)
-                        {
-                            await _unitOfWork.RollbackTransactionAsync();
-                            return ResponseDto<OrderDto>.CreateErrorResponse($"Insufficient stock for {detail.ProductID}.", ApiErrorCode.BadRequest);
-                        }
-                        var oldStock = inventory.CurrentStock;
-                        inventory.CurrentStock -= detail.Quantity;
-                        await _inventoryRepository.UpdateAsync(inventory);
-
-                        var product = await _productRepository.GetByIdAsync(detail.ProductID);
-                        inventoryUpdates.Add(new InventoryUpdateDto
-                        {
-                            ProductId = detail.ProductID,
-                            ProductName = product?.ProductName ?? "Unknown Product",
-                            OldQuantity = oldStock,
-                            NewQuantity = inventory.CurrentStock,
-                            ChangeType = "Sold",
-                            Message = $"Stock updated for {product?.ProductName}"
-                        });
-                        
-                        var consumeResult = await _productService.ConsumeIngredientsForProductAsync(detail.ProductID, detail.Quantity);
-                        if (!consumeResult.IsSuccess)
-                        {
-                            // Rolling back here is essential because ConsumeIngredientsForProductAsync might have rolled back its own nested transaction
-                            // but our UnitOfWork logic handles depth. However, if it failed, we must abort.
-                            if (!consumeResult.IsSuccess) throw new Exception(consumeResult.Message);
-                        }
-                    }
-                }
 
                 // Update Table Status for DineIn (in case table changed)
                 if (existingOrder.OrderType == "DineIn" && !string.IsNullOrEmpty(existingOrder.TableName) && existingOrder.TableName != "N/A")
@@ -298,13 +261,15 @@ namespace RMS.Application.Implementations
                     }
                 }
 
+                // Call SaveChangesAsync to prep the entity updates
+                await _unitOfWork.SaveChangesAsync();
+
+                // Dispatch Update Event inside the Outbox
+                await _publishEndpoint.Publish(new OrderUpdatedEvent(oldOrderState, existingOrder));
+
+                // Commit the entire transaction atomically
                 await _unitOfWork.CommitTransactionAsync();
 
-                // Send inventory updates after successful commit
-                foreach (var update in inventoryUpdates)
-                {
-                    await _notificationService.SendInventoryUpdateAsync(update);
-                }
 
                 var orderUpdateDto = new OrderUpdateDto
                 {
@@ -317,7 +282,7 @@ namespace RMS.Application.Implementations
                 await _notificationService.SendOrderUpdateAsync(orderUpdateDto);
                 await _notificationService.SendKitchenOrderUpdateAsync(orderUpdateDto);
 
-                return ResponseDto<OrderDto>.CreateSuccessResponse(_mapper.Map<OrderDto>(existingOrder), "Order updated and inventory adjusted successfully.");
+                return ResponseDto<OrderDto>.CreateSuccessResponse(_mapper.Map<OrderDto>(existingOrder), "Order updated successfully.");
             }
             catch (Exception ex)
             {
@@ -344,9 +309,6 @@ namespace RMS.Application.Implementations
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                // Revert stock before deleting
-                var inventoryUpdates = await RevertOrderStockAsync(order);
-
                 // Update Table Status for DineIn (Make available)
                 if (order.OrderType == "DineIn" && !string.IsNullOrEmpty(order.TableName) && order.TableName != "N/A")
                 {
@@ -359,14 +321,16 @@ namespace RMS.Application.Implementations
                 }
 
                 await _orderRepository.DeleteAsync(order);
+
+                // Prep entity deletes
                 await _unitOfWork.SaveChangesAsync();
+
+                // Dispatch Delete Event for Stock Reversal inside the Outbox
+                await _publishEndpoint.Publish(new OrderDeletedEvent(order));
+
+                // Commit atomically
                 await _unitOfWork.CommitTransactionAsync();
 
-                // Send inventory updates after successful commit
-                foreach (var update in inventoryUpdates)
-                {
-                    await _notificationService.SendInventoryUpdateAsync(update);
-                }
 
                 var orderUpdateDto = new OrderUpdateDto
                 {
@@ -389,41 +353,6 @@ namespace RMS.Application.Implementations
             }
         }
 
-        private async Task<List<InventoryUpdateDto>> RevertOrderStockAsync(Order order)
-        {
-            var updates = new List<InventoryUpdateDto>();
-            foreach (var detail in order.OrderDetails)
-            {
-                var inventory = await _inventoryRepository.GetByProductIdAsync(detail.ProductID);
-                if (inventory != null)
-                {
-                    var oldStock = inventory.CurrentStock;
-                    inventory.CurrentStock += detail.Quantity;
-                    await _inventoryRepository.UpdateAsync(inventory);
-
-                    // Notify POS of product stock restore
-                    var product = await _productRepository.GetByIdAsync(detail.ProductID);
-                    updates.Add(new InventoryUpdateDto
-                    {
-                        ProductId = detail.ProductID,
-                        ProductName = product?.ProductName ?? "Unknown Product",
-                        OldQuantity = oldStock,
-                        NewQuantity = inventory.CurrentStock,
-                        ChangeType = "Restored",
-                        Message = $"Stock restored for {product?.ProductName}"
-                    });
-                }
-                
-                // Revert Ingredient Consumption
-                var revertResult = await _productService.RevertIngredientConsumptionAsync(detail.ProductID, detail.Quantity);
-                if (!revertResult.IsSuccess)
-                {
-                    _logger.LogError("Stock Reversal Failed for Product {ProductID}: {Message}", detail.ProductID, revertResult.Message);
-                    throw new Exception(revertResult.Message ?? "Ingredient reversal failed without a specific message.");
-                }
-            }
-            return updates;
-        }
 
         public async Task<ResponseDto<OrderDto>> ProcessPaymentForOrderAsync(ProcessPaymentForOrderDto paymentDto)
         {
@@ -543,8 +472,7 @@ namespace RMS.Application.Implementations
 
                 order.OrderStatus = orderStatus;
                 await _orderRepository.UpdateAsync(order);
-                await _unitOfWork.SaveChangesAsync();
-
+                await _unitOfWork.CommitTransactionAsync();
                 var orderUpdateDto = new OrderUpdateDto
                 {
                     OrderId = order.OrderID,

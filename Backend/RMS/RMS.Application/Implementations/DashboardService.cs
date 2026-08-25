@@ -2,6 +2,7 @@ using RMS.Infrastructure.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Distributed;
+using RMS.Infrastructure.Persistences; // Added for ReadOnlyRestaurantDbContext
 using System.Text.Json;
 using RMS.Application.DTOs;
 using RMS.Application.DTOs.Dashboard;
@@ -18,31 +19,19 @@ namespace RMS.Application.Implementations
 {
     public class DashboardService : IDashboardService
     {
-        private readonly ISaleRepository _saleRepository;
-        private readonly IOrderRepository _orderRepository;
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IProductRepository _productRepository;
+        private readonly ReadOnlyRestaurantDbContext _db;
         private readonly IDistributedCache _cache;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<DashboardService> _logger;
 
         private const string DashboardCacheKey = "DASHBOARD_STATS";
 
         public DashboardService(
-            ISaleRepository saleRepository,
-            IOrderRepository orderRepository,
-            ICustomerRepository customerRepository,
-            IProductRepository productRepository,
+            ReadOnlyRestaurantDbContext db,
             IDistributedCache cache,
-            IUnitOfWork unitOfWork,
             ILogger<DashboardService> logger)
         {
-            _saleRepository = saleRepository;
-            _orderRepository = orderRepository;
-            _customerRepository = customerRepository;
-            _productRepository = productRepository;
+            _db = db;
             _cache = cache;
-            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -69,7 +58,7 @@ namespace RMS.Application.Implementations
                 var yesterday = today.AddDays(-1);
 
                 // 1. Stats - Fetch everything and filter in memory to bypass potential schema mismatches with BranchID
-                var allSalesRaw = await _saleRepository.GetQueryable()
+                var allSalesRaw = await _db.Sales
                     .Include(s => s.SaleDetails)
                     .Where(s => s.SaleDate >= yesterday)
                     .ToListAsync();
@@ -89,11 +78,11 @@ namespace RMS.Application.Implementations
                 var totalOrders = todaySales?.Count ?? 0;
                 var yesterdayOrders = yesterdaySales?.Count ?? 0;
 
-                var customerQuery = _customerRepository.GetQueryable().Where(c => c.Status && !c.IsDeleted);
+                var customerQuery = _db.Customers.Where(c => c.Status && !c.IsDeleted);
                 var totalCustomers = await customerQuery.CountAsync();
 
                 // Inventory Metrics - Ingredients and Inventory usually have BranchID
-                var totalIngredientsQuery = _unitOfWork.GetRepository<Ingredient>().GetQueryable().Where(i => !i.IsDeleted);
+                var totalIngredientsQuery = _db.Ingredients.Where(i => !i.IsDeleted);
                 try {
                     if (branchId.HasValue) totalIngredientsQuery = totalIngredientsQuery.Where(i => i.BranchID == branchId);
                 } catch { }
@@ -159,12 +148,12 @@ namespace RMS.Application.Implementations
                 var trendingMenuItems = new List<TrendingMenuItemDto>();
                 foreach (var item in trendingMenus)
                 {
-                    var product = await _productRepository.GetQueryable()
+                    var product = await _db.Products
                         .FirstOrDefaultAsync(p => p.Id == item.ProductId);
 
                     if (product != null)
                     {
-                        var ingredients = await _unitOfWork.GetRepository<ProductIngredient>().GetQueryable()
+                        var ingredients = await _db.ProductIngredients
                             .Include(pi => pi.Ingredient)
                             .Where(pi => pi.ProductID == product.Id)
                             .ToListAsync();
@@ -193,7 +182,7 @@ namespace RMS.Application.Implementations
                 // 5. Staff Performance
                 var staffPerformance = new List<StaffPerformanceDto>();
                 try {
-                    var staffDataRaw = await _orderRepository.GetQueryable()
+                    var staffDataRaw = await _db.Orders
                         .Include(o => o.Waiter)
                         .Where(o => o.StaffID.HasValue && o.OrderStatus == "Paid")
                         .Select(o => new { o.StaffID, o.Waiter.StaffName, o.Waiter.StaffRole, o.Total })
@@ -220,7 +209,7 @@ namespace RMS.Application.Implementations
                 // 6. Top Customers
                 var topCustomers = new List<CustomerLoyaltyDto>();
                 try {
-                    topCustomers = await _unitOfWork.GetRepository<Customer>().GetQueryable()
+                    topCustomers = await _db.Customers
                         .Where(c => !c.IsDeleted && c.TotalSpent > 0)
                         .OrderByDescending(c => c.TotalSpent)
                         .Take(5)
@@ -240,7 +229,7 @@ namespace RMS.Application.Implementations
                 // 7. Kitchen Productivity
                 var kitchenProductivity = new List<KitchenProductivityDto>();
                 try {
-                    var kitchenStatsRaw = await _orderRepository.GetQueryable()
+                    var kitchenStatsRaw = await _db.Orders
                         .Include(o => o.Chef)
                         .Where(o => o.ChefID.HasValue && o.PreparationStart.HasValue && o.PreparationEnd.HasValue)
                         .Select(o => new { o.ChefID, o.Chef.StaffName, o.PreparationStart, o.PreparationEnd })

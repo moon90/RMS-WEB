@@ -48,11 +48,11 @@ namespace RMS.WebApi.Controllers
 
         [HttpGet]
         [Authorize(Policy = "ORDER_VIEW")]
-        public async Task<IActionResult> GetAllOrders([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] string? status = null)
+        public async Task<IActionResult> GetAllOrders([FromQuery] int? lastSeenId = null, [FromQuery] int pageSize = 10, [FromQuery] string? searchQuery = null, [FromQuery] string? sortColumn = null, [FromQuery] string? sortDirection = null, [FromQuery] string? status = null, CancellationToken cancellationToken = default)
         {
             try
             {
-                var result = await _orderService.GetAllOrdersAsync(pageNumber, pageSize, searchQuery, sortColumn, sortDirection, status);
+                var result = await _orderService.GetAllOrdersAsync(lastSeenId, pageSize, searchQuery, sortColumn, sortDirection, status, cancellationToken);
                 return Ok(result);
             }
             catch (Exception ex)
